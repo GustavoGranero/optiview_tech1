@@ -1,0 +1,123 @@
+  <!DOCTYPE html>
+  <!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
+  <html lang="en" dir="ltr">
+    <head>
+      <meta charset="UTF-8">
+      <title> OptiView Tech | Home Page </title>
+      <link rel="stylesheet" href="plan.css">
+      <!-- Boxicons CDN Link -->
+      <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <i class='bx bxl-c-plus-plus icon'></i>
+          <div class="logo_name">OptiView Tech</div>
+          <i class='bx bx-menu' id="btn" ></i>
+      </div>
+      <ul class="nav-list">
+        <li>
+            <i class='bx bx-search' ></i>
+          <input type="text" placeholder="Search...">
+          <span class="tooltip">Search</span>
+        </li>
+        <li>
+          <a href="../home/home.html">
+            <i class='bx bx-home'></i>
+            <span class="links_name">Home</span>
+          </a>
+          <span class="tooltip">Home</span>
+        </li>
+        <li>
+        <a href="../about/about.html">
+          <i class='bx bx-group'></i>
+          <span class="links_name">About</span>
+        </a>
+        <span class="tooltip">About</span>
+      </li>
+      <li>
+        <a href="../myplantai/myplantai.html">
+          <i class='bx bx-map-alt'></i>
+          <span class="links_name">MyPlantAI</span>
+        </a>
+        <span class="tooltip">MyPlantAI</span>
+      </li>
+      <li>
+        <a href="../services/services.html">
+          <i class='bx bx-briefcase-alt' ></i>
+          <span class="links_name">Services</span>
+        </a>
+        <span class="tooltip">Services</span>
+      </li>
+      <li>
+        <a href="../plan/plan.html">
+          <i class='bx bx-credit-card'></i>
+          <span class="links_name">Plan</span>
+        </a>
+        <span class="tooltip">Plan</span>
+      </li>
+      <li>
+        <a href="../contact/contact.html">
+          <i class='bx bx-message-detail'></i>
+          <span class="links_name">Contact</span>
+        </a>
+        <span class="tooltip">Contact</span>
+      </li>
+      <li>
+        <a href="../user/user.html">
+          <i class='bx bx-user' ></i>
+          <span class="links_name">User</span>
+        </a>
+        <span class="tooltip">User</span>
+      </li>
+      <li>
+        <a href="../settings/settings.html">
+          <i class='bx bx-cog' ></i>
+          <span class="links_name">Settings</span>
+        </a>
+        <span class="tooltip">Settings</span>
+      </li>
+      <li class="profile">
+          <div class="profile-details">
+            <!-- <img src="profile.jpg" alt="profileImg"> -->
+            <i class='bx bxs-user-circle user-avatar'></i>
+            <div class="name_job">
+              <div class="name">User</div>
+              <div class="job">Plan</div>
+            </div>
+          </div>
+          <i class='bx bx-log-out' id="log_out" ></i>
+      </li>
+      </ul>
+    </div>
+    <section class="home-section">
+        <div class="text">Plan</div>
+    </section>
+    <script>
+    let sidebar = document.querySelector(".sidebar");
+    let closeBtn = document.querySelector("#btn");
+    let searchBtn = document.querySelector(".bx-search");
+
+    closeBtn.addEventListener("click", ()=>{
+      sidebar.classList.toggle("open");
+      menuBtnChange();//calling the function(optional)
+    });
+
+    searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+      sidebar.classList.toggle("open");
+      menuBtnChange(); //calling the function(optional)
+    });
+
+    // following are the code to change sidebar button(optional)
+    function menuBtnChange() {
+    if(sidebar.classList.contains("open")){
+      closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+    }else {
+      closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+    }
+    }
+    </script>
+  </body>
+  </html>
