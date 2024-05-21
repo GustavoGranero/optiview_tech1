@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8">
     <title> OptiView Tech | Home Page </title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="cadastro.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 
@@ -93,14 +93,15 @@
     </ul>
   </div>
   <section class="home-section">
-        <div class="text">Login de usuário</div>
-        <div class="container">
-          <form action="processar_login.php" method="post">
-              <input type="email" name="email" placeholder="Email" required><br>
-              <input type="password" name="senha" placeholder="Senha" required><br>
-              <button type="submit">Entrar</button>
-          </form>
-      </div>
+        <div class="text">Cadastro de usuário</div>
+        <div class="textxxx">
+            <form action="processar_cadastro.php" method="post">
+                <input type="text" name="nome" placeholder="Nome" required><br>
+                <input type="email" name="email" placeholder="Email" required><br>
+                <input type="password" name="senha" placeholder="Senha" required><br>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
   </section>
   <script>
   let sidebar = document.querySelector(".sidebar");
