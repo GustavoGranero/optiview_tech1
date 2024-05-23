@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #E4E9F7;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+form {
+    background-color: #E4E9F7;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 350px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+    font-size: 28px; /* Aumenta o tamanho da fonte do título */
+    font-weight: 700; /* Define a fonte como negrito */
+}
+
+.input-container {
+    position: relative;
+    margin: 15px 0;
+    width: 100%;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    outline: none;
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
+
+label {
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    font-size: 16px;
+    color: #666;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+input:focus + label,
+input.not-empty + label {
+    top: -10px;
+    left: 10%;
+    font-size: 12px;
+    color: #333;
+}
+
+input[type="submit"] {
+    background-color: #1d1b31;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 90%;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #333;
+}
