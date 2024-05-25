@@ -1,45 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
     <link rel="stylesheet" href="css/cadastro.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="images/optiview_grande.ico">
 </head>
 <body>
+    <div class="top-bar">
+        <a href="home.html" class="logo-link">
+            <div class="title">
+                <img src="images/logo_login.png" alt="OptiView Tech Logo" class="logo">
+                OptiView Tech
+            </div>
+        </a>
+    </div>
+    <div class="background-pattern"></div>
     <form>
         <h2>Cadastro</h2>
+        
         <div class="input-container">
             <input type="text" id="nome" required>
-            <label for="nome">Nome</label>
+            <label for="nome">Nome de Usuário</label>
         </div>
+        
         <div class="input-container">
             <input type="email" id="email" required>
-            <label for="email">E-mail</label>
+            <label for="email">Email</label>
         </div>
+        
         <div class="input-container">
             <input type="password" id="senha" required>
             <label for="senha">Senha</label>
+            <span class="toggle-password" onclick="togglePassword()">
+                <i class='bx bxs-show'></i>
+            </span>
         </div>
+        
         <input type="submit" value="Cadastrar">
+        <p class="login-link">Já tem cadastro? <a href="login.html">Entrar</a></p>
     </form>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var inputs = document.querySelectorAll("input[type='text'], input[type='email'], input[type='password']");
-            inputs.forEach(function(input) {
-                input.addEventListener("input", function() {
-                    if (input.value !== "") {
-                        input.classList.add("not-empty");
-                    } else {
-                        input.classList.remove("not-empty");
-                    }
-                });
+        function togglePassword() {
+            const passwordField = document.getElementById('senha');
+            const passwordToggle = document.querySelector('.toggle-password i');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordToggle.classList.remove('bxs-show');
+                passwordToggle.classList.add('bxs-hide');
+            } else {
+                passwordField.type = 'password';
+                passwordToggle.classList.remove('bxs-hide');
+                passwordToggle.classList.add('bxs-show');
+            }
+        }
 
-                // Check initial value in case of pre-filled inputs
-                if (input.value !== "") {
-                    input.classList.add("not-empty");
+        // Add class 'not-empty' when input is not empty
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.value !== '') {
+                    input.classList.add('not-empty');
+                } else {
+                    input.classList.remove('not-empty');
                 }
             });
         });

@@ -1,29 +1,68 @@
 <!DOCTYPE html>
-<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
-<html lang="en" dir="ltr">
-  <head>
+<html lang="pt-BR">
+<head>
     <meta charset="UTF-8">
-    <title> OptiView Tech | Home Page </title>
-    <link rel="stylesheet" href="css/site.css">
-    <!-- Boxicons CDN Link -->
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
+    <title>Login</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="images/optiview_grande.ico">
+</head>
 <body>
-  
-  <section class="home-section">
-        <div class="text">Login de usuário</div>
-        <div class="container">
-          <form action="processar_login.php" method="post">
-              <input type="email" name="email" placeholder="Email" required><br>
-              <input type="password" name="senha" placeholder="Senha" required><br>
-              <button type="submit">Entrar</button>
-          </form>
-      </div>
-  </section>
-  <script>
-  </script>
+    <div class="top-bar">
+        <a href="home.html" class="logo-link">
+            <div class="title">
+                <img src="images/logo_login.png" alt="OptiView Tech Logo" class="logo">
+                OptiView Tech
+            </div>
+        </a>
+    </div>
+    <div class="background-pattern"></div>
+    <form>
+        <h2>Login</h2>
+        
+        <div class="input-container">
+            <input type="text" id="email" required>
+            <label for="email">Usuário ou Email</label>
+        </div>
+        
+        <div class="input-container">
+            <input type="password" id="senha" required>
+            <label for="senha">Senha</label>
+            <span class="toggle-password" onclick="togglePassword()">
+                <i class='bx bxs-show'></i>
+            </span>
+        </div>
+        
+        <input type="submit" value="Entrar">
+        <p class="login-link">Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+    </form>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('senha');
+            const passwordToggle = document.querySelector('.toggle-password i');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordToggle.classList.remove('bxs-show');
+                passwordToggle.classList.add('bxs-hide');
+            } else {
+                passwordField.type = 'password';
+                passwordToggle.classList.remove('bxs-hide');
+                passwordToggle.classList.add('bxs-show');
+            }
+        }
+
+        // Add class 'not-empty' when input is not empty
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.value !== '') {
+                    input.classList.add('not-empty');
+                } else {
+                    input.classList.remove('not-empty');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-
