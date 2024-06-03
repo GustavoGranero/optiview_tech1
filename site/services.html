@@ -1,36 +1,36 @@
-  <!DOCTYPE html>
-  <!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
-  <html lang="en" dir="ltr">
-    <head>
-      <meta charset="UTF-8">
-      <title> OptiView Tech | Home Page </title>
-      <link rel="stylesheet" href="css/sidebar.css">
-      <!-- Boxicons CDN Link -->
-      <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-      <link rel="icon" href="images/optiview_grande.ico">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-  <body>
-    <div class="sidebar">
-      <div class="logo-details">
-        <i class='bx bxl-c-plus-plus icon'></i>
-          <div class="logo_name">OptiView Tech</div>
-          <i class='bx bx-menu' id="btn" ></i>
-      </div>
-      <ul class="nav-list">
-        <li>
-            <i class='bx bx-search' ></i>
-          <input type="text" placeholder="Search...">
-          <span class="tooltip">Search</span>
-        </li>
-        <li>
-          <a href="home.html">
-            <i class='bx bx-home'></i>
-            <span class="links_name">Home</span>
-          </a>
-          <span class="tooltip">Home</span>
-        </li>
-        <li>
+<!DOCTYPE html>
+<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title> OptiView Tech | Home Page </title>
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/services.css">
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="icon" href="images/optiview_grande.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus icon'></i>
+      <div class="logo_name">OptiView Tech</div>
+      <i class='bx bx-menu' id="btn"></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <i class='bx bx-search'></i>
+        <input type="text" placeholder="Search...">
+        <span class="tooltip">Search</span>
+      </li>
+      <li>
+        <a href="home.html">
+          <i class='bx bx-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+        <span class="tooltip">Home</span>
+      </li>
+      <li>
         <a href="about.html">
           <i class='bx bx-group'></i>
           <span class="links_name">About</span>
@@ -46,7 +46,7 @@
       </li>
       <li>
         <a href="services.html">
-          <i class='bx bx-briefcase-alt' ></i>
+          <i class='bx bx-briefcase-alt'></i>
           <span class="links_name">Services</span>
         </a>
         <span class="tooltip">Services</span>
@@ -67,35 +67,60 @@
       </li>
       <li>
         <a href="user.html">
-          <i class='bx bx-user' ></i>
+          <i class='bx bx-user'></i>
           <span class="links_name">User</span>
         </a>
         <span class="tooltip">User</span>
       </li>
       <li>
         <a href="settings.html">
-          <i class='bx bx-cog' ></i>
+          <i class='bx bx-cog'></i>
           <span class="links_name">Settings</span>
         </a>
         <span class="tooltip">Settings</span>
       </li>
       <li class="profile">
-          <div class="profile-details">
-            <!-- <img src="profile.jpg" alt="profileImg"> -->
-            <i class='bx bxs-user-circle user-avatar'></i>
-            <div class="name_job">
-              <div class="name">User</div>
-              <div class="job">Plan</div>
-            </div>
+        <div class="profile-details">
+          <!-- <img src="profile.jpg" alt="profileImg"> -->
+          <i class='bx bxs-user-circle user-avatar'></i>
+          <div class="name_job">
+            <div class="name">User</div>
+            <div class="job">Plan</div>
           </div>
-          <i class='bx bx-log-out' id="log_out" ></i>
+        </div>
+        <i class='bx bx-log-out' id="log_out"></i>
       </li>
-      </ul>
-    </div>
-    <section class="home-section">
-        <div class="text">Services</div>
-    </section>
-    <script>
+    </ul>
+  </div>
+  <section class="home-section">
+    <div class="text">Services</div>
+
+      <a class='services' href="myplantai.html">
+        <div class="card">
+          <div class="image-box">
+            <img src="images/myplantai_services.avif">
+          </div>
+          <div class="content">
+            <h2>MyPlantAI</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti porro quis.</p>
+          </div>
+        </div>
+      </a>
+
+      <a class='services' href="myplantai.html">
+        <div class="card">
+          <div class="image-box">
+            <img src="images/myplantai_services.avif">
+          </div>
+          <div class="content">
+            <h2>MyPlantAI</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti porro quis.</p>
+          </div>
+        </div>
+      </a>
+
+  </section>
+  <script>
     let sidebar = document.querySelector(".sidebar");
     let closeBtn = document.querySelector("#btn");
     let searchBtn = document.querySelector(".bx-search");
@@ -112,12 +137,12 @@
 
     // following are the code to change sidebar button(optional)
     function menuBtnChange() {
-    if(sidebar.classList.contains("open")){
-      closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
-    }else {
-      closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+      if(sidebar.classList.contains("open")){
+        closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+      }else {
+        closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+      }
     }
-    }
-    </script>
-  </body>
-  </html>
+  </script>
+</body>
+</html>

@@ -270,7 +270,7 @@
 }
 
 .home-section .text {
-  display: inline-block;
+  /* display: inline-block; */
   color: #11101d;
   font-size: 25px;
   font-weight: 500;
