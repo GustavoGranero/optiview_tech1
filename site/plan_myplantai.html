@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos de Assinatura</title>
+    <link rel="stylesheet" href="css/plan_myplantai.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="images/optiview_grande.ico">
+</head>
+<body>
+    <div class="top-bar">
+        <a href="home.html" class="logo-link">
+            <div class="title">
+                <img src="images/logo_login.png" alt="OptiView Tech Logo" class="logo">OptiView Tech
+            </div>
+        </a>
+    </div>
+
+    <div class="subscription-buttons">
+        <button class="toggle-btn active" onclick="showPlans('monthly')">Plano Mensal</button>
+        <button class="toggle-btn" onclick="showPlans('annual')">Plano Anual</button>
+    </div>
+
+    <div class="subscription-plans">
+        <div class="plan free monthly">
+            <h2>Plano Gratuito</h2>
+            <p>Oferece 10 utilizações da IA semanais</p>
+            <a href="myplantai.html" class="btn-free">
+                <div class="price">
+                    <button class="subscribe-btn">Grátis</button>
+                </div>
+            </a> 
+        </div>
+        <div class="plan individual monthly">
+            <h2>Plano Individual Mensal</h2>
+            <p>Utilização ilimitada da IA para um único usuário</p>
+            <div class="price">
+                <button class="subscribe-btn">R$ 67,90 / mês</button>
+            </div>
+        </div>
+        <div class="plan enterprise monthly">
+            <h2>Plano Empresarial Mensal</h2>
+            <p>Utilização ilimitada da IA para uma equipe de usuários de até 5</p>
+            <div class="price">
+                <button class="subscribe-btn">R$ 390,90 / mês</button>
+            </div>
+        </div>
+        <div class="plan free annual" style="display: none;">
+            <h2>Plano Gratuito</h2>
+            <p>Oferece 10 utilizações da IA semanais</p>
+            <a href="myplantai.html" class="btn-free">
+                <div class="price">
+                    <button class="subscribe-btn">Grátis</button>
+                </div>
+            </a>
+        </div>
+        <div class="plan individual annual" style="display: none;">
+            <h2>Plano Individual Anual</h2>
+            <p>Utilização ilimitada da IA para um único usuário</p>
+            <div class="price">
+                <button class="subscribe-btn">R$ 730,90 / ano</button>
+            </div>
+        </div>
+        <div class="plan enterprise annual" style="display: none;">
+            <h2>Plano Empresarial Anual</h2>
+            <p>Utilização ilimitada da IA para uma equipe de usuários de até 5</p>
+            <div class="price">
+                <button class="subscribe-btn">R$ 3982,90 / ano</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPlans(planType) {
+            // Esconder todos os planos
+            document.querySelectorAll('.plan').forEach(plan => {
+                plan.style.display = 'none';
+            });
+
+            // Mostrar planos do tipo selecionado
+            document.querySelectorAll('.' + planType).forEach(plan => {
+                plan.style.display = 'flex';
+            });
+
+            // Atualizar classes dos botões
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.toggle-btn.' + planType).classList.add('active');
+        }
+
+        // Inicialização: mostrar planos mensais
+        showPlans('monthly');
+    </script>
+</body>
+</html>
