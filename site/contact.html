@@ -1,36 +1,35 @@
-  <!DOCTYPE html>
-  <!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
-  <html lang="pt-BR" dir="ltr">
-    <head>
-      <meta charset="UTF-8">
-      <title> OptiView Tech | Contact Page </title>
-      <link rel="stylesheet" href="css/sidebar.css">
-      <!-- Boxicons CDN Link -->
-      <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-      <link rel="icon" href="images/optiview_grande.ico">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-  <body>
-    <div class="sidebar">
-      <div class="logo-details">
-        <i class='bx bxl-c-plus-plus icon'></i>
-          <div class="logo_name">OptiView Tech</div>
-          <i class='bx bx-menu' id="btn" ></i>
-      </div>
-      <ul class="nav-list">
-        <li>
-            <i class='bx bx-search' ></i>
-          <input type="text" placeholder="Search...">
-          <span class="tooltip">Search</span>
-        </li>
-        <li>
-          <a href="home.html">
-            <i class='bx bx-home'></i>
-            <span class="links_name">Home</span>
-          </a>
-          <span class="tooltip">Home</span>
-        </li>
-        <li>
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>OptiView Tech | Contact Page</title>
+  <link rel="stylesheet" href="css/contact.css">
+  <!-- Boxicons CDN Link -->
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="icon" href="images/optiview_grande.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus icon'></i>
+      <div class="logo_name">OptiView Tech</div>
+      <i class='bx bx-menu' id="btn"></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <i class='bx bx-search'></i>
+        <input type="text" placeholder="Search...">
+        <span class="tooltip">Search</span>
+      </li>
+      <li>
+        <a href="home.html">
+          <i class='bx bx-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+        <span class="tooltip">Home</span>
+      </li>
+      <li>
         <a href="about.html">
           <i class='bx bx-group'></i>
           <span class="links_name">About</span>
@@ -46,7 +45,7 @@
       </li>
       <li>
         <a href="services.html">
-          <i class='bx bx-briefcase-alt' ></i>
+          <i class='bx bx-briefcase-alt'></i>
           <span class="links_name">Services</span>
         </a>
         <span class="tooltip">Services</span>
@@ -67,57 +66,99 @@
       </li>
       <li>
         <a href="user.html">
-          <i class='bx bx-user' ></i>
+          <i class='bx bx-user'></i>
           <span class="links_name">User</span>
         </a>
         <span class="tooltip">User</span>
       </li>
       <li>
         <a href="settings.html">
-          <i class='bx bx-cog' ></i>
+          <i class='bx bx-cog'></i>
           <span class="links_name">Settings</span>
         </a>
         <span class="tooltip">Settings</span>
       </li>
       <li class="profile">
-          <div class="profile-details">
-            <!-- <img src="profile.jpg" alt="profileImg"> -->
-            <i class='bx bxs-user-circle user-avatar'></i>
-            <div class="name_job">
-              <div class="name">User</div>
-              <div class="job">Plan</div>
-            </div>
+        <div class="profile-details">
+          <i class='bx bxs-user-circle user-avatar'></i>
+          <div class="name_job">
+            <div class="name">User</div>
+            <div class="job">Plan</div>
           </div>
-          <i class='bx bx-log-out' id="log_out" ></i>
+        </div>
+        <i class='bx bx-log-out' id="log_out"></i>
       </li>
-      </ul>
+    </ul>
+  </div>
+
+  <section class="home-section">
+    <div class="contact-container">
+      <h1 class="page-title">Contact Us</h1>
+      <div class="contact-options">
+        <div class="contact-option">
+          <i class='bx bx-support'></i>
+          <h2>Support</h2>
+          <p>Visit our <a href="support.html">Support Page</a> for assistance.</p>
+        </div>
+        <div class="contact-option">
+          <i class='bx bx-help-circle'></i>
+          <h2>FAQ</h2>
+          <p>Find answers in our <a href="faq.html">Frequently Asked Questions</a>.</p>
+        </div>
+        <div class="contact-option">
+          <i class='bx bx-envelope'></i>
+          <h2>Email</h2>
+          <p>Send us an email at <a href="mailto:support@optiview.com">support@optiview.com</a>.</p>
+        </div>
+        <div class="contact-option">
+          <i class='bx bx-phone'></i>
+          <h2>Phone</h2>
+          <p>Call us at <a href="tel:+1234567890">(123) 456-7890</a>.</p>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h2>Send Us a Message</h2>
+        <form action="submit_form.php" method="post">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
     </div>
-    <section class="home-section">
-        <div class="text">Contact Us</div>
-    </section>
-    <script>
+  </section>
+
+  <script>
     let sidebar = document.querySelector(".sidebar");
     let closeBtn = document.querySelector("#btn");
     let searchBtn = document.querySelector(".bx-search");
 
-    closeBtn.addEventListener("click", ()=>{
+    closeBtn.addEventListener("click", () => {
       sidebar.classList.toggle("open");
-      menuBtnChange();//calling the function(optional)
+      menuBtnChange();
     });
 
-    searchBtn.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+    searchBtn.addEventListener("click", () => {
       sidebar.classList.toggle("open");
-      menuBtnChange(); //calling the function(optional)
+      menuBtnChange();
     });
 
-    // following are the code to change sidebar button(optional)
     function menuBtnChange() {
-    if(sidebar.classList.contains("open")){
-      closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
-    }else {
-      closeBtn.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+      if (sidebar.classList.contains("open")) {
+        closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+      } else {
+        closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      }
     }
-    }
-    </script>
-  </body>
-  </html>
+  </script>
+</body>
+</html>
