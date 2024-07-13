@@ -1,0 +1,146 @@
+.home-section {
+    position: relative;
+    background: #FFD988;
+    min-height: 100vh;
+    width: calc(100% - 78px);
+    left: 78px;
+    transition: all 0.5s ease;
+    z-index: 2;
+  }
+  
+  .sidebar.open ~ .home-section {
+    width: calc(100% - 250px);
+    left: 250px;
+  }
+  
+  .home-content {
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .home-content .bx-menu,
+  .home-content .text {
+    color: #FFA318;
+    font-size: 35px;
+    font-weight: 500;
+  }
+  
+  .home-content .bx-menu {
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  .home-content .text {
+    font-size: 26px;
+    font-weight: 600;
+  }
+  
+  .logo-image {
+    max-width: 200px;
+    height: auto;
+    margin: 20px;
+  }
+  
+  .intro-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+   .description {
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+  }
+  
+  .boxes {
+      align-items: center;
+  }
+  
+  .upload-section, .analysis-section {
+      background-color: #FFD988;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 400px;
+      text-align: center;
+      margin-bottom: 20px
+  }
+  
+  .file-upload-label {
+      background-color: #1d1b31;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      width: 340px
+  }
+  
+  #file-upload {
+      display: none;
+  }
+  
+  #file-upload {
+      display: none;
+  }
+  
+  #file-info {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+  
+  #file-info img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+  }
+  
+  #file-name {
+      font-size: 14px;
+      color: #333;
+  }
+  
+  .buttons {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+  
+  .submit-btn, .cancel-btn {
+      background-color: #1d1b31;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      margin-left: 10px;
+      margin-right: 10px;
+  }
+  
+  .submit-btn:hover, .cancel-btn:hover {
+      background-color: #333;
+  }
+  
+  .analysis-results {
+      width: 100%;
+    }
+  
+  h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+      font-size: 28px; 
+      font-weight: 700;
+  }

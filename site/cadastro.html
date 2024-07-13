@@ -12,13 +12,13 @@
     <div class="top-bar">
         <a href="home.html" class="logo-link">
             <div class="title">
-                <img src="images/logo_login.png" alt="OptiView Tech Logo" class="logo">
+                <img src="images/logo_white.png" alt="OptiView Tech Logo" class="logo">
                 OptiView Tech
             </div>
         </a>
     </div>
     <div class="background-pattern"></div>
-    <form>
+    <form id="cadastroForm">
         <h2>Cadastro</h2>
         
         <div class="input-container">
@@ -67,6 +67,13 @@
                     input.classList.remove('not-empty');
                 }
             });
+        });
+
+        // Redirect to home.html after form submission
+        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Here you can add your form validation or AJAX call
+            window.location.href = 'home.html';
         });
     </script>
 </body>

@@ -16,6 +16,24 @@ body {
     flex-direction: column;
 }
 
+form {
+    background-color: #E4E9F7;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 350px;
+    text-align: center;
+    margin-top: 80px; /* Add margin to push the form down from the top bar */
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #11101D;
+    font-size: 28px; 
+    font-weight: 700;
+}
+
 .title {
     display: flex;
     align-items: center;
@@ -29,7 +47,7 @@ body {
 .logo {
     height: 20px;
     margin-right: 5px;
-    filter: brightness(0); /* Inicia com a imagem branca */
+    filter: brightness(0) invert(1); /* Inicia com a imagem branca */
     transition: filter 0.2s ease; /* Adiciona uma transição suave no filtro */
 }
 
@@ -69,24 +87,6 @@ body {
     background-image: url('path_to_your_background_image.png'); /* Use uma imagem sutil aqui */
     background-size: cover;
     z-index: -1;
-}
-
-form {
-    background-color: #E4E9F7;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    width: 350px;
-    text-align: center;
-    margin-top: 80px; /* Add margin to push the form down from the top bar */
-}
-
-h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-    font-size: 28px; 
-    font-weight: 700;
 }
 
 .input-container {

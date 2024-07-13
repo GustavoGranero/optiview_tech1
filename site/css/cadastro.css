@@ -41,7 +41,7 @@ h2 {
 .logo {
     height: 20px;
     margin-right: 5px;
-    filter: brightness(0); /* Inicia com a imagem branca */
+    filter: brightness(0) invert(1); /* Inicia com a imagem branca */
     transition: filter 0.2s ease; /* Adiciona uma transição suave no filtro */
 }
 
@@ -56,7 +56,7 @@ h2 {
 }
 
 .logo-link:hover .logo {
-    filter: brightness(1); /* Cor da imagem ao passar o mouse */
+    filter: #D5F1FF
 }
 
 /* Centralizar título e imagem */
