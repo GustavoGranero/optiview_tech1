@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #E4E9F7;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.logo {
+    height: 20px;
+    margin-right: 5px;
+    filter: brightness(0) invert(1);
+    transition: filter 0.2s ease;
+}
+
+.logo-link {
+    text-decoration: none;
+}
+
+.logo-link:hover .title {
+    color: #D5F1FF;
+}
+
+.logo-link:hover .logo {
+    filter: brightness(0.8) invert(1);
+}
+
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #1d1b31;
+    padding: 10px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+}
+
+.home-section {
+    margin-top: 60px;
+    padding: 20px;
+}
+
+.service-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.service-item {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.service-item:hover {
+    background-color: #f9f9f9;
+}
+
+.legend {
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+.service-column {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.action-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.action-button:hover {
+    color: #666;
+}
+
+.extra-info {
+    display: none;
+    background-color: #f9f9f9;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 0 0 8px 8px;
+}

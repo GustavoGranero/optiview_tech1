@@ -157,3 +157,39 @@
 .dot.active, .dot:hover {
   background-color: #D5F1FF;
 }
+
+.new-section {
+  display: flex;
+  background-color: #11101D;
+  color: #D5F1FF;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 18px;
+}
+
+.new-section .left,
+.new-section .right {
+  flex: 1;
+  padding: 20px;
+}
+
+.new-section .left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.new-section .left h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.new-section .left p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.new-section .right video {
+  width: 100%;
+  border-radius: 10px;
+}

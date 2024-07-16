@@ -16,8 +16,7 @@
             </div>
         </a>
     </div>
-    <!-- <div class="background-pattern"></div> -->
-    <form>
+    <form id="loginForm">
         <h2>Login</h2>
         
         <div class="input-container">
@@ -63,7 +62,12 @@
             });
         });
 
-        
+        // Redirect to home.html after form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Here you can add your form validation or AJAX call
+            window.location.href = 'home.html';
+        });
     </script>
 </body>
 </html>
