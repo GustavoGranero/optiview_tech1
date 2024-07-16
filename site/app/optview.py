@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 import datetime
 
-app = Flask(__name__, static_url_path='',  static_folder='..',)
+app = Flask(__name__, static_url_path='',  static_folder='../web',)
 
 def authentication_test():
         # verificar aqui se está autenticado ...
