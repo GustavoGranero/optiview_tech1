@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3
 -- Dumped by pg_dump version 16.3
 
--- Started on 2024-07-16 18:11:55
+-- Started on 2024-07-17 19:03:10
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 4858 (class 1262 OID 16398)
+-- TOC entry 4859 (class 1262 OID 16398)
 -- Name: optview; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -52,7 +52,7 @@ CREATE SCHEMA public;
 ALTER SCHEMA public OWNER TO pg_database_owner;
 
 --
--- TOC entry 4859 (class 0 OID 0)
+-- TOC entry 4860 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
 --
@@ -158,14 +158,15 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 --
 
 CREATE TABLE public.versions (
-    version character varying NOT NULL
+    version character varying NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
 ALTER TABLE public.versions OWNER TO postgres;
 
 --
--- TOC entry 4852 (class 0 OID 16503)
+-- TOC entry 4853 (class 0 OID 16503)
 -- Dependencies: 222
 -- Data for Name: hash_types; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -174,7 +175,7 @@ INSERT INTO public.hash_types OVERRIDING SYSTEM VALUE VALUES (1, 'bcrypt');
 
 
 --
--- TOC entry 4849 (class 0 OID 16462)
+-- TOC entry 4850 (class 0 OID 16462)
 -- Dependencies: 219
 -- Data for Name: plans; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -185,7 +186,7 @@ INSERT INTO public.plans OVERRIDING SYSTEM VALUE VALUES (3, 'Empresarial');
 
 
 --
--- TOC entry 4847 (class 0 OID 16400)
+-- TOC entry 4848 (class 0 OID 16400)
 -- Dependencies: 217
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -193,16 +194,16 @@ INSERT INTO public.plans OVERRIDING SYSTEM VALUE VALUES (3, 'Empresarial');
 
 
 --
--- TOC entry 4850 (class 0 OID 16481)
+-- TOC entry 4851 (class 0 OID 16481)
 -- Dependencies: 220
 -- Data for Name: versions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.versions VALUES ('202407161811');
+
 
 
 --
--- TOC entry 4860 (class 0 OID 0)
+-- TOC entry 4861 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: hash_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -211,7 +212,7 @@ SELECT pg_catalog.setval('public.hash_types_id_seq', 1, true);
 
 
 --
--- TOC entry 4861 (class 0 OID 0)
+-- TOC entry 4862 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: plans_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -220,7 +221,7 @@ SELECT pg_catalog.setval('public.plans_id_seq', 3, true);
 
 
 --
--- TOC entry 4862 (class 0 OID 0)
+-- TOC entry 4863 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -229,7 +230,7 @@ SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
--- TOC entry 4698 (class 2606 OID 16509)
+-- TOC entry 4699 (class 2606 OID 16509)
 -- Name: hash_types hash_types_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -238,7 +239,7 @@ ALTER TABLE ONLY public.hash_types
 
 
 --
--- TOC entry 4700 (class 2606 OID 16511)
+-- TOC entry 4701 (class 2606 OID 16511)
 -- Name: hash_types hash_types_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -247,7 +248,7 @@ ALTER TABLE ONLY public.hash_types
 
 
 --
--- TOC entry 4692 (class 2606 OID 16466)
+-- TOC entry 4693 (class 2606 OID 16466)
 -- Name: plans plans_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -256,7 +257,7 @@ ALTER TABLE ONLY public.plans
 
 
 --
--- TOC entry 4694 (class 2606 OID 16470)
+-- TOC entry 4695 (class 2606 OID 16470)
 -- Name: plans plans_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -265,7 +266,7 @@ ALTER TABLE ONLY public.plans
 
 
 --
--- TOC entry 4686 (class 2606 OID 16410)
+-- TOC entry 4687 (class 2606 OID 16410)
 -- Name: users users_email_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -274,7 +275,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4688 (class 2606 OID 16408)
+-- TOC entry 4689 (class 2606 OID 16408)
 -- Name: users users_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -283,7 +284,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4690 (class 2606 OID 16406)
+-- TOC entry 4691 (class 2606 OID 16406)
 -- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -292,7 +293,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4696 (class 2606 OID 16487)
+-- TOC entry 4697 (class 2606 OID 16487)
 -- Name: versions versions_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -301,7 +302,7 @@ ALTER TABLE ONLY public.versions
 
 
 --
--- TOC entry 4701 (class 2606 OID 16512)
+-- TOC entry 4702 (class 2606 OID 16512)
 -- Name: users users_hash_types_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -310,7 +311,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4702 (class 2606 OID 16476)
+-- TOC entry 4703 (class 2606 OID 16476)
 -- Name: users users_plans_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -318,7 +319,7 @@ ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_plans_fk FOREIGN KEY (plan_id) REFERENCES public.plans(id);
 
 
--- Completed on 2024-07-16 18:11:55
+-- Completed on 2024-07-17 19:03:10
 
 --
 -- PostgreSQL database dump complete
