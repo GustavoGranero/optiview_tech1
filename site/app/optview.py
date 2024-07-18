@@ -6,24 +6,32 @@ from flask import render_template
 # from flask import request
 # from flask import url_for
 # from flask import redirect
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import URL
-from sqlalchemy import create_engine
+from flask_login import current_user
+from flask_login import UserMixin
+from flask_login import LoginManager
+from flask_login import login_required
+from flask_login import login_user
+from flask_login import logout_user
 
-def get_database_engine():
-    url_object = URL.create(
-        "postgresql",
-        username=app.config['DATABASE_USER'],
-        password=app.config['DATABASE_PASSWORD'],
-        host=app.config['DATABASE_HOST'],
-        database=app.config['DATABASE_NAME'],
-    )
-
-    engine = create_engine(url_object)
-    return engine
+def get_database_url():
+        url_object = URL.create(
+            "postgresql+psycopg2",
+            username=app.config['DATABASE_USER'],
+            password=app.config['DATABASE_PASSWORD'],
+            host=app.config['DATABASE_HOST'],
+            database=app.config['DATABASE_NAME'],
+            port=app.config['DATABASE_PORT'],
+        )
+        return url_object
 
 app = Flask(__name__, static_url_path='',  static_folder='../web', template_folder="../web")
+
 app.config.from_pyfile('config.py')
-engine = get_database_engine()
+app.config['SQLALCHEMY_DATABASE_URI'] = get_database_url()
+db = SQLAlchemy(app)
+
 
 @app.route("/")
 @app.route("/<name>")
