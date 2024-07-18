@@ -8,5 +8,5 @@ DATABASE_PASSWORD = SECRET_DATABASE_PASSWORD
 
 SECRET_KEY = SECRET_SESSION_KEY
 
-PAGES_NO_AUTHENTICAN_REQUIRED = ['home.html', 'about.html']
+PAGES_NO_AUTHENTICAN_REQUIRED = ['home.html', 'about.html', 'declaracao_estrategica.html', 'login.com']
 
