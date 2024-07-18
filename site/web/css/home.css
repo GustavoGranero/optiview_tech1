@@ -176,20 +176,37 @@
 .new-section .left {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-.new-section .left h2 {
+.new-section h2 {
   font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 .new-section .left p {
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .new-section .right video {
   width: 100%;
   border-radius: 10px;
+}
+
+.mute-btn {
+  margin-top: 10px;
+  background-color: #FFA318;
+  color: #11101D;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.mute-btn:hover {
+  background-color: #D5F1FF;
+  color: #11101D;
 }
