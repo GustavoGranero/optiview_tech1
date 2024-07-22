@@ -83,7 +83,7 @@ p {
   scale: 1;
   opacity: 1;
 }
-.card:hover .content P {
+.card:hover .content p {
   opacity: 1;
   transform: translateY(0);
 }
@@ -94,44 +94,30 @@ p {
   display: flex;
   justify-content: center;
   margin: 0px;
-  background: rgb(17,16,29);
-  padding: 20px
+  padding: 20px;
+  color: #1d1b31;
 }
-
-.transition_one{
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin: 0px;
-  background: rgb(228,233,247);
-  background: linear-gradient(180deg, rgba(228,233,247,1) 35%, rgba(17,16,29,1) 100%);
-  padding: 20px
-}
-
-.transition_two{
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin: 0px;
-  background: rgb(228,233,247);
-  background: linear-gradient(360deg, rgba(228,233,247,1) 35%, rgba(17,16,29,1) 100%);
-  padding: 20px
-}
-
 
 .search-container input[type="text"] {
   width: 50%;
   padding: 10px 20px;
-  border: 2px solid #d1d1d1;
-  border-radius: 25px;
+  border: 2px solid #11101D;
+  border-radius: 25px 0 0 25px;
   font-size: 16px;
+  background-color: #1d1b31;
+  color: #d1d1d1;
 }
 
-.search-container i.bx-search {
-  position: absolute;
-  right: 27%;
-  top: 50%;
-  transform: translateY(-50%);
+.search-icon {
+  background-color: #11101D;
+  border: 2px solid #11101D;
+  border-radius: 0 25px 25px 0;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon i {
   font-size: 25px;
   color: #d1d1d1;
 }
