@@ -9,9 +9,17 @@
             "type": "debugpy",
             "request": "launch",
             "module": "flask",
-            "env": {
-                "FLASK_APP": "site\\app\\optview.py",
-                "FLASK_DEBUG": "1"
+            "windows": {
+                "env": {
+                    "FLASK_APP": "site\\app\\optview.py",
+                    "FLASK_DEBUG": "1"
+                },
+            },
+            "linux": {
+                "env": {
+                    "FLASK_APP": "site/app/optview.py",
+                    "FLASK_DEBUG": "1"
+                },
             },
             "args": [
                 "run",
