@@ -52,7 +52,17 @@ def user():
             data_valid = False
         else:
             password = password1
-        if not re.match(r'[\d -]', phone) and len(phone.replace(' ').replace('-')) >= 6:
+
+            if not (re.search(r"[a-zç]", password) is not None and 
+                    re.search(r"[A-ZÇ]", password) is not None and 
+                    (re.search(r"[0-9]", password) is not None or re.search(r"[!@#$%^&\*\(\)-_=+\[\]\{\}\/\|/\\\?\<\>.,~`]", password) is not None)):
+                messages.append(f"A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
+                data_valid = False
+
+        if len(password)<8:
+            messages.append(f"A senha deve ter ao menos 8 caracteres")
+            data_valid = False
+        if not (re.match(r'[\d -]', phone) and len(phone.replace(' ','').replace('-', '')) >= 6):
             messages.append(f"O telefone pode conter apenas espaços, números e - e tem de ter ao menos 6 dígitos.")
             data_valid = False
         if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
@@ -60,10 +70,10 @@ def user():
             data_valid = False
 
         if data_valid:
-            user_by_name = Users.query.filter(Users.user_name == user_name).first()
-            user_by_email= Users.query.filter(Users.email == email).first()
-            user_by_phone = Users.query.filter(Users.phone == phone).first()
-            
+            user_by_name = Users.query.filter_by(user_name = user_name).first()
+            user_by_email= Users.query.filter_by(email = email).first()
+            user_by_phone = Users.query.filter_by(phone = phone).first()
+
             if user_by_name is None and user_by_email is None and user_by_phone is None:
 
                 try:
