@@ -17,7 +17,6 @@ from flask_login import (
 )
 from sqlalchemy import exc
 
-
 from database import get_database
 
 app = Flask(__name__, static_url_path='',  static_folder='../web', template_folder="../web")
