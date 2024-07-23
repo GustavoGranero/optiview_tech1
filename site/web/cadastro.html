@@ -18,34 +18,53 @@
         </a>
     </div>
     <div class="background-pattern"></div>
-    <form id="cadastroForm">
+    <form id="cadastroForm" action="/user" method="post">
         <h2>Cadastro</h2>
         
         <div class="input-container">
-            <input type="text" id="nome" required>
+            <input class="{{ input_class }}" type="text" id="nome" name="user" value="{{ user_name }}" required>
             <label for="nome">Nome de Usuário</label>
         </div>
         
         <div class="input-container">
-            <input type="email" id="email" required>
+            <input class="{{ input_class }}" type="email" id="email" name="email" value="{{ email }}" required>
             <label for="email">Email</label>
         </div>
         
         <div class="input-container">
-            <input type="password" id="senha" required>
-            <label for="senha">Senha</label>
-            <span class="toggle-password" onclick="togglePassword()">
+            <input class="{{ input_class }}" type="password" id="senha1" name="password1" value="{{ password1 }}" required>
+            <label for="senha1">Senha</label>
+            <span class="toggle-password" onclick="togglePassword('senha1')">
                 <i class='bx bxs-show'></i>
             </span>
         </div>
+
+        <div class="input-container">
+            <input class="{{ input_class }}" type="password" id="senha2" name="password2" value="{{ password2 }}" required>
+            <label for="senha2">Confirmação senha</label>
+            <span class="toggle-password" onclick="togglePassword('senha2')">
+                <i class='bx bxs-show'></i>
+            </span>
+        </div>
+
+        <div class="input-container">
+            <input class="{{ input_class }}" type="text" id="telefone" name="phone" value="{{ phone }}" required>
+            <label for="telefone">Telefone</label>
+        </div>
         
         <input type="submit" value="Cadastrar">
+
+        {% for message in messages %}
+            <p class="error-message">{{message}}</p>
+        {% endfor %}
+
+
         <p class="login-link">Já tem cadastro? <a href="login.html">Entrar</a></p>
     </form>
 
     <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('senha');
+        function togglePassword(id) {
+            const passwordField = document.getElementById(id);
             const passwordToggle = document.querySelector('.toggle-password i');
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
@@ -67,13 +86,6 @@
                     input.classList.remove('not-empty');
                 }
             });
-        });
-
-        // Redirect to home.html after form submission
-        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Here you can add your form validation or AJAX call
-            window.location.href = 'home.html';
         });
     </script>
 </body>
