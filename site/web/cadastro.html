@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    {% include "includes/loader.html" %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OptiView Tech | Cadastro</title>
@@ -61,7 +62,7 @@
 
         <p class="login-link">Já tem cadastro? <a href="login.html">Entrar</a></p>
     </form>
-
+    <script src="js/loader.js"></script>
     <script>
         function togglePassword(id) {
             const passwordField = document.getElementById(id);

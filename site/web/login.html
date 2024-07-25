@@ -9,6 +9,7 @@
     <link rel="icon" href="images/optiview_grande.ico">
 </head>
 <body>
+    {% include "includes/loader.html" %}
     <div class="top-bar">
         <a href="home.html" class="logo-link">
             <div class="title">
@@ -36,7 +37,7 @@
         <input type="submit" value="Login">
         <p class="login-link">Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
     </form>
-
+    <script src="js/loader.js"></script>
     <script>
         function togglePassword() {
             const passwordField = document.getElementById('senha');

@@ -10,6 +10,7 @@
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+    {% include "includes/loader.html" %}
     <div class="top-bar">
         <a href="home.html" class="logo-link">
             <div class="title">
@@ -43,6 +44,7 @@
         </div>
     </section>
     {% include "includes/footer.html" %}
+    <script src="js/loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const buttons = document.querySelectorAll('.action-button');
