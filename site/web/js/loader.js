@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
       content.classList.add("loaded");
     }
   
+
     // Simula um carregamento inicial
     setTimeout(hideLoader, 700);
   
