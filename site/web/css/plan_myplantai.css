@@ -71,7 +71,7 @@ body {
 
 .toggle-btn {
     background-color: #1d1b31;
-    color: #fff;
+    color: #D5F1FF;
     border: none;
     border-radius: 10px;
     padding: 15px 30px; /* Tamanho uniforme para todos os botões */
@@ -91,7 +91,6 @@ body {
 .subscription-plans {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     gap: 20px;
     padding: 20px;
     flex-wrap: wrap;
@@ -111,7 +110,7 @@ body {
 
 .subscribe-btn {
     background-color: #1d1b31;
-    color: #fff;
+    color: #D5F1FF;
     border: none;
     border-radius: 10px;
     padding: 15px 30px; /* Tamanho uniforme para todos os botões */
@@ -127,19 +126,19 @@ body {
 .pack-container {
     position: relative;
     display: flex;
-    max-width: 350px;
+    max-width: 400px;
     flex-direction: column;
     border-radius: 12px;
-    background-color: #212121;
-    border: solid #fff;
+    background-color: #1d1b31;
+    border: solid #11101D;
     padding: 1.6rem;
-    color: #fff;
+    color: #D5F1FF;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     width: 400px; /* Aumentar largura do frame */
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     justify-content: space-between;
-    min-height: 350px; /* Aumentar altura mínima */
+    min-height: 540px; /* Aumentar altura mínima */
   }
   
   .header {
@@ -148,7 +147,7 @@ body {
     margin-bottom: 2rem;
     overflow: hidden;
     border-radius: 0;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid #D5F1FF;
     background: transparent;
     padding-bottom: 1rem;
     text-align: center;
@@ -156,18 +155,17 @@ body {
   
   .title_price {
     display: block;
-    font-family: sans-serif;
-    font-size: 0.875rem;
+    font-family: 'Poppins';
+    font-size: 19px;
     line-height: 1.25rem;
     text-transform: uppercase;
-    color: #fff
+    color: #D5F1FF
   }
   
   .price-container {
     margin-top: 10px;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     gap: 4px;
     font-family: sans-serif;
     font-size: 4.5rem;
@@ -227,11 +225,15 @@ body {
   .button-container button {
     display: block;
     width: 100%;
-    background-color: #fff;
+    background-color: #D5F1FF;
     padding: 10px 20px;
     text-transform: uppercase;
     color: #000;
     outline: 0;
     border: 0;
     border-radius: 10px;
+  }
+
+  a {
+    text-decoration: none;
   }
