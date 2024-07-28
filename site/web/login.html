@@ -36,7 +36,16 @@
         
         
         <input type="submit" value="Login">
-        <p class="login-link">Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+
+        {% for message in messages %}
+            <p class="error-message">{{message}}</p>
+        {% endfor %}
+
+
+        <p class="login-link">
+            Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se</a><br/>
+            Esqueceu sua senha? <a href="#">Alterar senha</a>
+        </p>
     </form>
     <script>
         function togglePassword() {

@@ -114,19 +114,28 @@ def loader_user(user_id):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    messages = []
     user_name = request.form.get("user-or-email")
     password = request.form.get("password")
 
-    if (user := get_authenticated_user(user_name, password)) is not None:
-        login_user(user)
-        if 'redirect' in session:
-            name = session['redirect']
-            session.pop('redirect')
-            return render_template(name)
+    try:
+        if (user := get_authenticated_user(user_name, password)) is not None:
+            login_user(user)
+            if 'redirect' in session:
+                name = session['redirect']
+                session.pop('redirect')
+                return render_template(name)
+            else:
+                return render_template("home.html")
         else:
-            return render_template("home.html")
+            messages.append("Usuário ou senha inválidos. Tente novamente.")
+    except Exception:
+        messages.append("Houve um erro na validação do usuário e senha.")
 
-    return render_template("login.html")
+    context = {
+        'messages': messages,
+    }
+    return render_template("login.html", **context)
 
 @app.route("/logout")
 @login_required
