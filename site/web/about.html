@@ -1,23 +1,54 @@
-  <!DOCTYPE html>
-  <html lang="en" dir="ltr">
-    <head>
-      <meta charset="UTF-8">
-      <title> OptiView Tech | About Page </title>
-      <link rel="stylesheet" href="css/loader.css">
-      <link rel="stylesheet" href="css/sidebar.css">
-      <link rel="stylesheet" href="css/rodape.css">
-      <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-      <link rel="icon" href="images/optiview_grande.ico">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> OptiView Tech | About Page </title>
+    <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/rodape.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="images/optiview_grande.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
   <body>
     {% include "includes/loader.html" %}
     {% include "includes/sidebar.html" %}
     <section class="home-section">
-        <div class="text">About Us</div>
-        {% include "includes/footer.html" %}
+      <div class="text">About Us</div>
+      <div class="container_header">
+        <div class="intro_text">Conheça a OptiView Tech</div>
+      </div>
+      <div></div>
+      <div class="values">
+        <h2>Nossos Valores</h2>
+        <p class="subtitle">Esses são os valores da OptiView...</p>
+        <div class="cards-container">
+          <div class="card">
+            HOVER
+            <div class="more-info-button">Saber Mais</div>
+          </div>
+          <div class="card">
+            HOVER
+            <div class="more-info-button">Saber Mais</div>
+          </div>
+          <div class="card">
+            HOVER
+            <div class="more-info-button">Saber Mais</div>
+          </div>
+          <div class="card">
+            HOVER
+            <div class="more-info-button">Saber Mais</div>
+          </div>
+          <div class="card">
+            HOVER
+            <div class="more-info-button">Saber Mais</div>
+          </div>
+        </div>
+      </div>
+      {% include "includes/footer.html" %}
     </section>
     <script src="js/sidebar.js"></script>
     <script src="js/loader.js"></script>
   </body>
-  </html>
+</html>
