@@ -24,6 +24,7 @@ app.config.from_pyfile('config.py')
 db = get_database(app)
 
 from models.users import Users
+from models.plans import Plans
 from auth import get_authenticated_user
 from auth import get_authenticated_user
 from auth import get_hash
@@ -114,25 +115,42 @@ def loader_user(user_id):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    messages = []
     user_name = request.form.get("user-or-email")
     password = request.form.get("password")
 
+    # try:
     if (user := get_authenticated_user(user_name, password)) is not None:
         login_user(user)
+        context = {
+            'user': current_user,
+        }
         if 'redirect' in session:
             name = session['redirect']
             session.pop('redirect')
-            return render_template(name)
+            return render_template(name, **context)
         else:
-            return render_template("home.html")
+            return render_template("home.html", **context)
+    else:
+        messages.append("Usuário ou senha inválidos. Tente novamente.")
+    # except Exception:
+    #     # TODO log the error
+    #     messages.append("Houve um erro na validação do usuário e senha.")
 
-    return render_template("login.html")
+
+    context = {
+        'messages': messages,
+    }
+    return render_template("login.html", **context)
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return render_template("home.html")
+    context = {
+        'user': current_user,
+    }
+    return render_template("home.html", **context)
 
 @app.route("/")
 @app.route("/<name>")
@@ -147,5 +165,8 @@ def templates(name = "home.html"):
         name = session['redirect']
         session.pop('redirect', None)
     
-    return render_template(name)
+    context = {
+        'user': current_user,
+    }
+    return render_template(name, **context)
 

@@ -14,3 +14,6 @@ class Users(UserMixin, db.Model):
     plan_id = db.Column(db.Integer, unique=False, nullable=False, default=1)
     phone = db.Column(db.String(250), unique=False, nullable=False)
     login_failure_count = db.Column(db.Integer, unique=False, nullable=False, default=1)
+
+    plans = db.relationship('Plans', backref='users', lazy='joined')
+

@@ -15,7 +15,9 @@
   </head>
 <body>
     {% include "includes/loader.html" %}
-    {% include "includes/sidebar.html" %}
+    {% with user=user %}
+      {% include "includes/sidebar.html" %}
+    {% endwith %} 
     <section class="home-section">              
         <main>
             <div class="text">Settings</div>

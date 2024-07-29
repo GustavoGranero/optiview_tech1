@@ -17,11 +17,7 @@ def get_hash(user_name, password):
 
 def get_authenticated_user(user_name, password):
     user = Users.query.filter_by(user_name=user_name).first()
-    try:
-        if user is not None and bcrypt.check_password_hash(user.hash, password):
-            return user
-        else:
-            return None
-    except Exception as e:
-        # TODO log error
+    if user is not None and bcrypt.check_password_hash(user.hash, password):
+        return user
+    else:
         return None
