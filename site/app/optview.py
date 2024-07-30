@@ -119,23 +119,20 @@ def login():
     user_name = request.form.get("user-or-email")
     password = request.form.get("password")
 
-    # try:
-    if (user := get_authenticated_user(user_name, password)) is not None:
-        login_user(user)
-        context = {
-            'user': current_user,
-        }
-        if 'redirect' in session:
-            name = session['redirect']
-            session.pop('redirect')
-            return render_template(name, **context)
+    try:
+        if (user := get_authenticated_user(user_name, password)) is not None:
+            login_user(user)
+            if 'redirect' in session:
+                name = session['redirect']
+                session.pop('redirect')
+                redirect(f"/{name}")
+            else:
+                return redirect("/home.html")
         else:
-            return render_template("home.html", **context)
-    else:
-        messages.append("Usuário ou senha inválidos. Tente novamente.")
-    # except Exception:
-    #     # TODO log the error
-    #     messages.append("Houve um erro na validação do usuário e senha.")
+            messages.append("Usuário ou senha inválidos. Tente novamente.")
+    except Exception:
+        # TODO log the error
+        messages.append("Houve um erro na validação do usuário e senha.")
 
 
     context = {
@@ -150,7 +147,7 @@ def logout():
     context = {
         'user': current_user,
     }
-    return render_template("home.html", **context)
+    return redirect("/home.html")
 
 @app.route("/")
 @app.route("/<name>")

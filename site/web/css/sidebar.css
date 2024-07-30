@@ -216,6 +216,12 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.sidebar.open li .profile-details {
+  opacity: 1;
 }
 
 .bx.user-avatar {
@@ -238,20 +244,17 @@
 .sidebar .profile #log_out {
   position: absolute;
   top: 50%;
-  right: 0;
   transform: translateY(-50%);
+  right: 14px;
   background: #1d1b31;
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  border-radius: 0px;
-  transition: all 0.5s ease;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
 }
 
-.sidebar.open .profile #log_out {
-  width: 50px;
-  background: none;
-}
+.sidebar #links_log_out {
+  background: transparent;
+ }
 
 .home-section {
   position: relative;
