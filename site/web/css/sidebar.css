@@ -205,7 +205,6 @@
   padding: 10px 8px;
   background: #1d1b31;
   transition: all 0.5s ease;
-  overflow: hidden;
 }
 
 .sidebar.open li.profile {
