@@ -205,7 +205,6 @@
   padding: 10px 8px;
   background: #1d1b31;
   transition: all 0.5s ease;
-  overflow: hidden;
 }
 
 .sidebar.open li.profile {
@@ -241,7 +240,7 @@
   font-size: 12px;
 }
 
-.sidebar .profile #log_out {
+.sidebar li.profile .bx-log-out {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -252,9 +251,15 @@
   border-radius: 12px;
 }
 
-.sidebar #links_log_out {
+.sidebar li.profile a{
   background: transparent;
- }
+}
+
+.sidebar li.profile a:hover .links_name,
+.sidebar li.profile a:hover i {
+  transition: all 0.5s ease;
+  color: #D5F1FF;
+}
 
 .home-section {
   position: relative;
