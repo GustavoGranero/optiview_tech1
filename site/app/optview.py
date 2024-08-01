@@ -125,7 +125,7 @@ def login():
             if 'redirect' in session:
                 name = session['redirect']
                 session.pop('redirect')
-                redirect(f"/{name}")
+                return redirect(f"/{name}")
             else:
                 return redirect("/home.html")
         else:
@@ -133,7 +133,6 @@ def login():
     except Exception:
         # TODO log the error
         messages.append("Houve um erro na validação do usuário e senha.")
-
 
     context = {
         'messages': messages,
