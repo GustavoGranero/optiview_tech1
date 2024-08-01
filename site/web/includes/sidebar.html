@@ -67,21 +67,24 @@
         <span class="tooltip">Settings</span>
       </li>
       <li class="profile">
+        {% if user.is_authenticated  %}
           <div class="profile-details">
             <i class='bx bxs-user-circle user-avatar'></i>
             <div class="name_job">
               <div class="name">{{user.user_name}}</div>
-              <div class="job">
-                {% if user.is_authenticated  %}
-                  {{user.plans[0].name}}
-                {% endif %}
-              </div>
+              <div class="job">{{user.plans[0].name}}</div>
             </div>
           </div>
-          <a id="links_log_out" href="logout">
-            <i class='bx bx-log-out' id="log_out"></i>
+          <a href="logout">
+            <i class='bx bx-log-out'></i>
           </a>
+        {% else %}
+          <a href="login.html">
+            <i class='bx bx-log-in'></i>
+            <span class="links_name">Login</span>
+          </a>
+          <span class="tooltip">Login</span>
+        {% endif %}
       </li>
     </ul>
   </div>
-  

@@ -186,7 +186,7 @@
 .sidebar li a:hover .links_name,
 .sidebar li a:hover i {
   transition: all 0.5s ease;
-  color: #11101D;
+  /* color: #11101D; */
 }
 
 .sidebar li i {
@@ -241,7 +241,7 @@
   font-size: 12px;
 }
 
-.sidebar .profile #log_out {
+.sidebar li.profile .bx-log-out {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -252,9 +252,10 @@
   border-radius: 12px;
 }
 
-.sidebar #links_log_out {
+.sidebar li.profile a {
   background: transparent;
- }
+}
+
 
 .home-section {
   position: relative;
