@@ -186,7 +186,7 @@
 .sidebar li a:hover .links_name,
 .sidebar li a:hover i {
   transition: all 0.5s ease;
-  /* color: #11101D; */
+  color: #11101D;
 }
 
 .sidebar li i {
@@ -252,10 +252,15 @@
   border-radius: 12px;
 }
 
-.sidebar li.profile a {
+.sidebar li.profile a{
   background: transparent;
 }
 
+.sidebar li.profile a:hover .links_name,
+.sidebar li.profile a:hover i {
+  transition: all 0.5s ease;
+  color: #D5F1FF;
+}
 
 .home-section {
   position: relative;
