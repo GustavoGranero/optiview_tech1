@@ -12,7 +12,7 @@ def get_template(template_name):
     return template
 
 def get_action_url(app, user):
-    # TODO criar uma tabela para guardar os tokens de confirmação
+    # TODO criar o modelo das tabelas action e action_types
     # TODO create action token
     token = '7799404457b3c2914DB395ea19ce0641'
     # TODO create token entry on action table
