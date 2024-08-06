@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <title>OptiView Tech | MyPlanAI</title>
+  <title>OptiView Tech | Home Page</title>
   <link rel="stylesheet" href="css/loader.css">
-  <link rel="stylesheet" href="css/sidebar_laranja.css">
-  <link rel="stylesheet" href="css/myplantai_teste_laranja.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/myplanai.css">
   <link rel="stylesheet" href="css/rodape.css">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
   <link rel="icon" href="images/optiview_grande.ico">
@@ -17,86 +17,89 @@
     {% include "includes/sidebar.html" %}
   {% endwith %}
   <section class="home-section">
-    <div class="main-section">
-      <img src="images/MyPlanAI_off.png" alt="MyPlanAI Image" class="intro-image">
-    </div>
-    <div class="description">
-      <p>Envie sua planta e obtenha uma análise dela com informações como: a lista, quantidade e recomendação de materiais necessários, além da área útil da planta;</p>
-    </div>
-  
-    <div class="boxes">
-      <div class="upload-section">
-        <h2>Envio de Arquivo</h2>
-        <form id="upload-form">
-          <label for="file-upload" class="file-upload-label">
-            <i class='bx bx-upload'></i>
-            Selecione o arquivo da planta
-          </label>
-          <input type="file" id="file-upload" accept=".pdf,.png,.jpg,.jpeg" required>
-          <div id="file-info">
-            <img id="file-preview" src="#" alt="File Preview" style="display:none;">
-            <span id="file-name"></span>
-          </div>
-          <div id='file-buttons' class="buttons">
-            <button type="submit" class="submit-btn">Enviar</button>
-            <button type="reset" class="submit-btn">Cancelar</button>
-          </div>
-        </form>
-      </div>
-  
-      <div class="analysis-section">
-        <h2>Resultados da Análise</h2>
-        <div class="analysis-results">
-          <div id="analysis-output">
-          </div>
+    <div class="text">MyPlanAI</div>
+    <div class="folders-container">
+      <div class="folder">
+        <div class="folder-name">
+          <span>Project 1</span>
+          <input type="text">
         </div>
       </div>
+      <div class="folder">
+        <div class="folder-name">
+          <span>Project 2</span>
+          <input type="text">
+        </div>
+      </div>
+      <div class="add-folder">+</div>
     </div>
-    {% include "includes/footer.html" %}
   </section>
+  {% include "includes/footer.html" %}
   <script src="js/sidebar.js"></script>
   <script src="js/loader.js"></script>
   <script>
-    document.getElementById('file-upload').addEventListener('change', function() {
-      const file = this.files[0];
-      const fileName = file.name;
-      document.getElementById('file-name').textContent = `Arquivo selecionado: ${fileName}`;
-      
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('file-preview').src = e.target.result;
-          document.getElementById('file-preview').style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-        document.getElementById('file-buttons').style.display='flex'
-      }
-      else {
-        document.getElementById('file-buttons').style.display='none'
-      }
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener to each folder name
+      document.querySelectorAll('.folder-name').forEach(function(folderName) {
+        folderName.addEventListener('click', function() {
+          const folder = this.closest('.folder');
+          folder.classList.add('edit-mode');
+          const input = folder.querySelector('input');
+          input.value = this.innerText.trim();
+          input.focus();
+        });
+      });
 
-    document.getElementById('upload-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      // Simulate file upload and AI analysis result
-      setTimeout(() => {
-        document.getElementById('analysis-output').innerHTML = `
-          <p><strong>Área da construção:</strong> 200 m²</p>
-          <p><strong>Materiais estimados:</strong></p>
-          <ul>
-            <li>Cimento: 50 sacos</li>
-            <li>Areia: 20 m³</li>
-            <li>Tijolos: 5000 unidades</li>
-          </ul>
+      // Add event listener to folder name input fields
+      document.querySelectorAll('.folder-name input').forEach(function(input) {
+        input.addEventListener('blur', function() {
+          const folder = this.closest('.folder');
+          folder.classList.remove('edit-mode');
+          const span = folder.querySelector('span');
+          span.innerText = this.value.trim();
+        });
+
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            this.blur();
+          }
+        });
+      });
+
+      // Add new folder functionality
+      document.querySelector('.add-folder').addEventListener('click', function() {
+        const newFolder = document.createElement('div');
+        newFolder.classList.add('folder');
+        newFolder.innerHTML = `
+          <div class="folder-name">
+            <span>New Folder</span>
+            <input type="text">
+          </div>
         `;
-      }, 1000);
-    });
+        document.querySelector('.folders-container').insertBefore(newFolder, this);
+        
+        // Reattach event listeners for the new folder
+        newFolder.querySelector('.folder-name').addEventListener('click', function() {
+          const folder = this.closest('.folder');
+          folder.classList.add('edit-mode');
+          const input = folder.querySelector('input');
+          input.value = this.innerText.trim();
+          input.focus();
+        });
 
-    document.getElementById('upload-form').addEventListener('reset', function() {
-      document.getElementById('file-preview').style.display = 'none';
-      document.getElementById('file-buttons').style.display='none'
-      document.getElementById('file-name').textContent = '';
-      document.getElementById('analysis-output').innerHTML = '';
+        newFolder.querySelector('.folder-name input').addEventListener('blur', function() {
+          const folder = this.closest('.folder');
+          folder.classList.remove('edit-mode');
+          const span = folder.querySelector('span');
+          span.innerText = this.value.trim();
+        });
+
+        newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            this.blur();
+          }
+        });
+      });
     });
   </script>
 </body>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>OptiView Tech | MyPlanAI</title>
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/sidebar_laranja.css">
+  <link rel="stylesheet" href="css/myplantai_teste_laranja.css">
+  <link rel="stylesheet" href="css/rodape.css">
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="icon" href="images/optiview_grande.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  {% include "includes/loader.html" %}
+  {% with user=user %}
+    {% include "includes/sidebar.html" %}
+  {% endwith %}
+  <section class="home-section">
+    <div class="main-section">
+      <img src="images/MyPlanAI_off.png" alt="MyPlanAI Image" class="intro-image">
+    </div>
+    <div class="description">
+      <p>Envie sua planta e obtenha uma análise dela com informações como: a lista, quantidade e recomendação de materiais necessários, além da área útil da planta;</p>
+    </div>
+  
+    <div class="boxes">
+      <div class="upload-section">
+        <h2>Envio de Arquivo</h2>
+        <form id="upload-form">
+          <label for="file-upload" class="file-upload-label">
+            <i class='bx bx-upload'></i>
+            Selecione o arquivo da planta
+          </label>
+          <input type="file" id="file-upload" accept=".pdf,.png,.jpg,.jpeg" required>
+          <div id="file-info">
+            <img id="file-preview" src="#" alt="File Preview" style="display:none;">
+            <span id="file-name"></span>
+          </div>
+          <div id='file-buttons' class="buttons">
+            <button type="submit" class="submit-btn">Enviar</button>
+            <button type="reset" class="submit-btn">Cancelar</button>
+          </div>
+        </form>
+      </div>
+  
+      <div class="analysis-section">
+        <h2>Resultados da Análise</h2>
+        <div class="analysis-results">
+          <div id="analysis-output">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "includes/footer.html" %}
+  </section>
+  <script src="js/sidebar.js"></script>
+  <script src="js/loader.js"></script>
+  <script>
+    document.getElementById('file-upload').addEventListener('change', function() {
+      const file = this.files[0];
+      const fileName = file.name;
+      document.getElementById('file-name').textContent = `Arquivo selecionado: ${fileName}`;
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('file-preview').src = e.target.result;
+          document.getElementById('file-preview').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+        document.getElementById('file-buttons').style.display='flex'
+      }
+      else {
+        document.getElementById('file-buttons').style.display='none'
+      }
+    });
+
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Simulate file upload and AI analysis result
+      setTimeout(() => {
+        document.getElementById('analysis-output').innerHTML = `
+          <p><strong>Área da construção:</strong> 200 m²</p>
+          <p><strong>Materiais estimados:</strong></p>
+          <ul>
+            <li>Cimento: 50 sacos</li>
+            <li>Areia: 20 m³</li>
+            <li>Tijolos: 5000 unidades</li>
+          </ul>
+        `;
+      }, 1000);
+    });
+
+    document.getElementById('upload-form').addEventListener('reset', function() {
+      document.getElementById('file-preview').style.display = 'none';
+      document.getElementById('file-buttons').style.display='none'
+      document.getElementById('file-name').textContent = '';
+      document.getElementById('analysis-output').innerHTML = '';
+    });
+  </script>
+</body>
+</html>
