@@ -8,6 +8,7 @@ class Users(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(250), unique=True, nullable=False)
+    full_name = db.Column(db.String(250), unique=True, nullable=False)   
     email = db.Column(db.String(250), unique=True, nullable=False)
     hash_type = db.Column(db.Integer, unique=False, nullable=False, default=1)
     hash = db.Column(db.LargeBinary, unique=False, nullable=False)

@@ -26,8 +26,8 @@ db = get_database(app)
 from models.users import Users
 from models.plans import Plans
 from auth import get_authenticated_user
-from auth import get_authenticated_user
 from auth import get_hash
+import email_send
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -41,6 +41,7 @@ def user():
     else:
         # create new user is only allowed if you are not logged in
         user_name = request.form.get("user")
+        full_name = request.form.get("full_name")
         email = request.form.get("email")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
@@ -59,15 +60,18 @@ def user():
                 messages.append(f"A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
                 data_valid = False
 
-        if len(password)<8:
-            messages.append(f"A senha deve ter ao menos 8 caracteres")
-            data_valid = False
+            if len(password)<8:
+                messages.append(f"A senha deve ter ao menos 8 caracteres")
+                data_valid = False
+                
         if not (re.match(r'[\d -]', phone) and len(phone.replace(' ','').replace('-', '')) >= 6):
             messages.append(f"O telefone pode conter apenas espaços, números e - e tem de ter ao menos 6 dígitos.")
             data_valid = False
         if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
             messages.append(f"O e-mail é inválido")
             data_valid = False
+        if len(full_name)<1:
+            messages.append(f"O nome completo não pode ser vazio")       
 
         if data_valid:
             user_by_name = Users.query.filter_by(user_name = user_name).first()
@@ -77,16 +81,21 @@ def user():
             if user_by_name is None and user_by_email is None and user_by_phone is None:
 
                 try:
-                    new_user = Users(user_name=user_name, email=email, phone=phone, hash=get_hash(user_name, password))
+                    new_user = Users(user_name=user_name, full_name=full_name, email=email, phone=phone, hash=get_hash(user_name, password))
                     db.session.add(new_user)   
                     db.session.commit()
 
-                    messages.append(f"Usuário criado, você receberá um e-mail e um SMS para confirmar e-mail e telefone.")
+                    messages.append(f"Usuário criado, você receberá um e-mail para confirmar o e-mail e telefone.")
                     messages.append("Após confirmar estes dados poderá fazer login.")
+
+                    ok, code, message = email_send.send_email_confirmation(app, new_user)
+                    if not ok:
+                        messages.append("Houve um erro no envio de seu e-mail. Tente fazer login mais tarde.")
+                        # TODO log error code and message
+
                 except exc.SQLAlchemyError as e:
                     # TODO log error
                     messages.append(f"Houve um erro na criação do usuário.")
-
 
             else:
                 if user_by_name is not None:
@@ -99,6 +108,7 @@ def user():
     context = {
         'messages': messages,
         'user_name': user_name,
+        'full_name': full_name,
         'email': email,
         'password1': password1,
         'password2': password2,
