@@ -1,4 +1,5 @@
 import os
+import secrets 
 
 from mailersend import emails
 from flask import render_template_string
@@ -13,8 +14,7 @@ def get_template(template_name):
 
 def get_action_url(app, user):
     # TODO criar o modelo das tabelas action e action_types
-    # TODO create action token
-    token = '7799404457b3c2914DB395ea19ce0641'
+    token = secrets.token_urlsafe()
     # TODO create token entry on action table
     # TODO create action URL
     url = app.config['EMAIL_ACTION_URL'].format(token=token)
