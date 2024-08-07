@@ -43,3 +43,5 @@ EMAIL_REQUEST_EXPIRATION_TIME = 24
 EMAIL_SITE_URL = 'http://127.0.0.1:5000' # temporário para teste
 EMAIL_LOGIN_URL = f'{EMAIL_SITE_URL}/login.html'
 EMAIL_ACTION_URL = f'{EMAIL_SITE_URL}/action/{{token}}'
+
+ACTION_TYPE_CONFIRM_EMAIL = 'confirm_email'

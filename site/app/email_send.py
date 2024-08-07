@@ -4,6 +4,10 @@ import secrets
 from mailersend import emails
 from flask import render_template_string
 
+from optview import db
+from models.action_types import ActionTypes
+from models.actions import Actions
+
 def get_template(template_name):
     
     filename = os.path.join(os.path.dirname(__file__), f'../email_templates/{template_name}')
@@ -12,26 +16,35 @@ def get_template(template_name):
     
     return template
 
-def get_action_url(app, user):
-    # TODO criar o modelo das tabelas action e action_types
-    token = secrets.token_urlsafe()
-    # TODO create token entry on action table
-    # TODO create action URL
+def get_action_url(app, token):
     url = app.config['EMAIL_ACTION_URL'].format(token=token)
     return url
 
+def create_action(app, user, action_type_name, token):
+    action_type = app.config[action_type_name]
+    action_type_id = ActionTypes.query.filter_by(action_type = action_type).first().id
+
+    new_action = Actions(action_type_id=action_type_id, user_id=user.id, token=token)
+    db.session.add(new_action)   
+    db.session.commit()
+
 def send_email_confirmation(app, user):
+    token = secrets.token_urlsafe()
+    action_url = get_action_url(app, token)
+    create_action(app, user, 'ACTION_TYPE_CONFIRM_EMAIL', token)
+
     template_name = app.config['EMAIL_TEMPLATE_CONFIRM_EMAIL']
     template = get_template(template_name)
+
     subject_template_name = app.config['EMAIL_TEMPLATE_CONFIRM_EMAIL_SUBJECT']
-    subject_template = get_template(subject_template_name)
+    subject_template = get_template(subject_template_name)    
 
     variables = {
         'company': app.config['COMPANY'],
         'name': user.full_name,
         'product': app.config['PRODUCT'],
         'expiration_time': app.config['EMAIL_REQUEST_EXPIRATION_TIME'],
-        'action_url': get_action_url(app, user),
+        'action_url': action_url,
         'login_url': app.config['EMAIL_LOGIN_URL'],
         'username':  user.user_name,
         'site_url': app.config['EMAIL_SITE_URL'],
@@ -41,6 +54,7 @@ def send_email_confirmation(app, user):
     email_content = render_template_string(template, **variables)
 
     result = send_mail(app, subject, email_content, user)
+
     return result
 
 def send_mail(app, subject, email_content, user):

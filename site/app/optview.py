@@ -26,6 +26,8 @@ db = get_database(app)
 from models.users import Users
 from models.plans import Plans
 from models.hash_types import HashTypes
+from models.action_types import ActionTypes
+from models.actions import Actions
 from auth import get_authenticated_user
 from auth import get_hash
 import email_send
@@ -89,10 +91,10 @@ def user():
                     messages.append(f"Usuário criado, você receberá um e-mail para confirmar o e-mail e telefone.")
                     messages.append("Após confirmar estes dados poderá fazer login.")
 
-                    # ok, code, message = email_send.send_email_confirmation(app, new_user)
-                    # if not ok:
-                    #     messages.append("Houve um erro no envio de seu e-mail. Tente fazer login mais tarde.")
-                    #     # TODO log error code and message
+                    ok, code, message = email_send.send_email_confirmation(app, new_user)
+                    if not ok:
+                        messages.append("Houve um erro no envio de seu e-mail. Tente fazer login mais tarde.")
+                        # TODO log error code and message
 
                 except exc.SQLAlchemyError as e:
                     # TODO log error
