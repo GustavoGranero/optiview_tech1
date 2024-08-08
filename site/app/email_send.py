@@ -11,7 +11,7 @@ from models.actions import Actions
 def get_template(template_name):
     
     filename = os.path.join(os.path.dirname(__file__), f'../email_templates/{template_name}')
-    with open(filename) as file:
+    with open(filename, encoding="utf8") as file:
         template = file.read()
     
     return template

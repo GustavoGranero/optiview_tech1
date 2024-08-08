@@ -205,7 +205,6 @@
   padding: 10px 8px;
   background: #1d1b31;
   transition: all 0.5s ease;
-  overflow: hidden;
 }
 
 .sidebar.open li.profile {
@@ -216,6 +215,12 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.sidebar.open li .profile-details {
+  opacity: 1;
 }
 
 .bx.user-avatar {
@@ -235,27 +240,30 @@
   font-size: 12px;
 }
 
-.sidebar .profile #log_out {
+.sidebar li.profile .bx-log-out {
   position: absolute;
   top: 50%;
-  right: 0;
   transform: translateY(-50%);
+  right: 14px;
   background: #1d1b31;
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  border-radius: 0px;
-  transition: all 0.5s ease;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
 }
 
-.sidebar.open .profile #log_out {
-  width: 50px;
-  background: none;
+.sidebar li.profile a{
+  background: transparent;
+}
+
+.sidebar li.profile a:hover .links_name,
+.sidebar li.profile a:hover i {
+  transition: all 0.5s ease;
+  color: #FFA318;
 }
 
 .home-section {
   position: relative;
-  background:#FDD69B;
+  background: #FDD69B;
   min-height: 100vh;
   top: 0;
   left: 78px;
