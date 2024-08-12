@@ -1,7 +1,7 @@
 from optview import db
+from models.base_mixin import BaseMixin
 
-
-class ActionTypes(db.Model):
+class ActionTypes(BaseMixin, db.Model):
     __tablename__ = "action_types"
 
     id = db.Column(db.Integer, primary_key=True)

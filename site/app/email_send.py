@@ -4,6 +4,7 @@ import secrets
 from mailersend import emails
 from flask import render_template_string
 
+# tod import app instead of passing
 from optview import db
 from models.action_types import ActionTypes
 from models.actions import Actions
@@ -22,11 +23,9 @@ def get_action_url(app, token):
 
 def create_action(app, user, action_type_name, token):
     action_type = app.config[action_type_name]
-    action_type_id = ActionTypes.query.filter_by(action_type = action_type).first().id
+    action_type_id = ActionTypes.get_one(action_type = action_type).id
 
-    new_action = Actions(action_type_id=action_type_id, user_id=user.id, token=token)
-    db.session.add(new_action)   
-    db.session.commit()
+    Actions.add(action_type_id=action_type_id, user_id=user.id, token=token)
 
 def send_email_confirmation(app, user):
     token = secrets.token_urlsafe()

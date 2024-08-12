@@ -77,16 +77,14 @@ def user():
             messages.append(f"O nome completo não pode ser vazio")       
 
         if data_valid:
-            user_by_name = Users.query.filter_by(user_name = user_name).first()
-            user_by_email= Users.query.filter_by(email = email).first()
-            user_by_phone = Users.query.filter_by(phone = phone).first()
+            user_by_name = Users.get_one(user_name = user_name)
+            user_by_email= Users.get_one(email = email)
+            user_by_phone = Users.get_one(phone = phone)
 
             if user_by_name is None and user_by_email is None and user_by_phone is None:
 
                 try:
-                    new_user = Users(user_name=user_name, full_name=full_name, email=email, phone=phone, hash=get_hash(user_name, password))
-                    db.session.add(new_user)   
-                    db.session.commit()
+                    new_user = Users.add(user_name=user_name, full_name=full_name, email=email, phone=phone, hash=get_hash(user_name, password))
 
                     messages.append(f"Usuário criado, você receberá um e-mail para confirmar o e-mail e telefone.")
                     messages.append("Após confirmar estes dados poderá fazer login.")
@@ -134,6 +132,9 @@ def login():
 
     try:
         if (user := get_authenticated_user(user_name, password)) is not None:
+            # TODO reset login failure count and timestamp
+            # TODO test verified user
+            # TODO test login attempts cound and expiration
             login_user(user)
             if 'redirect' in session:
                 name = session['redirect']
@@ -142,6 +143,7 @@ def login():
             else:
                 return redirect("/home.html")
         else:
+            # TODO increment login failure count and timestamp
             messages.append("Usuário ou senha inválidos. Tente novamente.")
     except Exception:
         # TODO log the error

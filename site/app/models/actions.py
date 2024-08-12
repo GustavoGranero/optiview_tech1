@@ -1,9 +1,10 @@
 from sqlalchemy.sql import func
 
 from optview import db
+from models.base_mixin import BaseMixin
 
 
-class Actions(db.Model):
+class Actions(BaseMixin, db.Model):
     __tablename__ = "actions"
 
     id = db.Column(db.Integer, primary_key=True)
