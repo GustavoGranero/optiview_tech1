@@ -23,3 +23,17 @@ class Users(UserMixin, BaseMixin, db.Model):
     plan = db.relationship('Plans', backref='users', lazy='joined')
     hash_type = db.relationship('HashTypes', backref='users', lazy='joined')
 
+    @classmethod
+    def update_login_failure(cls, user_name, failed):
+        user = cls.get_one(user_name=user_name)
+        if user is not None:
+            if failed:
+                user.login_failure_count += 1
+                user.login_failure_timestamp = func.now()
+            else:
+                user.login_failure_count = 0
+                user.login_failure_timestamp = None
+
+            db.session.commit()
+
+

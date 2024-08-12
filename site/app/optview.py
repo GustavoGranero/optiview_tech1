@@ -28,8 +28,11 @@ from models.plans import Plans
 from models.hash_types import HashTypes
 from models.action_types import ActionTypes
 from models.actions import Actions
-from auth import get_authenticated_user
-from auth import get_hash
+from auth import (
+    get_authenticated_user,
+    get_hash,
+    is_suspended,
+)
 import email_send
 
 login_manager = LoginManager()
@@ -131,21 +134,23 @@ def login():
     password = request.form.get("password")
 
     try:
-        if (user := get_authenticated_user(user_name, password)) is not None:
-            # TODO reset login failure count and timestamp
-            # TODO test verified user
-            # TODO test login attempts cound and expiration
-            login_user(user)
-            if 'redirect' in session:
-                name = session['redirect']
-                session.pop('redirect')
-                return redirect(f"/{name}")
-            else:
-                return redirect("/home.html")
+        if is_suspended(user_name):
+                messages.append("Muitas tentativas de login sem sucesso.\nLogin temporariamente bloqueado, tente mais tarde.")
         else:
-            # TODO increment login failure count and timestamp
-            messages.append("Usuário ou senha inválidos. Tente novamente.")
-    except Exception:
+            if (user := get_authenticated_user(user_name, password)) is not None:
+                # TODO test verified user
+                Users.update_login_failure(user_name, failed=False)
+                login_user(user)
+                if 'redirect' in session:
+                    name = session['redirect']
+                    session.pop('redirect')
+                    return redirect(f"/{name}")
+                else:
+                    return redirect("/home.html")
+            else:
+                Users.update_login_failure(user_name, failed=True)
+                messages.append("Usuário ou senha inválidos. Tente novamente.")
+    except Exception as e:
         # TODO log the error
         messages.append("Houve um erro na validação do usuário e senha.")
 
