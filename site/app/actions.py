@@ -36,10 +36,10 @@ def execute_confirm_email(action, action_executed, action_expired):
             messages = ['Esse pedido de ativacão de conta já expirou. Solicite outro.']
             resend_verification = True
         else:
-            # user = action.user
-            # user.verified = True
-            # action.executed_timestamp = datetime.now(timezone.utc)
-            # db.session.commit()
+            user = action.user
+            user.verified = True
+            action.executed_timestamp = datetime.now(timezone.utc)
+            db.session.commit()
             
             messages = ['Seu e-mail foi verificado e sua conta ativada. Faça o login.']
             resend_verification = False
