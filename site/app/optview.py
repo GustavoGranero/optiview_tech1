@@ -40,13 +40,44 @@ login_manager.init_app(app)
 
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):
-    messages, resend_verification = execute_action(token)
+    return execute_action(token, request)
+
+@app.route("/reset_password", methods=["GET", "POST"])
+def reset_password():
+    messages = []
+    user_or_email = request.form.get("user-or-email")
+
+    user_by_name = Users.get_one(user_name = user_or_email)
+    user_by_email= Users.get_one(email = user_or_email)
+    
+    if user_by_name is not None:
+        user = user_by_name
+    elif user_by_email is not None:
+        user = user_by_email
+    else:
+        user = None
+
+    if user is not None:
+
+        try:
+            ok, code, message = email_send.send_email_recorver_password(app, user)
+            if ok:
+                messages.append("Você receberá um e-mail com instruções para mudar a senha.")
+            else:
+                messages.append("Houve um erro no envio de seu e-mail. Faça o pedido novamente mais tarde.")
+                # TODO log error code and message
+
+        except exc.SQLAlchemyError as e:
+            # TODO log error
+            messages.append(f"Houve um erro no pedido de mudança de senha.")
+
+    else:
+        messages.append(f"Este usuário ou e-mail não foi encontrado.")
 
     context = {
         'messages': messages,
-        'resend_verification': resend_verification,
     }
-    return render_template("login.html", **context)
+    return render_template("request_password_reset.html", **context)
 
 @app.route("/user", methods=["GET", "POST"])
 def user():
@@ -144,7 +175,7 @@ def login():
 
     try:
         if is_suspended(user_name):
-                Users.update_login_failure(user_name, failed=False)
+                Users.update_login_failure(user_name, failed=True)
                 messages.append("Muitas tentativas de login sem sucesso.<br>Login temporariamente bloqueado.<br>Tente mais tarde ou altere sua senha.")
         else:
             if (user := get_authenticated_user(user_name, password)) is not None:

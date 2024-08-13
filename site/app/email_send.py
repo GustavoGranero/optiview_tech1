@@ -56,6 +56,34 @@ def send_email_confirmation(app, user):
 
     return result
 
+def send_email_recorver_password(app, user):
+    token = secrets.token_urlsafe()
+    action_url = get_action_url(app, token)
+    create_action(app, user, 'ACTION_TYPE_CONFIRM_PASSWORD_RESET', token)
+
+    template_name = app.config['EMAIL_TEMPLATE_RECOVER_PASSWORD']
+    template = get_template(template_name)
+
+    subject_template_name = app.config['EMAIL_TEMPLATE_RECOVER_PASSWORD_SUBJECT']
+    subject_template = get_template(subject_template_name)    
+
+    variables = {
+        'company': app.config['COMPANY'],
+        'name': user.full_name,
+        'product': app.config['PRODUCT'],
+        'expiration_time': app.config['EMAIL_REQUEST_EXPIRATION_TIME'],
+        'action_url': action_url,
+        'username':  user.user_name,
+        'site_url': app.config['EMAIL_SITE_URL'],
+    }
+
+    subject =  render_template_string(subject_template, **variables)
+    email_content = render_template_string(template, **variables)
+
+    result = send_mail(app, subject, email_content, user)
+
+    return result
+
 def send_mail(app, subject, email_content, user):
     mailer = emails.NewEmail(app.config['EMAIL_API_TOKEN'])
 

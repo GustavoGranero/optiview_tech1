@@ -7,9 +7,8 @@ from models.users import Users
 
 bcrypt = Bcrypt(app)
 
-def update_password(user_name, password):
-    user = Users.get_one(user_name=user_name)
-    user.hash = get_hash(user_name, password)
+def update_password(user, password):
+    user.hash = get_hash(user.user_name, password)
     db.session.commit()
 
 def get_hash(user_name, password):
