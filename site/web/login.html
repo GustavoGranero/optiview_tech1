@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OptiView Tech | Login</title>
-    <link rel="stylesheet" href="css/loader.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="/css/loader.css">
+    <link rel="stylesheet" href="/css/login.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" href="images/optiview_grande.ico">
+    <link rel="icon" href="/images/optiview_grande.ico">
 </head>
 <body>
-    {% include "includes/loader.html" %}
+    {% include "/includes/loader.html" %}
     <div class="top-bar">
-        <a href="home.html" class="logo-link">
+        <a href="/home.html" class="logo-link">
             <div class="title">
-                <img src="images/logo_white.png" alt="OptiView Tech Logo" class="logo">OptiView Tech
+                <img src="/images/logo_white.png" alt="OptiView Tech Logo" class="logo">OptiView Tech
             </div>
         </a>
     </div>
@@ -38,13 +38,17 @@
         <input type="submit" value="Login">
 
         {% for message in messages %}
-            <p class="error-message">{{message}}</p>
+            <p class="error-message">{{ message|safe }}</p>
         {% endfor %}
 
 
         <p class="login-link">
-            Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se</a><br/>
-            Esqueceu sua senha? <a href="#">Alterar senha</a>
+            {% if not resend_verification %}
+                Ainda não tem uma conta? <a href="/cadastro.html">Cadastre-se</a><br/>
+                Esqueceu sua senha? <a href="#">Alterar senha</a>
+            {% else %}
+                Deseja reenviar e-mail de ativação? <a href="/reenviar">Reenviar</a>
+            {% endif %}
         </p>
     </form>
     <script>
@@ -73,6 +77,6 @@
             });
         });
     </script>
-    <script src="js/loader.js"></script>
+    <script src="/js/loader.js"></script>
 </body>
 </html>

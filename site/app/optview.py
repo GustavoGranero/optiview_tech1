@@ -6,7 +6,6 @@ from flask import (
     request,
     render_template,
     redirect,
-    url_for,
 )
 from flask_login import (
     login_user,
@@ -34,9 +33,20 @@ from auth import (
     is_suspended,
 )
 import email_send
+from actions import execute_action
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+@app.route("/action/<token>", methods=["GET", "POST"])
+def action(token):
+    messages, resend_verification = execute_action(token)
+
+    context = {
+        'messages': messages,
+        'resend_verification': resend_verification,
+    }
+    return render_template("login.html", **context)
 
 @app.route("/user", methods=["GET", "POST"])
 def user():
@@ -89,8 +99,7 @@ def user():
                 try:
                     new_user = Users.add(user_name=user_name, full_name=full_name, email=email, phone=phone, hash=get_hash(user_name, password))
 
-                    messages.append(f"Usuário criado, você receberá um e-mail para confirmar o e-mail e telefone.")
-                    messages.append("Após confirmar estes dados poderá fazer login.")
+                    messages.append("Usuário criado, você receberá um e-mail para confirmar o e-mail e telefone.<br>Após confirmar estes dados poderá fazer login.")
 
                     ok, code, message = email_send.send_email_confirmation(app, new_user)
                     if not ok:
@@ -126,27 +135,31 @@ def loader_user(user_id):
     user = Users.query.get(user_id)
     return user
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     messages = []
+    resend_verification = False
     user_name = request.form.get("user-or-email")
     password = request.form.get("password")
 
     try:
         if is_suspended(user_name):
-                messages.append("Muitas tentativas de login sem sucesso.\nLogin temporariamente bloqueado, tente mais tarde.")
+                Users.update_login_failure(user_name, failed=False)
+                messages.append("Muitas tentativas de login sem sucesso.<br>Login temporariamente bloqueado.<br>Tente mais tarde ou altere sua senha.")
         else:
             if (user := get_authenticated_user(user_name, password)) is not None:
-                # TODO test verified user
-                Users.update_login_failure(user_name, failed=False)
-                login_user(user)
-                if 'redirect' in session:
-                    name = session['redirect']
-                    session.pop('redirect')
-                    return redirect(f"/{name}")
+                if not user.verified:
+                    resend_verification = True
+                    messages.append("Você precisa ativar sua conta.<br>Verifique seu e-mail para ativar.")
                 else:
-                    return redirect("/home.html")
+                    Users.update_login_failure(user_name, failed=False)
+                    login_user(user)
+                    if 'redirect' in session:
+                        name = session['redirect']
+                        session.pop('redirect')
+                        return redirect(f"/{name}")
+                    else:
+                        return redirect("/home.html")
             else:
                 Users.update_login_failure(user_name, failed=True)
                 messages.append("Usuário ou senha inválidos. Tente novamente.")
@@ -156,6 +169,7 @@ def login():
 
     context = {
         'messages': messages,
+        'resend_verification': resend_verification,
     }
     return render_template("login.html", **context)
 
@@ -185,4 +199,3 @@ def templates(name = "home.html"):
         'user': current_user,
     }
     return render_template(name, **context)
-

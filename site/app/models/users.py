@@ -36,4 +36,3 @@ class Users(UserMixin, BaseMixin, db.Model):
 
             db.session.commit()
 
-

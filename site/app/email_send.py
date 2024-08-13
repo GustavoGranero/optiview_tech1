@@ -96,4 +96,3 @@ def send_mail(app, subject, email_content, user):
         ok = False
 
     return ok, code, message
-
