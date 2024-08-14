@@ -5,9 +5,11 @@ from datetime import(
 )
 
 from flask import render_template
+from sqlalchemy import exc
 
 from optview import app, db
 from auth import update_password
+import email_send
 from models.actions import Actions
 
 def execute_action(token, request=None):
@@ -96,13 +98,27 @@ def execute_confirm_password_reset(action, action_executed, action_expired, requ
                     data_valid = False
 
             if data_valid:
-                update_password(action.user, password)
-                user = action.user
-                user.update_login_failure(user.user_name, failed=False)
-                action.executed_timestamp = datetime.now(timezone.utc)
-                db.session.commit()
 
-                messages = ['Senha alterada. Faça login.']
+                try:
+                    update_password(action.user, password)
+                    user = action.user
+                    user.update_login_failure(user.user_name, failed=False)
+                    action.executed_timestamp = datetime.now(timezone.utc)
+                    db.session.commit()
+                    
+                    messages = ['Senha alterada. Faça login.']
+
+                    ok, code, message = email_send.send_email_changed_password(app, user)
+                    if not ok:
+                        # messages.append("Houve um erro no envio de seu e-mail.")
+                        # TODO log error code and message
+                        pass
+
+                except exc.SQLAlchemyError as e:
+                    # TODO log error
+                    messages.append(f"Houve um erro na mudança da senha.")
+
+
                 resend_verification = False
                 token = None
                 page = "login.html"

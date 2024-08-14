@@ -84,6 +84,29 @@ def send_email_recorver_password(app, user):
 
     return result
 
+def send_email_changed_password(app, user):
+    template_name = app.config['EMAIL_TEMPLATE_CHANGED_PASSWORD']
+    template = get_template(template_name)
+
+    subject_template_name = app.config['EMAIL_TEMPLATE_CHANGED_PASSWORD_SUBJECT']
+    subject_template = get_template(subject_template_name)    
+
+    variables = {
+        'company': app.config['COMPANY'],
+        'name': user.full_name,
+        'product': app.config['PRODUCT'],
+        'username':  user.user_name,
+        'request_password_change_url': app.config['EMAIL_REQUEST_PASSWORD_CHANGE_URL'],
+        'site_url': app.config['EMAIL_SITE_URL'],
+    }
+
+    subject =  render_template_string(subject_template, **variables)
+    email_content = render_template_string(template, **variables)
+
+    result = send_mail(app, subject, email_content, user)
+
+    return result
+
 def send_mail(app, subject, email_content, user):
     mailer = emails.NewEmail(app.config['EMAIL_API_TOKEN'])
 
