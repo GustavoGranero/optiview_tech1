@@ -54,22 +54,24 @@ def execute_confirm_email(action, action_executed, action_expired):
         return render_template("login.html", **context)
 
 def execute_confirm_password_reset(action, action_executed, action_expired, request):
+    messages = []
+    token = None
+    resend_verification = None
     if action_executed:
-        messages = ['Esse pedido de recuperação de senha já foi executado. Faça login.']
+        messages.append("Esse pedido de recuperação de senha já foi executado. Faça login.")
         resend_verification = False
         token = None
         page = "login.html"
     elif action_expired:
-        messages = ['Esse pedido de recuperação de senha já expirou. Solicite outro.']
+        messages.append("Esse pedido de recuperação de senha já expirou. Solicite outro.")
         resend_verification = True
         token = None
         page = "login.html"
     else:
+        token = action.token
+        resend_verification = None
         if len(request.form) == 0:
             # no post data received so it came from the confirmation e-mail: present change password page
-            messages = []
-            resend_verification = None
-            token = action.token
             page = "change_password.html"
         else:
             # post data received so it came from change password page: change password and present login page
@@ -78,7 +80,7 @@ def execute_confirm_password_reset(action, action_executed, action_expired, requ
 
             data_valid = True
             if password1 != password2:
-                messages.append(f"A senha e a confirmação são diferentes.")
+                messages.append("A senha e a confirmação são diferentes.")
                 data_valid = False
             else:
                 password = password1
@@ -86,20 +88,27 @@ def execute_confirm_password_reset(action, action_executed, action_expired, requ
                 if not (re.search(r"[a-zç]", password) is not None and 
                         re.search(r"[A-ZÇ]", password) is not None and 
                         (re.search(r"[0-9]", password) is not None or re.search(r"[!@#$%^&\*\(\)-_=+\[\]\{\}\/\|/\\\?\<\>.,~`]", password) is not None)):
-                    messages.append(f"A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
+                    messages.append("A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
                     data_valid = False
 
                 if len(password)<8:
-                    messages.append(f"A senha deve ter ao menos 8 caracteres")
+                    messages.append("A senha deve ter ao menos 8 caracteres")
                     data_valid = False
 
             if data_valid:
                 update_password(action.user, password)
+                user = action.user
+                user.update_login_failure(user.user_name, failed=False)
+                action.executed_timestamp = datetime.now(timezone.utc)
+                db.session.commit()
 
                 messages = ['Senha alterada. Faça login.']
                 resend_verification = False
                 token = None
                 page = "login.html"
+            else:
+                page = "change_password.html"
+
 
     context = {
         'messages': messages,
