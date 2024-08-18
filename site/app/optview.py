@@ -30,6 +30,14 @@ from models.plans import Plans
 from models.hash_types import HashTypes
 from models.action_types import ActionTypes
 from models.actions import Actions
+from validate_fields import (
+    is_valid_password,
+    is_valid_password_length,
+    is_valid_phone,
+    is_valid_email,
+    is_valid_full_name,
+    is_valid_user_name,
+)
 from auth import (
     get_authenticated_user,
     get_hash,
@@ -104,23 +112,23 @@ def user():
         else:
             password = password1
 
-            if not (re.search(r"[a-zç]", password) is not None and 
-                    re.search(r"[A-ZÇ]", password) is not None and 
-                    (re.search(r"[0-9]", password) is not None or re.search(r"[!@#$%^&\*\(\)-_=+\[\]\{\}\/\|/\\\?\<\>.,~`]", password) is not None)):
+            if not is_valid_password(password):
                 messages.append("A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
                 data_valid = False
 
-            if len(password)<8:
+            if not is_valid_password_length(password):
                 messages.append("A senha deve ter ao menos 8 caracteres")
                 data_valid = False
                 
-        if not (re.match(r'[\d -]', phone) and len(phone.replace(' ','').replace('-', '')) >= 6):
+        if not is_valid_phone(phone):
             messages.append(f"O telefone pode conter apenas espaços, números e - e tem de ter ao menos 6 dígitos.")
             data_valid = False
-        if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
+        if not is_valid_email(email):
             messages.append(f"O e-mail é inválido")
             data_valid = False
-        if len(full_name)<1:
+        if not is_valid_user_name(user_name):
+            messages.append("O nome de usuário não pode ser vazio") 
+        if not is_valid_full_name(full_name):
             messages.append("O nome completo não pode ser vazio")       
 
         if data_valid:

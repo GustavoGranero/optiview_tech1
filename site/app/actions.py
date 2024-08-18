@@ -1,4 +1,3 @@
-import re
 from datetime import(
     datetime,
     timezone,
@@ -8,9 +7,14 @@ from flask import render_template
 from sqlalchemy import exc
 
 from optview import app, db
+from validate_fields import (
+    is_valid_password,
+    is_valid_password_length,
+)
 from auth import update_password
 import email_send
 from models.actions import Actions
+
 
 def execute_action(token, request=None):
     action = Actions.get_one(token=token)
@@ -87,13 +91,11 @@ def execute_confirm_password_reset(action, action_executed, action_expired, requ
             else:
                 password = password1
 
-                if not (re.search(r"[a-zç]", password) is not None and 
-                        re.search(r"[A-ZÇ]", password) is not None and 
-                        (re.search(r"[0-9]", password) is not None or re.search(r"[!@#$%^&\*\(\)-_=+\[\]\{\}\/\|/\\\?\<\>.,~`]", password) is not None)):
+                if not is_valid_password(password):
                     messages.append("A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
                     data_valid = False
 
-                if len(password)<8:
+                if not is_valid_password_length(password):
                     messages.append("A senha deve ter ao menos 8 caracteres")
                     data_valid = False
 
