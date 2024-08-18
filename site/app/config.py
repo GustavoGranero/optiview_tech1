@@ -48,6 +48,7 @@ EMAIL_SITE_URL = 'http://127.0.0.1:5000' # temporário para teste
 EMAIL_LOGIN_URL = f'{EMAIL_SITE_URL}/login.html'
 EMAIL_REQUEST_PASSWORD_CHANGE_URL = f'{EMAIL_SITE_URL}/request_password_reset.html'
 EMAIL_ACTION_URL = f'{EMAIL_SITE_URL}/action/{{token}}'
+EMAIL_LOGO_URL = f'{EMAIL_SITE_URL}/images/logo_black.png'
 
 ACTION_TYPE_CONFIRM_EMAIL = 'confirm_email'
 ACTION_TYPE_CONFIRM_PASSWORD_RESET = 'confirm_password_reset'

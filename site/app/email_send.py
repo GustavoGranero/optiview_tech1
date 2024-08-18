@@ -1,5 +1,5 @@
 import os
-import secrets 
+import secrets
 
 from mailersend import emails
 from flask import render_template_string
@@ -47,6 +47,7 @@ def send_email_confirmation(app, user):
         'login_url': app.config['EMAIL_LOGIN_URL'],
         'username':  user.user_name,
         'site_url': app.config['EMAIL_SITE_URL'],
+        'logo_url': app.config['EMAIL_LOGO_URL'],
     }
 
     subject =  render_template_string(subject_template, **variables)
@@ -75,6 +76,7 @@ def send_email_recorver_password(app, user):
         'action_url': action_url,
         'username':  user.user_name,
         'site_url': app.config['EMAIL_SITE_URL'],
+        'logo_url': app.config['EMAIL_LOGO_URL'],
     }
 
     subject =  render_template_string(subject_template, **variables)
@@ -98,6 +100,7 @@ def send_email_changed_password(app, user):
         'username':  user.user_name,
         'request_password_change_url': app.config['EMAIL_REQUEST_PASSWORD_CHANGE_URL'],
         'site_url': app.config['EMAIL_SITE_URL'],
+        'logo_url': app.config['EMAIL_LOGO_URL'],
     }
 
     subject =  render_template_string(subject_template, **variables)
