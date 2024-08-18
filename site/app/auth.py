@@ -15,15 +15,20 @@ def get_hash(user_name, password):
     # TODO make provision for other hash types
     return bcrypt.generate_password_hash(password)
 
-def get_authenticated_user(user_name, password):
-    user = Users.get_one(user_name=user_name)
+def get_authenticated_user(user_name_or_email, password):
+    user = Users.get_one(user_name=user_name_or_email)
+    if user is None:
+        user = Users.get_one(email=user_name_or_email)  
+        
     if user is not None and bcrypt.check_password_hash(user.hash, password):
         return user
     else:
         return None
 
-def is_suspended(user_name):
-    user = Users.get_one(user_name=user_name)
+def is_suspended(user_name_or_email):
+    user = Users.get_one(user_name=user_name_or_email)
+    if user is None:
+        user = Users.get_one(email=user_name_or_email)
 
     if user is None:
         return False

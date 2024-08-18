@@ -181,20 +181,20 @@ def loader_user(user_id):
 def login():
     messages = []
     resend_verification = False
-    user_name = request.form.get("user-or-email")
+    user_name_or_email = request.form.get("user-or-email")
     password = request.form.get("password")
 
     try:
-        if is_suspended(user_name):
-                Users.update_login_failure(user_name, failed=True)
+        if is_suspended(user_name_or_email):
+                Users.update_login_failure(user_name_or_email, failed=True)
                 messages.append("Muitas tentativas de login sem sucesso.<br>Login temporariamente bloqueado.<br>Tente mais tarde ou altere sua senha.")
         else:
-            if (user := get_authenticated_user(user_name, password)) is not None:
+            if (user := get_authenticated_user(user_name_or_email, password)) is not None:
                 if not user.verified:
                     resend_verification = True
                     messages.append("Você precisa ativar sua conta.<br>Verifique seu e-mail para ativar.")
                 else:
-                    Users.update_login_failure(user_name, failed=False)
+                    Users.update_login_failure(user_name_or_email, failed=False)
                     login_user(user)
                     if 'redirect' in session:
                         name = session['redirect']
@@ -203,7 +203,7 @@ def login():
                     else:
                         return redirect("/home.html")
             else:
-                Users.update_login_failure(user_name, failed=True)
+                Users.update_login_failure(user_name_or_email, failed=True)
                 messages.append("Usuário ou senha inválidos. Tente novamente.")
     except Exception as e:
         # TODO log the error

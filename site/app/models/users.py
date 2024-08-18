@@ -24,8 +24,11 @@ class Users(UserMixin, BaseMixin, db.Model):
     hash_type = db.relationship('HashTypes', backref='users', lazy='joined')
 
     @classmethod
-    def update_login_failure(cls, user_name, failed):
-        user = cls.get_one(user_name=user_name)
+    def update_login_failure(cls, user_name_or_email, failed):
+        user = cls.get_one(user_name=user_name_or_email)
+        if user is None:
+            user = Users.get_one(email=user_name_or_email)    
+
         if user is not None:
             if failed:
                 user.login_failure_count += 1
