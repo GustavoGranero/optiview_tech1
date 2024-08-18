@@ -1,4 +1,5 @@
 import re
+import os
 
 from flask import (
     Flask,
@@ -6,6 +7,8 @@ from flask import (
     request,
     render_template,
     redirect,
+    abort,
+    Response,
 )
 from flask_login import (
     login_user,
@@ -104,11 +107,11 @@ def user():
             if not (re.search(r"[a-zç]", password) is not None and 
                     re.search(r"[A-ZÇ]", password) is not None and 
                     (re.search(r"[0-9]", password) is not None or re.search(r"[!@#$%^&\*\(\)-_=+\[\]\{\}\/\|/\\\?\<\>.,~`]", password) is not None)):
-                messages.append(f"A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
+                messages.append("A senha deve ter maiúsculas, minúsculas, e números ou símbolos.")
                 data_valid = False
 
             if len(password)<8:
-                messages.append(f"A senha deve ter ao menos 8 caracteres")
+                messages.append("A senha deve ter ao menos 8 caracteres")
                 data_valid = False
                 
         if not (re.match(r'[\d -]', phone) and len(phone.replace(' ','').replace('-', '')) >= 6):
@@ -118,7 +121,7 @@ def user():
             messages.append(f"O e-mail é inválido")
             data_valid = False
         if len(full_name)<1:
-            messages.append(f"O nome completo não pode ser vazio")       
+            messages.append("O nome completo não pode ser vazio")       
 
         if data_valid:
             user_by_name = Users.get_one(user_name = user_name)
@@ -139,15 +142,15 @@ def user():
 
                 except exc.SQLAlchemyError as e:
                     # TODO log error
-                    messages.append(f"Houve um erro na criação do usuário.")
+                    messages.append("Houve um erro na criação do usuário.")
 
             else:
                 if user_by_name is not None:
-                    messages.append(f"Este usuário já existe no cadastro utilize outro.")
+                    messages.append("Este usuário já existe no cadastro utilize outro.")
                 if user_by_email is not None:
-                    messages.append(f"Este e-mail já existe no cadastro utilize outro.")
+                    messages.append("Este e-mail já existe no cadastro utilize outro.")
                 if user_by_phone is not None:
-                    messages.append(f"Este telefone já existe no cadastro utilize outro.")
+                    messages.append("Este telefone já existe no cadastro utilize outro.")
 
     context = {
         'messages': messages,
@@ -225,6 +228,10 @@ def templates(name = "home.html"):
     if current_user.is_authenticated and 'redirect' in session:
         name = session['redirect']
         session.pop('redirect', None)
+    
+    filename = os.path.join(os.path.dirname(__file__), f'../web/{name}')
+    if not os.path.isfile(filename):
+        name = 'not_found.html'
     
     context = {
         'user': current_user,
