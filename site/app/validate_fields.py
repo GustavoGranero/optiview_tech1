@@ -12,7 +12,7 @@ def is_valid_password_length(password):
 
 def is_valid_phone(phone):
     has_only_digits_spaces_dash = re.match(r'[\d -]', phone)
-    is_long_enough = len(phone.replace(' ','').replace('-', '')) >= 6
+    is_long_enough = len(phone.replace(' ','').replace('-', '')) >= 7
     return has_only_digits_spaces_dash and is_long_enough
 
 def is_valid_email(email):
