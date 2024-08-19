@@ -44,11 +44,13 @@ EMAIL_TEMPLATE_CHANGED_PASSWORD_SUBJECT = f'changed_password_subject_{LANGUAGE}.
 EMAIL_TEMPLATE_CHANGED_EMAIL_SUBJECT = f'changed_email_subject_{LANGUAGE}.txt '
 
 EMAIL_REQUEST_EXPIRATION_TIME = 24
-EMAIL_SITE_URL = 'http://127.0.0.1:5000' # temporário para teste
+EMAIL_SITE_URL = 'http://127.0.0.1:5000' # TODO temporário para teste
 EMAIL_LOGIN_URL = f'{EMAIL_SITE_URL}/login.html'
 EMAIL_REQUEST_PASSWORD_CHANGE_URL = f'{EMAIL_SITE_URL}/request_password_reset.html'
 EMAIL_ACTION_URL = f'{EMAIL_SITE_URL}/action/{{token}}'
-EMAIL_LOGO_URL = f'{EMAIL_SITE_URL}/images/logo_black.png'
+# TODO exportado no Google Albuns enquanto não tem um host para o sistema
+EMAIL_LOGO_URL = 'https://lh3.googleusercontent.com/pw/AP1GczPIWSIIQGt1kfyuCwxWaBEZpVfixhq_H9Va2U1mW0duY8vBWJNJBUWd94ZjFerAV-Qim-7J2xwhn98V8hnn-er5CSMIibwVYnce1hoFZ1rj-KAQA8SAZBMqHcq6ilpNxB1i--j0s0Nmb-otNNo2ttlB=w498-h262-s-no'
+# EMAIL_LOGO_URL = f'{EMAIL_SITE_URL}/images/logo_black.png'
 
 ACTION_TYPE_CONFIRM_EMAIL = 'confirm_email'
 ACTION_TYPE_CONFIRM_PASSWORD_RESET = 'confirm_password_reset'
