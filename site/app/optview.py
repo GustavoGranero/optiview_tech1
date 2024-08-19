@@ -33,6 +33,7 @@ from models.actions import Actions
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,
+    normalize_phone,
     is_valid_phone,
     is_valid_email,
     is_valid_full_name,
@@ -104,6 +105,7 @@ def user():
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
         phone = request.form.get("phone")
+        phone_normalized = normalize_phone(phone)
 
         data_valid = True
         if password1 != password2:
@@ -128,18 +130,21 @@ def user():
             data_valid = False
         if not is_valid_user_name(user_name):
             messages.append("O nome de usuário não pode ser vazio")
+            data_valid = False
         if is_valid_email(user_name):
             # if other user can use an e-mail as a login ...
             # ... if this e-mail is used by another user ...
             # ... this e-mail could not be used to login or recover password
             messages.append("O nome de usuário não pode ser um e-mail")
+            data_valid = False
         if not is_valid_full_name(full_name):
-            messages.append("O nome completo não pode ser vazio")       
+            messages.append("O nome completo não pode ser vazio")
+            data_valid = False
 
         if data_valid:
             user_by_name = Users.get_one(user_name = user_name)
             user_by_email= Users.get_one(email = email)
-            user_by_phone = Users.get_one(phone = phone)
+            user_by_phone = Users.get_one(phone_normalized = phone_normalized)
 
             if user_by_name is None and user_by_email is None and user_by_phone is None:
 

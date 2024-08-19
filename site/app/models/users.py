@@ -2,7 +2,13 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 from optview import db
+from validate_fields import normalize_phone
 from models.base_mixin import BaseMixin
+
+def phone_normalized_default(context):
+    phone = context.get_current_parameters()["phone"]
+    phone_normalized = normalize_phone(phone)
+    return phone_normalized
 
 
 class Users(UserMixin, BaseMixin, db.Model):
@@ -15,7 +21,8 @@ class Users(UserMixin, BaseMixin, db.Model):
     hash_type_id = db.Column(db.Integer, db.ForeignKey('hash_types.id'), unique=False, nullable=False, default=1)
     hash = db.Column(db.LargeBinary, unique=False, nullable=False)
     plan_id = db.Column(db.Integer, db.ForeignKey('plans.id'), unique=False, nullable=False, default=1)
-    phone = db.Column(db.String(250), unique=False, nullable=False)
+    phone = db.Column(db.String(250), unique=True, nullable=False)
+    phone_normalized = db.Column(db.String(250), unique=True, nullable=False, default=phone_normalized_default)
     verified = db.Column(db.Boolean, unique=False, nullable=False, default=False)
     login_failure_count = db.Column(db.Integer, unique=False, nullable=False, default=0)
     login_failure_timestamp = db.Column(db.DateTime, unique=False, nullable=True, default=None)
@@ -38,4 +45,3 @@ class Users(UserMixin, BaseMixin, db.Model):
                 user.login_failure_timestamp = None
 
             db.session.commit()
-

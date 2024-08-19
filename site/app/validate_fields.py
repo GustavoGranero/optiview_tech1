@@ -10,9 +10,12 @@ def is_valid_password(password):
 def is_valid_password_length(password):
     return len(password) >= 8
 
+def normalize_phone(phone):
+    return phone.replace(' ','').replace('-', '')
+
 def is_valid_phone(phone):
     has_only_digits_spaces_dash = re.match(r'[\d -]', phone)
-    is_long_enough = len(phone.replace(' ','').replace('-', '')) >= 7
+    is_long_enough = len(normalize_phone(phone)) >= 7
     return has_only_digits_spaces_dash and is_long_enough
 
 def is_valid_email(email):
