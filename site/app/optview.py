@@ -127,7 +127,12 @@ def user():
             messages.append(f"O e-mail é inválido")
             data_valid = False
         if not is_valid_user_name(user_name):
-            messages.append("O nome de usuário não pode ser vazio") 
+            messages.append("O nome de usuário não pode ser vazio")
+        if is_valid_email(user_name):
+            # if other user can use an e-mail as a login ...
+            # ... if this e-mail is used by another user ...
+            # ... this e-mail could not be used to login or recover password
+            messages.append("O nome de usuário não pode ser um e-mail")
         if not is_valid_full_name(full_name):
             messages.append("O nome completo não pode ser vazio")       
 
