@@ -9,12 +9,16 @@
     <title>OptiView Tech | Cadastro</title>
     {% endif %}
     <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/cadastro.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="images/optiview_grande.ico">
 </head>
 <body>
     {% include "includes/loader.html" %}
+    {% with user=user %}
+        {% include "includes/sidebar.html" %}
+    {% endwith %}
     <div class="top-bar">
         <a href="home.html" class="logo-link">
             <div class="title">
@@ -31,7 +35,6 @@
         <h2>Cadastro</h2>
     {% endif %}
         <div class="input-container">
-            
             {% if user.is_authenticated %}
                 <input class="not-empty" type="text" id="nome" name="user" value="{{ user.user_name }}" required disabled>
             {% else %}
@@ -128,6 +131,7 @@
             });
         });
     </script>
+    <script src="js/sidebar.js"></script>
     <script src="js/loader.js"></script>
 </body>
 </html>

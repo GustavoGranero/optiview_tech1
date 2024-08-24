@@ -18,6 +18,7 @@ form {
     padding: 40px;
     width: 350px;
     text-align: center;
+    box-sizing: unset
 }
 
 h2 {
@@ -78,7 +79,7 @@ h2 {
     width: 100%;
 }
 
-input[type="text"],
+div.input-container > input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: 90%;
