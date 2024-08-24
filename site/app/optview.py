@@ -95,12 +95,62 @@ def reset_password():
 def user():
     messages = []
     if current_user.is_authenticated:
- 
+        user_name = request.form.get("user")
+        full_name = request.form.get("full_name")
+        email = request.form.get("email")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+        phone = request.form.get("phone")
+        phone_normalized = normalize_phone(phone)
+
+
+        data_valid = True
+        if not is_valid_full_name(full_name):
+            messages.append("O nome completo não pode ser vazio")
+            data_valid = False
+        if not is_valid_phone(phone):
+            messages.append(f"O telefone pode conter apenas espaços, números e - e tem de ter ao menos 6 dígitos.")
+            data_valid = False
+        if user_name is not None:
+            messages.append("O campo nome de usuário não pode ser alterado.")
+            data_valid = False
+        if email is not None:
+            messages.append("O campo e-mail não pode ser alterado.")
+            data_valid = False
+        if password1 is not None or password2 is not None:
+            messages.append("A senha não pode ser alterada.<br>Utilize o link abaixo para mudar a senha.")
+            data_valid = False
+
+        if data_valid:
+            user_by_phone = Users.get_one(phone_normalized = phone_normalized)
+
+            if user_by_phone is None:
+
+                try:
+                    current_user.full_name = full_name
+                    current_user.phone = phone
+                    current_user.phone_normalized = phone_normalized
+                    db.session.commit()
+
+                     # ok, code, message = email_send.send_email_confirmation(app, new_user)
+                    # if not ok:
+                    #     messages.append("Houve um erro no envio de seu e-mail.")
+                    #     # TODO log error code and message
+
+                    messages.append("Dados alterados.")
+
+                except exc.SQLAlchemyError as e:
+                    # TODO log error
+                    messages.append("Houve um erro na alteração dos dados do usuário.")
+
+            else:
+                messages.append("Este telefone já existe no cadastro utilize outro.")
 
 
         context = {
-            'messages': '',
+            'messages': messages,
             'user': current_user,
+            'input_class': 'not-empty',
         }
     else:
         # create new user is only allowed if you are not logged in
