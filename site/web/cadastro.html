@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if user.is_authenticated %}
+        <title>OptiView Tech | Dados do usuário</title>
+    {% else %}
     <title>OptiView Tech | Cadastro</title>
+    {% endif %}
     <link rel="stylesheet" href="css/loader.css">
     <link rel="stylesheet" href="css/cadastro.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -21,52 +25,82 @@
     </div>
     <div class="background-pattern"></div>
     <form id="cadastroForm" action="/user" method="post">
+    {% if user.is_authenticated  %}
+        <h2>Dados do usuário</h2>
+    {% else %}
         <h2>Cadastro</h2>
-        
+    {% endif %}
         <div class="input-container">
-            <input class="{{ input_class }}" type="text" id="nome" name="user" value="{{ user_name }}" required>
+            
+            {% if user.is_authenticated %}
+                <input class="not-empty" type="text" id="nome" name="user" value="{{ user.user_name }}" required disabled>
+            {% else %}
+                <input class="{{ input_class }}" type="text" id="nome" name="user" value="{{ user_name }}" required>
+            {% endif %}
             <label for="nome">Nome de Usuário</label>
         </div>
         
         <div class="input-container">
-            <input class="{{ input_class }}" type="text" id="nome_completo" name="full_name" value="{{ full_name }}" required>
+            {% if user.is_authenticated %}
+                <input class="not-empty" type="text" id="nome_completo" name="full_name" value="{{ user.full_name }}" required>
+            {% else %}
+                <input class="{{ input_class }}" type="text" id="nome_completo" name="full_name" value="{{ full_name }}" required>
+            {% endif %}
             <label for="nome">Nome Completo</label>
         </div>
 
         <div class="input-container">
-            <input class="{{ input_class }}" type="email" id="email" name="email" value="{{ email }}" required>
+            {% if user.is_authenticated %}
+                <input class="not-empty" type="email" id="email" name="email" value="{{ user.email }}" required disabled>
+            {% else %}
+                <input class="{{ input_class }}" type="email" id="email" name="email" value="{{ email }}" required>
+            {% endif %}
             <label for="email">Email</label>
         </div>
         
-        <div class="input-container">
-            <input class="{{ input_class }}" type="password" id="senha1" name="password1" value="{{ password1 }}" required>
-            <label for="senha1">Senha</label>
-            <span class="toggle-password" id="toggle-password1" onclick="togglePassword('senha1', 'toggle-password1')">
-                <i class='bx bxs-show'></i>
-            </span>
-        </div>
+        {% if not user.is_authenticated %}
+            <div class="input-container">
+                <input class="{{ input_class }}" type="password" id="senha1" name="password1" value="{{ password1 }}" required>
+                <label for="senha1">Senha</label>
+                <span class="toggle-password" id="toggle-password1" onclick="togglePassword('senha1', 'toggle-password1')">
+                    <i class='bx bxs-show'></i>
+                </span>
+            </div>
 
-        <div class="input-container">
-            <input class="{{ input_class }}" type="password" id="senha2" name="password2" value="{{ password2 }}" required>
-            <label for="senha2">Confirmação senha</label>
-            <span class="toggle-password" id="toggle-password2" onclick="togglePassword('senha2', 'toggle-password2')">
-                <i class='bx bxs-show'></i>
-            </span>
-        </div>
+            <div class="input-container">
+                <input class="{{ input_class }}" type="password" id="senha2" name="password2" value="{{ password2 }}" required>
+                <label for="senha2">Confirmação senha</label>
+                <span class="toggle-password" id="toggle-password2" onclick="togglePassword('senha2', 'toggle-password2')">
+                    <i class='bx bxs-show'></i>
+                </span>
+            </div>
+        {% endif %}
 
-        <div class="input-container">
-            <input class="{{ input_class }}" type="text" id="telefone" name="phone" value="{{ phone }}" required>
+        <div class="input-container">    
+            {% if user.is_authenticated %}
+                <input class="not-empty" type="text" id="telefone" name="phone" value="{{ user.phone }}" required>
+            {% else %}
+                <input class="{{ input_class }}" type="text" id="telefone" name="phone" value="{{ user.phone }}" required>
+            {% endif %}
             <label for="telefone">Telefone</label>
         </div>
         
-        <input type="submit" value="Cadastrar">
+        {% if user.is_authenticated %}
+            <input type="submit" value="Alterar">
+        {% else %}
+            <input type="submit" value="Cadastrar">
+        {% endif %}
 
         {% for message in messages %}
             <p class="error-message">{{ message|safe }}</p>
         {% endfor %}
 
-
-        <p class="login-link">Já tem cadastro? <a href="login.html">Entrar</a></p>
+        {% if user.is_authenticated  %}
+            <p class="login-link">Deseja alterar sua senha? <a href="/request_password_reset.html">Alterar senha</a>
+        {% else %}
+            <p class="login-link">Já tem cadastro? <a href="login.html">Entrar</a></p>
+        {% endif %}
+        
     </form>
     <script>
         function togglePassword(id, toogle_id) {

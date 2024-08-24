@@ -95,8 +95,13 @@ def reset_password():
 def user():
     messages = []
     if current_user.is_authenticated:
-        # TODO update user
-        pass
+ 
+
+
+        context = {
+            'messages': '',
+            'user': current_user,
+        }
     else:
         # create new user is only allowed if you are not logged in
         user_name = request.form.get("user")
@@ -170,16 +175,17 @@ def user():
                 if user_by_phone is not None:
                     messages.append("Este telefone já existe no cadastro utilize outro.")
 
-    context = {
-        'messages': messages,
-        'user_name': user_name,
-        'full_name': full_name,
-        'email': email,
-        'password1': password1,
-        'password2': password2,
-        'phone': phone,
-        'input_class': 'not-empty',
-    }
+        context = {
+            'messages': messages,
+            'user_name': user_name,
+            'full_name': full_name,
+            'email': email,
+            'password1': password1,
+            'password2': password2,
+            'phone': phone,
+            'input_class': 'not-empty',
+        }
+
     return render_template("cadastro.html", **context)
 
 @login_manager.user_loader

@@ -22,7 +22,11 @@
         <button class="login-btn">Login</button>
       </a>
       <a href="cadastro.html">
-        <button class="signup-btn">Cadastro</button>
+        {% if user.is_authenticated  %}
+          <button class="signup-btn">Usuário</button>
+        {% else %}
+          <button class="signup-btn">Cadastre-se</button>
+        {% endif %}
       </a>
     </div>
     <div class="text">Home</div>
