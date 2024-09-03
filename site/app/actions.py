@@ -17,25 +17,36 @@ from models.actions import Actions
 
 
 def execute_action(token, request=None):
+    messages = []
     action = Actions.get_one(token=token)
 
-    action_elapsed_time = datetime.now(timezone.utc) -  action.timestamp
-    action_expired = action_elapsed_time.total_seconds() / 3600 >= app.config['EMAIL_REQUEST_EXPIRATION_TIME']
-    action_executed = action.executed_timestamp is not None
+    if action is not None:
+        action_elapsed_time = datetime.now(timezone.utc) -  action.timestamp
+        action_expired = action_elapsed_time.total_seconds() / 3600 >= app.config['EMAIL_REQUEST_EXPIRATION_TIME']
+        action_executed = action.executed_timestamp is not None
 
-    action_type = action.action_type.action_type
-    if action_type == 'confirm_email':
-        return execute_confirm_email(action, action_executed, action_expired)
-    elif action_type == 'confirm_password_reset':
-        return execute_confirm_password_reset(action, action_executed, action_expired, request)
-    elif action_type == 'confirm_email_change_original':
-        # TODO do action
-        pass
-    elif action_type == 'confirm_email_change_new':
-        # TODO do action
-        pass
+        action_type = action.action_type.action_type
+        if action_type == 'confirm_email':
+            return execute_confirm_email(action, action_executed, action_expired)
+        elif action_type == 'confirm_password_reset':
+            return execute_confirm_password_reset(action, action_executed, action_expired, request)
+        elif action_type == 'confirm_email_change_original':
+            # TODO do action
+            pass
+        elif action_type == 'confirm_email_change_new':
+            # TODO do action
+            pass
 
-    return 'Ação "{action_type}" não reconhecida.', False
+        messages.append(f'Ação "{action_type}" não reconhecida.')
+    else:
+        messages.append(f'Token inexistente')
+    
+
+    context = {
+        'messages': messages,
+        'token': token,
+    }           
+    return render_template("action_error.html", **context)
 
 def execute_confirm_email(action, action_executed, action_expired):
         if action_executed:
