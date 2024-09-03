@@ -227,6 +227,7 @@ def user():
 
         context = {
             'messages': messages,
+            'user': user,
             'user_name': user_name,
             'full_name': full_name,
             'email': email,
