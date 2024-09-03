@@ -29,5 +29,4 @@ CREATE TABLE public.actions (
 	CONSTRAINT actions_users_fk FOREIGN KEY (user_id) REFERENCES public.users(id)
 );
 
-
-
+INSERT INTO public.versions VALUES ('202408060938', '2024-08-06 09:38:00.000000-03');
