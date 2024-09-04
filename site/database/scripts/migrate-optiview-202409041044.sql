@@ -9,19 +9,19 @@ CREATE TABLE public.plan_periods (
 INSERT INTO public.plan_periods (id,"name","period") VALUES (1,'Mensal','1 mon'::interval);
 INSERT INTO public.plan_periods (id,"name","period") VALUES (2,'Anual','1 year'::interval);
 
-CREATE TABLE currency (
+CREATE TABLE currencies (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"name" varchar NOT NULL,
 	name_plural varchar NOT NULL,
 	symbol varchar NOT NULL,
-	CONSTRAINT currency_pk PRIMARY KEY (id),
-	CONSTRAINT currency_name_unique UNIQUE (name),
-	CONSTRAINT currency_name_plural_unique UNIQUE (name_plural),
-	CONSTRAINT currency_symbol_unique UNIQUE (symbol)
+	CONSTRAINT currencies_pk PRIMARY KEY (id),
+	CONSTRAINT currencies_name_unique UNIQUE (name),
+	CONSTRAINT currencies_name_plural_unique UNIQUE (name_plural),
+	CONSTRAINT currencies_symbol_unique UNIQUE (symbol)
 );
 
-INSERT INTO public.currency (id,"name",name_plural,symbol) OVERRIDING SYSTEM VALUE VALUES (1,'Real','Reais','R$');
-INSERT INTO public.currency (id,"name",name_plural,symbol) OVERRIDING SYSTEM VALUE VALUES (2,'Dólar','Dólares','US$');
+INSERT INTO public.currencies (id,"name",name_plural,symbol) OVERRIDING SYSTEM VALUE VALUES (1,'Real','Reais','R$');
+INSERT INTO public.currencies (id,"name",name_plural,symbol) OVERRIDING SYSTEM VALUE VALUES (2,'Dólar','Dólares','US$');
 
 CREATE TABLE plan_prices (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE plan_prices (
 	CONSTRAINT plan_prices_pk PRIMARY KEY (id)
 );
 
-ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_currency_fk FOREIGN KEY (currency_id) REFERENCES currency(id);
+ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_currencies_fk FOREIGN KEY (currency_id) REFERENCES currencies(id);
 ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_plan_periods_fk FOREIGN KEY (period_id) REFERENCES plan_periods(id);
 
 INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (1,R$ 0,00,1,1);
@@ -87,5 +87,3 @@ INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_i
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (10,4,1,1200,2);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (11,4,2,1,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (12,4,3,NULL,NULL);
-
-
