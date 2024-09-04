@@ -39,7 +39,7 @@ def execute_action(token, request=None):
 
         messages.append(f'Ação "{action_type}" não reconhecida.')
     else:
-        messages.append(f'Token inexistente')
+        messages.append(f'Token inexistente<br>Você copiou a URL completa?')
     
 
     context = {

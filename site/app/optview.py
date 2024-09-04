@@ -122,7 +122,7 @@ def user():
             data_valid = False
 
         if data_valid:
-            user_by_phone = Users.get_one(phone_normalized = phone_normalized)
+            user_by_phone = Users.query.filter(Users.phone_normalized == phone_normalized, Users.id != current_user.id).first()
 
             if user_by_phone is None:
 
@@ -132,10 +132,11 @@ def user():
                     current_user.phone_normalized = phone_normalized
                     db.session.commit()
 
-                    ok, code, message = email_send.send_email_confirmation(app, new_user)
-                    if not ok:
-                        messages.append("Houve um erro no envio de seu e-mail.")
-                        # TODO log error code and message
+                    # TODO create send_changed_user_data and e-mail templates
+                    # ok, code, message = email_send.send_changed_user_data(app, current_user)
+                    # if not ok:
+                    #     messages.append("Houve um erro no envio de seu e-mail.")
+                    #     # TODO log error code and message
 
                     messages.append("Dados alterados.")
 
