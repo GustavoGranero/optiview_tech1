@@ -30,6 +30,11 @@ from models.plans import Plans
 from models.hash_types import HashTypes
 from models.action_types import ActionTypes
 from models.actions import Actions
+from models.periods import Periods
+from models.currencies import Currencies
+from models.prices import Prices
+from models.resources import Resources
+from models.resource_limits import ResourceLimits
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,
@@ -291,6 +296,16 @@ def logout():
         'user': current_user,
     }
     return redirect("/home.html")
+
+# @app.route("/plan_myplantai.html", methods=["GET", "POST"])
+# def plans():
+#     # filename = os.path.join(os.path.dirname(__file__), f'../web/{name}')
+    
+#     context = {
+#         'user': current_user,
+#     }
+#     return render_template('plan_myplantai.html', **context)
+
 
 @app.route("/")
 @app.route("/<name>")
