@@ -83,7 +83,7 @@
             {% if user.is_authenticated %}
                 <input class="not-empty" type="text" id="telefone" name="phone" value="{{ user.phone }}" required>
             {% else %}
-                <input class="{{ input_class }}" type="text" id="telefone" name="phone" value="{{ user.phone }}" required>
+                <input class="{{ input_class }}" type="text" id="telefone" name="phone" value="{{ phone }}" required>
             {% endif %}
             <label for="telefone">Telefone</label>
         </div>

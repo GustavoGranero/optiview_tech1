@@ -132,10 +132,10 @@ def user():
                     current_user.phone_normalized = phone_normalized
                     db.session.commit()
 
-                     # ok, code, message = email_send.send_email_confirmation(app, new_user)
-                    # if not ok:
-                    #     messages.append("Houve um erro no envio de seu e-mail.")
-                    #     # TODO log error code and message
+                    ok, code, message = email_send.send_email_confirmation(app, new_user)
+                    if not ok:
+                        messages.append("Houve um erro no envio de seu e-mail.")
+                        # TODO log error code and message
 
                     messages.append("Dados alterados.")
 

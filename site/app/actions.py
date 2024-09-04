@@ -44,7 +44,6 @@ def execute_action(token, request=None):
 
     context = {
         'messages': messages,
-        'token': token,
     }           
     return render_template("action_error.html", **context)
 
