@@ -1,8 +1,8 @@
 
 from optview import db
+from models.base_mixin import BaseMixin
 
-
-class Resources(db.Model):
+class Resources(BaseMixin, db.Model):
     __tablename__ = "plan_resources"
 
     id = db.Column(db.Integer, primary_key=True)

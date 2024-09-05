@@ -1,8 +1,9 @@
 
 from optview import db
+from models.base_mixin import BaseMixin
 
 
-class Currencies(db.Model):
+class Currencies(BaseMixin, db.Model):
     __tablename__ = "currencies"
 
     id = db.Column(db.Integer, primary_key=True)

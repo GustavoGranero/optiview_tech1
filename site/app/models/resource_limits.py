@@ -1,8 +1,8 @@
-
 from optview import db
+from models.base_mixin import BaseMixin
 
 
-class ResourceLimits(db.Model):
+class ResourceLimits(BaseMixin, db.Model):
     __tablename__ = "plan_resource_limits"
 
     id = db.Column(db.Integer, primary_key=True)
