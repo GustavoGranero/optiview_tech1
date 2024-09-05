@@ -127,9 +127,9 @@ def user():
             data_valid = False
 
         if data_valid:
-            user_by_phone = Users.query.filter(Users.phone_normalized == phone_normalized, Users.id != current_user.id).first()
+            user_by_phone = Users.get_one(phone_normalized = phone_normalized)
 
-            if user_by_phone is None:
+            if user_by_phone.id == current_user.id:
 
                 try:
                     current_user.full_name = full_name
