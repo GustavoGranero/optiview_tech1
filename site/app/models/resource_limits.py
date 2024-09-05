@@ -14,3 +14,4 @@ class ResourceLimits(BaseMixin, db.Model):
     plan = db.relationship('Plans', backref='plan_resource_limits', lazy='joined')
     resource = db.relationship('Resources', backref='plan_resource_limits', lazy='joined')
     period = db.relationship('Periods', backref='plan_resource_limits', lazy='joined')
+

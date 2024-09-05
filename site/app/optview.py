@@ -297,14 +297,17 @@ def logout():
     }
     return redirect("/home.html")
 
-# @app.route("/plan_myplantai.html", methods=["GET", "POST"])
-# def plans():
-#     # filename = os.path.join(os.path.dirname(__file__), f'../web/{name}')
+@app.route("/plan_myplantai.html", methods=["GET", "POST"])
+def plans():
+    # filename = os.path.join(os.path.dirname(__file__), f'../web/{name}')
+    plans = Plans.query.order_by(Plans.id).all()
+    periods = Periods.query.order_by(Periods.id).all()
     
-#     context = {
-#         'user': current_user,
-#     }
-#     return render_template('plan_myplantai.html', **context)
+    context = {
+        'periods': periods,
+        'plans': plans,
+    }
+    return render_template('plan_myplantai.html', **context)
 
 
 @app.route("/")

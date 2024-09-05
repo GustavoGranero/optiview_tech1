@@ -1,13 +1,17 @@
-CREATE TABLE public.plan_periods (
-	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
+CREATE TABLE plan_periods (
+	id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
 	"name" varchar NOT NULL,
 	"period" interval NOT NULL,
-	CONSTRAINT plan_periods_pk PRIMARY KEY (id),
+	name_plural varchar NOT NULL,
+	unit_name varchar NOT NULL,
+	CONSTRAINT plan_periods_name_plural_unique UNIQUE (name_plural),
 	CONSTRAINT plan_periods_name_unique UNIQUE (name),
+	CONSTRAINT plan_periods_pk PRIMARY KEY (id),
+	CONSTRAINT plan_periods_unit_name_unique UNIQUE (unit_name)
 );
 
-INSERT INTO public.plan_periods (id,"name","period") VALUES (1,'Mensal','1 mon'::interval);
-INSERT INTO public.plan_periods (id,"name","period") VALUES (2,'Anual','1 year'::interval);
+INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (1,'Mensal','1 mon'::interval,'Mensais', 'Mês');
+INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (2,'Anual','1 year'::interval),'Anuais', 'Ano';
 
 CREATE TABLE currencies (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,

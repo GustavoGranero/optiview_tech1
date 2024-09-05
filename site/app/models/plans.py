@@ -10,3 +10,4 @@ class Plans(BaseMixin, db.Model):
     price_id = db.Column(db.Integer, db.ForeignKey('plan_prices.id'), unique=False, nullable=False, default=None)
 
     price = db.relationship('Prices', backref='plans', lazy='joined')
+    resource_limits = db.relationship('ResourceLimits', back_populates='plan')

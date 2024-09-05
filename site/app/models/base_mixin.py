@@ -13,4 +13,8 @@ class BaseMixin(object):
     def get_one(cls, **kw):
         return cls.query.filter_by(**kw).first()
     
+    @classmethod
+    def get_all(cls, **kw):
+        return cls.query.filter_by(**kw).all()
+    
     
