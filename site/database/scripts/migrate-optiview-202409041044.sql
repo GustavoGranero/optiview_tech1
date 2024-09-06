@@ -79,15 +79,43 @@ ALTER TABLE public.plan_resource_limits ADD CONSTRAINT plan_resource_limits_plan
 ALTER TABLE public.plan_resource_limits ADD CONSTRAINT plan_resource_limits_plan_resources_fk FOREIGN KEY (resource_id) REFERENCES plan_resources(id);
 ALTER TABLE public.plan_resource_limits ADD CONSTRAINT plan_resource_limits_plans_fk FOREIGN KEY (plan_id) REFERENCES "plans"(id);
 
-INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (1,1,1,10,1);
+INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (1,1,1,10,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (2,1,2,1,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (3,1,3,1,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (4,2,1,100,1);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (5,2,2,1,NULL);
-INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (6,2,3,2,NULL);
-INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (7,3,1,500,2);
+INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (6,2,3,NULL,NULL);
+INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (7,3,1,500,1);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (8,3,2,5,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (9,3,3,NULL,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (10,4,1,1200,2);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (11,4,2,1,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (12,4,3,NULL,NULL);
+INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (13,5,1,6000,2);
+INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (14,5,2,NULL,NULL);
+INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (15,5,3,NULL,NULL);
+
+CREATE OR REPLACE VIEW public.view_resources_limits
+AS SELECT rl.id,
+    p.name AS plan_name,
+    p_pri_per.name AS plan_period,
+    pr.name AS resource_name,
+    rl."limit",
+    per.name AS period_name
+   FROM plan_resource_limits rl
+     JOIN plans p ON rl.plan_id = p.id
+     JOIN plan_prices pri ON p.price_id = pri.id
+     JOIN plan_periods p_pri_per ON pri.period_id = p_pri_per.id
+     JOIN plan_resources pr ON rl.resource_id = pr.id
+     LEFT JOIN plan_periods per ON rl.period_id = per.id
+  ORDER BY p.id;
+
+CREATE OR REPLACE VIEW public.newview
+AS SELECT p.id,
+    p.name AS plan_name,
+    per.name AS period_name,
+    pr.price
+   FROM plans p
+     JOIN plan_prices pr ON p.price_id = pr.id
+     JOIN plan_periods per ON pr.period_id = per.id;
+
