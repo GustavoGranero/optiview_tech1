@@ -27,7 +27,8 @@
     </div>
     <div class="subscription-plans">
       {% for plan in plans %}
-        <div class="plan free {{ plan.price.period.name }}">
+      {% set free = 'free' if plan.price.price == 0 else '' %}
+        <div class="plan {{ free }} {{ plan.price.period.name }}">
           <div class="pack-container">
               <div class="header">
                 <p class="title_price">
@@ -36,11 +37,35 @@
                 <div class="price-container">
                   {% set price = 'Free' if plan.price.price == 0 else plan.price.price %}
                   <span>{{ plan.price.currency.symbol }}</span>{{ price }}
-                  <span>/{{ plan.price.period.unit_name.lower() }}</span>
+                  {% if plan.price.period != None %}
+                    <span>/{{ plan.price.period.unit_name.lower() }}</span>
+                  {% endif %}
                 </div>
               </div>
               <!-- TODO fazer loop para enumerar os recursos do plano e seus limites -->
+              {% for resource_limit in plan.resource_limits %}
               <div>
+                <ul class="lists">
+                  <li class="list">
+                    <span>
+                      <svg aria-hidden="true" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.5 12.75l6 6 9-13.5" stroke-linejoin="round" stroke-linecap="round"></path>
+                      </svg>
+                    </span>
+                    <p>
+                      {% set limit = 'Sem limite de ' if resource_limit.limit == None else resource_limit.limit %}
+                      {{ limit }}
+                      {% if resource_limit.limit != 1 %}
+                        {{ resource_limit.resource.name[0].lower() }}{{ resource_limit.resource.name[1:] }}
+                      {% else %}
+                        {{ resource_limit.resource.name_singular[0].lower() }}{{ resource_limit.resource.name_singular[1:] }}
+                      {% endif %}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              {% endfor %}
+              <!-- <div>
                 <ul class="lists">
                   <li class="list">
                     <span>
@@ -53,7 +78,7 @@
                     </p>
                   </li>
                 </ul>
-              </div>
+              </div> -->
               <!-- TODO fim do loop para enumerar os recursos e seus limites -->
               <div class="button-container">
                 <a href="myplantai.html">
@@ -74,6 +99,10 @@
 
             // Mostrar planos do tipo selecionado
             document.querySelectorAll('.' + planType).forEach(plan => {
+                plan.style.display = 'flex';
+            });
+
+            document.querySelectorAll('.free').forEach(plan => {
                 plan.style.display = 'flex';
             });
 

@@ -56,15 +56,17 @@ INSERT INTO public."plans" (id,"name",price_id) OVERRIDING SYSTEM VALUE VALUES (
 ALTER TABLE public."plans" ALTER COLUMN price_id SET NOT NULL;
 
 CREATE TABLE plan_resources (
-	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
+	id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
 	"name" varchar NOT NULL,
-	CONSTRAINT plan_resources_pk PRIMARY KEY (id),
+	name_singular varchar NOT NULL,
+	CONSTRAINT plan_resources_name_singular_unique UNIQUE (name_singular),
 	CONSTRAINT plan_resources_name_unique UNIQUE (name),
+	CONSTRAINT plan_resources_pk PRIMARY KEY (id)
 );
 
-INSERT INTO public.plan_resources (id,"name") OVERRIDING SYSTEM VALUE VALUES (1,'Usos de IA');
-INSERT INTO public.plan_resources (id,"name") OVERRIDING SYSTEM VALUE VALUES (2,'Usuários');
-INSERT INTO public.plan_resources (id,"name") OVERRIDING SYSTEM VALUE VALUES (3,'Projetos');
+INSERT INTO public.plan_resources (id,"name",name_singular) OVERRIDING SYSTEM VALUE VALUES (1,'Usos de IA','Uso de IA');
+INSERT INTO public.plan_resources (id,"name",name_singular) OVERRIDING SYSTEM VALUE VALUES (2,'Usuários','Usuário');
+INSERT INTO public.plan_resources (id,"name",name_singular) OVERRIDING SYSTEM VALUE VALUES (3,'Projetos','Projeto');
 
 CREATE TABLE plan_resource_limits (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
