@@ -38,7 +38,7 @@ CREATE TABLE plan_prices (
 ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_currencies_fk FOREIGN KEY (currency_id) REFERENCES currencies(id);
 ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_plan_periods_fk FOREIGN KEY (period_id) REFERENCES plan_periods(id);
 
-INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (1,R$ 0,00,1,1);
+INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (1,R$ 0,00,1,NULL);
 INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (2,R$ 67,90,1,1);
 INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (3,R$ 390,90,1,1);
 INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (4,R$ 730,90,1,2);
@@ -95,7 +95,7 @@ INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_i
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (14,5,2,NULL,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (15,5,3,NULL,NULL);
 
-CREATE OR REPLACE VIEW public.view_resources_limits
+CREATE OR REPLACE VIEW view_resources_limits
 AS SELECT rl.id,
     p.name AS plan_name,
     p_pri_per.name AS plan_period,
@@ -105,7 +105,7 @@ AS SELECT rl.id,
    FROM plan_resource_limits rl
      JOIN plans p ON rl.plan_id = p.id
      JOIN plan_prices pri ON p.price_id = pri.id
-     JOIN plan_periods p_pri_per ON pri.period_id = p_pri_per.id
+     LEFT JOIN plan_periods p_pri_per ON pri.period_id = p_pri_per.id
      JOIN plan_resources pr ON rl.resource_id = pr.id
      LEFT JOIN plan_periods per ON rl.period_id = per.id
   ORDER BY p.id;
