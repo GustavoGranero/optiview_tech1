@@ -12,6 +12,6 @@ class ResourceLimits(BaseMixin, db.Model):
     period_id = db.Column(db.Integer, db.ForeignKey('plan_periods.id'), unique=False, nullable=True, default=None)
 
     plan = db.relationship('Plans', backref='plan_resource_limits', lazy='joined')
-    resource = db.relationship('Resources', backref='plan_resource_limits', lazy='joined')
+    resource = db.relationship('Resources', backref='plan_resource_limits', lazy='joined', order_by='Resources.id')
     period = db.relationship('Periods', backref='plan_resource_limits', lazy='joined')
 
