@@ -62,39 +62,52 @@
       });
 
       // Add new folder functionality
-      document.querySelector('.add-folder').addEventListener('click', function() {
-        const newFolder = document.createElement('div');
-        newFolder.classList.add('folder');
-        newFolder.innerHTML = `
-          <div class="folder-name">
-            <span>New Folder</span>
-            <input type="text" placeholder="New Folder">
-          </div>
-        `;
-        document.querySelector('.folders-container').insertBefore(newFolder, this);
-        
-        // Reattach event listeners for the new folder
-        newFolder.querySelector('.folder-name').addEventListener('click', function() {
-          const folder = this.closest('.folder');
-          folder.classList.add('edit-mode');
-          const input = folder.querySelector('input');
-          input.value = this.querySelector('span').innerText.trim();
-          input.focus();
-        });
+      document.querySelector('.add-folder').addEventListener('click', create_folder)
 
-        newFolder.querySelector('.folder-name input').addEventListener('blur', function() {
-          const folder = this.closest('.folder');
-          folder.classList.remove('edit-mode');
-          const span = folder.querySelector('span');
-          span.innerText = this.value.trim();
-        });
+      // create folder on server
+      function create_folder() {
+        fetch("/create_folder")
+        .then((response) => response.json())
+        .then((json) =>  create_folder_ui(document.querySelector('.add-folder'), json));
+      }
 
-        newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            this.blur();
-          }
-        });
-      });
+      function create_folder_ui(parent, json) {
+        if (json.status == 'Ok') {
+          const newFolder = document.createElement('div');
+          newFolder.classList.add('folder');
+          newFolder.innerHTML = `
+            <div class="folder-name">
+              <span>New Folder</span>
+              <input type="text" placeholder="New Folder">
+            </div>
+          `;
+          document.querySelector('.folders-container').insertBefore(newFolder, parent);
+
+          // Reattach event listeners for the new folder
+          newFolder.querySelector('.folder-name').addEventListener('click', function() {
+            const folder = parent.closest('.folder');
+            folder.classList.add('edit-mode');
+            const input = folder.querySelector('input');
+            input.value = parent.querySelector('span').innerText.trim();
+            input.focus();
+          });
+
+          newFolder.querySelector('.folder-name input').addEventListener('blur', function() {
+            const folder = parent.closest('.folder');
+            folder.classList.remove('edit-mode');
+            const span = folder.querySelector('span');
+            span.innerText = parent.value.trim();
+          });
+
+          newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              parent.blur();
+            }
+          });
+        }
+      };
+      
+
     });
   </script>
 </body>

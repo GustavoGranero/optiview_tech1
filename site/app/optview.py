@@ -55,6 +55,15 @@ from actions import execute_action
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@app.route("/create_folder/", methods=["GET", "POST"])
+def create_folder():
+    # TODO create folder and return status
+    status = {
+        'status': 'Ok',
+        'message': '',
+    }
+    return status
+
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):
     return execute_action(token, request)
