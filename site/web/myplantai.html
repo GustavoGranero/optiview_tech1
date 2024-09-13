@@ -85,26 +85,27 @@
 
           // Reattach event listeners for the new folder
           newFolder.querySelector('.folder-name').addEventListener('click', function() {
-            const folder = parent.closest('.folder');
+            const folder = this.closest('.folder');
             folder.classList.add('edit-mode');
             const input = folder.querySelector('input');
-            input.value = parent.querySelector('span').innerText.trim();
+            input.value = this.querySelector('span').innerText.trim();
             input.focus();
           });
 
           newFolder.querySelector('.folder-name input').addEventListener('blur', function() {
-            const folder = parent.closest('.folder');
+            const folder = this.closest('.folder');
             folder.classList.remove('edit-mode');
             const span = folder.querySelector('span');
-            span.innerText = parent.value.trim();
+            span.innerText = this.value.trim();
           });
 
           newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-              parent.blur();
+              this.blur();
             }
           });
         }
+
       };
       
 
