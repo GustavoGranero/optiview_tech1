@@ -56,11 +56,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 @app.route("/create_folder/", methods=["GET", "POST"])
+@login_required
 def create_folder():
     # TODO create folder and return status
     status = {
         'status': 'Ok',
         'message': '',
+        'id': 0,
     }
     return status
 
