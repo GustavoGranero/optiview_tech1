@@ -121,3 +121,4 @@ AS SELECT p.id,
      JOIN plan_prices pr ON p.price_id = pr.id
      JOIN plan_periods per ON pr.period_id = per.id;
 
+INSERT INTO public.versions VALUES ('202409041044', '2024-09-04 10:44:00.000000-03');

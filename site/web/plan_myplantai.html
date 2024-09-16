@@ -30,17 +30,17 @@
       {% set free = 'free' if plan.price.price == 0 else '' %}
         <div class="plan {{ free }} {{ plan.price.period.name }}">
           <div class="pack-container">
-              <div class="header">
-                <p class="title_price">
-                  {{ plan.name }}
-                </p>
-                <div class="price-container">
-                  {% set price = 'Free' if plan.price.price == 0 else plan.price.price %}
-                  <span>{{ plan.price.currency.symbol }}</span>{{ price }}
-                  {% if plan.price.period != None %}
-                    <span>/{{ plan.price.period.unit_name.lower() }}</span>
-                  {% endif %}
-                </div>
+            <div class="header">
+              <p class="title_price">
+                {{ plan.name }}
+              </p>
+              <div class="price-container">
+                {% set price = 'Free' if plan.price.price == 0 else plan.price.price %}
+                <span>{{ plan.price.currency.symbol }}</span>{{ price }}
+                {% if plan.price.period != None %}
+                  <span>/{{ plan.price.period.unit_name.lower() }}</span>
+                {% endif %}
+              </div>
               {% for resource_limit in plan.resource_limits %}
                 <div>
                   <ul class="lists">

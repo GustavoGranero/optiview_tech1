@@ -35,6 +35,7 @@ from models.currencies import Currencies
 from models.prices import Prices
 from models.resources import Resources
 from models.resource_limits import ResourceLimits
+from models.folders import Folders
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,
