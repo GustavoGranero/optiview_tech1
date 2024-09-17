@@ -3,7 +3,7 @@ CREATE TABLE public.folders (
 	"uuid" uuid DEFAULT gen_random_uuid() NOT NULL,
 	user_id int8 NOT NULL,
 	"name" varchar NOT NULL,
-	CONSTRAINT folders_name_unique UNIQUE (name),
+	CONSTRAINT folders_name_user_id_unique UNIQUE (name, user_id),
 	CONSTRAINT folders_pk PRIMARY KEY (id),
 	CONSTRAINT folders_uuid_unique UNIQUE (uuid),
 	CONSTRAINT folders_users_fk FOREIGN KEY (user_id) REFERENCES public.users(id)

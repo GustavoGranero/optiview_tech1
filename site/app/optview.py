@@ -51,6 +51,7 @@ from auth import (
     is_suspended,
 )
 import email_send
+from folders import get_new_folder_name
 from actions import execute_action
 
 login_manager = LoginManager()
@@ -59,13 +60,35 @@ login_manager.init_app(app)
 @app.route("/create_folder/", methods=["GET", "POST"])
 @login_required
 def create_folder():
-    # TODO create folder and return status
+    status = 'Ok'
+    messages = []
+    name = None
+    uuid = None
+    new_folder_name = get_new_folder_name(app, current_user)
+    try:
+        new_folder = Folders.add(name=new_folder_name, user_id=current_user.id)
+        name = new_folder.name,
+        uuid = new_folder.uuid
+    except  exc.SQLAlchemyError as e:
+        # TODO log error
+        status = 'Error'
+        messages.append(f"Houve um erro na criação do novo folder.")
+    
     status = {
-        'status': 'Ok',
-        'message': '',
-        'id': 0,
+        'status': status,
+        'messages': '',
+        'name': name,
+        'uuid': uuid,
     }
     return status
+
+# @app.route("/myplantai.html", methods=["GET", "POST"])
+# def folders():
+#     # TODO  get folders created
+#     context = {
+#         'user': current_user,
+#     }
+#     return render_template("myplantai.html", **context)
 
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):

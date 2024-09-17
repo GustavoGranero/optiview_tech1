@@ -54,3 +54,5 @@ EMAIL_LOGO_URL = 'https://lh3.googleusercontent.com/pw/AP1GczPIWSIIQGt1kfyuCwxWa
 
 ACTION_TYPE_CONFIRM_EMAIL = 'confirm_email'
 ACTION_TYPE_CONFIRM_PASSWORD_RESET = 'confirm_password_reset'
+
+FOLDER_NEW_NAME_TEMPLATE = f'New folder{{number}}'

@@ -20,12 +20,14 @@
   <section class="home-section">
     <div class="text">MyPlanAI</div>
     <div class="folders-container">
+      {% for folder in user.folders %}
       <div class="folder">
-        <div class="folder-name">
-          <span>Folder 1</span>
-          <input type="text" placeholder="Folder 1">
+        <div class="folder-name" id='{{ folder.uuid}}'>
+          <span>{{ folder.name }}</span>
+          <input type="text" placeholder="{{ folder.name }}">
         </div>
       </div>
+      {% endfor %}
       <div class="add-folder">+</div>
     </div>
   </section>
@@ -77,7 +79,7 @@
           newFolder.classList.add('folder');
           newFolder.innerHTML = `
             <div class="folder-name">
-              <span>New Folder</span>
+              <span>` + json.name + `</span>
               <input type="text" placeholder="New Folder">
             </div>
           `;
