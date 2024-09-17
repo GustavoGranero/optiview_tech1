@@ -30,6 +30,7 @@
       {% endfor %}
       <div class="add-folder">+</div>
     </div>
+    <div class="messages-container"></div>
   </section>
   {% include "includes/footer.html" %}
   <script src="js/sidebar.js"></script>
@@ -78,9 +79,9 @@
           const newFolder = document.createElement('div');
           newFolder.classList.add('folder');
           newFolder.innerHTML = `
-            <div class="folder-name">
+            <div class="folder-name" id="` + json.uuid + `">
               <span>` + json.name + `</span>
-              <input type="text" placeholder="New Folder">
+              <input type="text" placeholder="` + json.name + `">
             </div>
           `;
           document.querySelector('.folders-container').insertBefore(newFolder, parent);
@@ -106,6 +107,9 @@
               this.blur();
             }
           });
+        }
+        else {
+          document.querySelector('.messages-container').innerHTML = json.message
         }
 
       };

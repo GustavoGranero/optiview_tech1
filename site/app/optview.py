@@ -61,22 +61,30 @@ login_manager.init_app(app)
 @login_required
 def create_folder():
     status = 'Ok'
-    messages = []
+    message = ''
     name = None
     uuid = None
-    new_folder_name = get_new_folder_name(app, current_user)
-    try:
-        new_folder = Folders.add(name=new_folder_name, user_id=current_user.id)
-        name = new_folder.name,
-        uuid = new_folder.uuid
-    except  exc.SQLAlchemyError as e:
-        # TODO log error
+    plan = current_user.plan
+    resource_id = Resources.get_one(name='Projetos').id
+    folders_limit = ResourceLimits.get_one(plan_id=plan.id, resource_id=resource_id).limit
+    folders_count = len(current_user.folders)
+    if folders_count < folders_limit:
+        try:
+            new_folder_name = get_new_folder_name(app, current_user)
+            new_folder = Folders.add(name=new_folder_name, user_id=current_user.id)
+            name = new_folder.name,
+            uuid = new_folder.uuid
+        except  exc.SQLAlchemyError as e:
+            # TODO log error
+            status = 'Error'
+            message = "Houve um erro na criação do novo folder."
+    else:
         status = 'Error'
-        messages.append(f"Houve um erro na criação do novo folder.")
+        message = f"O número máximo de projetos para o plano {plan.name} foi atingido"
     
     status = {
         'status': status,
-        'messages': '',
+        'message': message,
         'name': name,
         'uuid': uuid,
     }
