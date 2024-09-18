@@ -130,7 +130,7 @@
       function rename_folder_ui(json) {
         document.querySelector('.messages-container').innerHTML = json.message;
         if (json.status != 'Ok') {
-          document.getElementById(json.uuid).querySelector('input').value = json.name;
+          document.getElementById(json.uuid).querySelector('input').placeholder = json.name;
           document.getElementById(json.uuid).querySelector('span').innerText = json.name;
         }
       }
