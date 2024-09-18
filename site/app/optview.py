@@ -100,9 +100,13 @@ def rename_folder():
     try:
         folder_alredy_exists = Folders.get_one(user_id = current_user.id, name = name)
         current_folder = Folders.get_one(user_id = current_user.id, uuid = uuid)
-        if folder_alredy_exists is None:
+        if folder_alredy_exists is None and current_folder is not None:
             current_folder.name = name
             db.session.commit()
+        elif current_folder is None:
+            status = 'Error'
+            message = f"O folder '{name}' não foi econtrado nor servidor."
+            name = ''
         elif current_folder != folder_alredy_exists:
             # if current_folder and folder_alredy_exists are equal the name was not changed
             status = 'Error'

@@ -124,15 +124,18 @@
         url.search = new URLSearchParams(params).toString();
         fetch(url)
         .then((response) => response.json())
-        .then((json) =>  rename_folder_ui(json))
+        .then((json) => rename_folder_ui(json))
         .catch((error) => rename_folder_ui({status: 'Error', message: 'Falha na comunicação com o servidor'}));
       }
 
       function rename_folder_ui(json) {
         document.querySelector('.messages-container').innerHTML = json.message;
         if (json.status != 'Ok') {
-          document.getElementById(json.uuid).querySelector('input').placeholder = json.name;
-          document.getElementById(json.uuid).querySelector('span').innerText = json.name;
+          div = document.getElementById(json.uuid);
+          if (div != null) {
+            document.getElementById(json.uuid).querySelector('input').placeholder = json.name;
+            document.getElementById(json.uuid).querySelector('span').innerText = json.name;
+          }
         }
       }
 
