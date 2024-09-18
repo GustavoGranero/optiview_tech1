@@ -90,13 +90,36 @@ def create_folder():
     }
     return status
 
-# @app.route("/myplantai.html", methods=["GET", "POST"])
-# def folders():
-#     # TODO  get folders created
-#     context = {
-#         'user': current_user,
-#     }
-#     return render_template("myplantai.html", **context)
+@app.route("/rename_folder/", methods=["GET", "POST"])
+@login_required
+def rename_folder():
+    name = request.args.get("name")
+    uuid = request.args.get("uuid")
+    status = 'Ok'
+    message = ''
+    try:
+        folder_alredy_exists = Folders.get_one(user_id = current_user.id, name = name)
+        current_folder = Folders.get_one(user_id = current_user.id, uuid = uuid)
+        if folder_alredy_exists is None:
+            current_folder.name = name
+            db.session.commit()
+        elif current_folder != folder_alredy_exists:
+            # if current_folder and folder_alredy_exists are equal the name was not changed
+            status = 'Error'
+            message = f"O folder '{name}' já existe."
+            name = current_folder.name
+    except  exc.SQLAlchemyError as e:
+        # TODO log error
+        status = 'Error'
+        message = "Houve um erro na renomeação do folder."
+    
+    status = {
+        'status': status,
+        'message': message,
+        'name': name,
+        'uuid': uuid,
+    }
+    return status
 
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):

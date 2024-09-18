@@ -22,7 +22,7 @@
     <div class="folders-container">
       {% for folder in user.folders %}
       <div class="folder">
-        <div class="folder-name" id='{{ folder.uuid}}'>
+        <div id='{{ folder.uuid}}' class="folder-name">
           <span>{{ folder.name }}</span>
           <input type="text" placeholder="{{ folder.name }}">
         </div>
@@ -59,6 +59,7 @@
 
         input.addEventListener('keypress', function(e) {
           if (e.key === 'Enter') {
+            rename_folder(this.value, this.parentNode.id)
             this.blur();
           }
         });
@@ -71,7 +72,8 @@
       function create_folder() {
         fetch("/create_folder")
         .then((response) => response.json())
-        .then((json) =>  create_folder_ui(document.querySelector('.add-folder'), json));
+        .then((json) =>  create_folder_ui(document.querySelector('.add-folder'), json))
+        .catch((error) => create_folder_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
       }
 
       function create_folder_ui(parent, json) {
@@ -79,7 +81,7 @@
           const newFolder = document.createElement('div');
           newFolder.classList.add('folder');
           newFolder.innerHTML = `
-            <div class="folder-name" id="` + json.uuid + `">
+            <div id="` + json.uuid + `" class="folder-name">
               <span>` + json.name + `</span>
               <input type="text" placeholder="` + json.name + `">
             </div>
@@ -114,6 +116,24 @@
 
       };
       
+      // rename folder on server
+      function rename_folder(name, uuid) {
+        var url = new URL("/rename_folder", window.location.href)
+        var params = {name: name, uuid: uuid}
+        url.search = new URLSearchParams(params).toString();
+        fetch(url)
+        .then((response) => response.json())
+        .then((json) =>  rename_folder_ui(json))
+        .catch((error) => rename_folder_ui({status: 'Error', message: 'Falha na comunicação com o servidor'}));
+      }
+
+      function rename_folder_ui(json) {
+        document.querySelector('.messages-container').innerHTML = json.message;
+        if (json.status != 'Ok') {
+          document.getElementById(json.uuid).querySelector('input').value = json.name;
+          document.getElementById(json.uuid).querySelector('span').innerText = json.name;
+        }
+      }
 
     });
   </script>
