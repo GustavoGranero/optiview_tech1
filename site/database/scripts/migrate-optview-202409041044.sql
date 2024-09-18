@@ -27,7 +27,7 @@ CREATE TABLE public.currencies (
 INSERT INTO public.currencies (id,"name",name_plural,symbol) OVERRIDING SYSTEM VALUE VALUES (1,'Real','Reais','R$');
 INSERT INTO public.currencies (id,"name",name_plural,symbol) OVERRIDING SYSTEM VALUE VALUES (2,'Dólar','Dólares','US$');
 
-CREATE TABLE plan_prices (
+CREATE TABLE public.plan_prices (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	price money NOT NULL,
 	currency_id int8 NOT NULL,

@@ -347,9 +347,6 @@ INSERT INTO public.versions VALUES ('202409041044', '2024-09-04 10:44:00-03');
 INSERT INTO public.versions VALUES ('202409161614', '2024-09-16 16:14:00-03');
 
 
-
-
-
 SELECT pg_catalog.setval('public.action_types_id_seq', 4, true);
 
 
