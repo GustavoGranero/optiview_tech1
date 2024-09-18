@@ -106,6 +106,7 @@
 
           newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+              rename_folder(this.value, this.parentNode.id)
               this.blur();
             }
           });
