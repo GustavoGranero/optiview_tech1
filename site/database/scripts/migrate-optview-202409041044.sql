@@ -1,4 +1,4 @@
-CREATE TABLE plan_periods (
+CREATE TABLE public.plan_periods (
 	id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
 	"name" varchar NOT NULL,
 	"period" interval NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE plan_periods (
 INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (1,'Mensal','1 mon'::interval,'Mensais', 'Mês');
 INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (2,'Anual','1 year'::interval),'Anuais', 'Ano';
 
-CREATE TABLE currencies (
+CREATE TABLE public.currencies (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"name" varchar NOT NULL,
 	name_plural varchar NOT NULL,
@@ -55,7 +55,7 @@ INSERT INTO public."plans" (id,"name",price_id) OVERRIDING SYSTEM VALUE VALUES (
 
 ALTER TABLE public."plans" ALTER COLUMN price_id SET NOT NULL;
 
-CREATE TABLE plan_resources (
+CREATE TABLE public.plan_resources (
 	id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
 	"name" varchar NOT NULL,
 	name_singular varchar NOT NULL,
@@ -68,7 +68,7 @@ INSERT INTO public.plan_resources (id,"name",name_singular) OVERRIDING SYSTEM VA
 INSERT INTO public.plan_resources (id,"name",name_singular) OVERRIDING SYSTEM VALUE VALUES (2,'Usuários','Usuário');
 INSERT INTO public.plan_resources (id,"name",name_singular) OVERRIDING SYSTEM VALUE VALUES (3,'Projetos','Projeto');
 
-CREATE TABLE plan_resource_limits (
+CREATE TABLE public.plan_resource_limits (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	plan_id int8 NOT NULL,
 	resource_id int8 NOT NULL,
@@ -97,28 +97,29 @@ INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_i
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (14,5,2,NULL,NULL);
 INSERT INTO public.plan_resource_limits (id,plan_id,resource_id,"limit",period_id) OVERRIDING SYSTEM VALUE VALUES (15,5,3,NULL,NULL);
 
-CREATE OR REPLACE VIEW view_resources_limits
-AS SELECT rl.id,
+CREATE VIEW public.view_plan_periods AS
+ SELECT p.id,
+    p.name AS plan_name,
+    per.name AS period_name,
+    pr.price
+   FROM ((public.plans p
+     JOIN public.plan_prices pr ON ((p.price_id = pr.id)))
+     JOIN public.plan_periods per ON ((pr.period_id = per.id)));
+
+
+CREATE VIEW public.view_resources_limits AS
+ SELECT rl.id,
     p.name AS plan_name,
     p_pri_per.name AS plan_period,
     pr.name AS resource_name,
     rl."limit",
     per.name AS period_name
-   FROM plan_resource_limits rl
-     JOIN plans p ON rl.plan_id = p.id
-     JOIN plan_prices pri ON p.price_id = pri.id
-     LEFT JOIN plan_periods p_pri_per ON pri.period_id = p_pri_per.id
-     JOIN plan_resources pr ON rl.resource_id = pr.id
-     LEFT JOIN plan_periods per ON rl.period_id = per.id
+   FROM (((((public.plan_resource_limits rl
+     JOIN public.plans p ON ((rl.plan_id = p.id)))
+     JOIN public.plan_prices pri ON ((p.price_id = pri.id)))
+     LEFT JOIN public.plan_periods p_pri_per ON ((pri.period_id = p_pri_per.id)))
+     JOIN public.plan_resources pr ON ((rl.resource_id = pr.id)))
+     LEFT JOIN public.plan_periods per ON ((rl.period_id = per.id)))
   ORDER BY p.id;
-
-CREATE OR REPLACE VIEW public.newview
-AS SELECT p.id,
-    p.name AS plan_name,
-    per.name AS period_name,
-    pr.price
-   FROM plans p
-     JOIN plan_prices pr ON p.price_id = pr.id
-     JOIN plan_periods per ON pr.period_id = per.id;
 
 INSERT INTO public.versions VALUES ('202409041044', '2024-09-04 10:44:00.000000-03');

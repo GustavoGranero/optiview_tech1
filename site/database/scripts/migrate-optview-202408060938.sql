@@ -10,11 +10,10 @@ CREATE TABLE public.action_types (
 	CONSTRAINT action_types_pk PRIMARY KEY (id)
 );
 
-INSERT INTO public.action_types ("action_type") VALUES
-	 ('confirm_email'),
-	 ('confirm_password_reset'),
-	 ('confirm_email_change_original'),
-	 ('confirm_email_change_new');
+INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (1, 'confirm_email');
+INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (2, 'confirm_password_reset');
+INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (3, 'confirm_email_change_original');
+INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (4, 'confirm_email_change_new');
 
 
 CREATE TABLE public.actions (
