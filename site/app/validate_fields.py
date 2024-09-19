@@ -1,4 +1,5 @@
 import re
+import uuid
 
 def is_valid_password(password):
     has_lowercase = re.search(r"[a-zç]", password) is not None 
@@ -27,3 +28,10 @@ def is_valid_full_name(full_name):
 def is_valid_user_name(user):
     # kept separated in case of validation rules change
     return is_valid_full_name(user)
+
+def is_valid_uuid(val):
+    try:
+        uuid.UUID(str(val))
+        return True
+    except ValueError:
+        return False

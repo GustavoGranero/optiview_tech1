@@ -46,6 +46,7 @@ from validate_fields import (
     is_valid_email,
     is_valid_full_name,
     is_valid_user_name,
+    is_valid_uuid,
 )
 from auth import (
     get_authenticated_user,
@@ -65,10 +66,16 @@ def folder():
     status = 'Ok'
     message = ''
     uuid = request.args.get("uuid")
-    folder = Folders.get_one(user_id = current_user.id, uuid = uuid)
-    if folder is None:
+
+    if is_valid_uuid(uuid):
+        folder = Folders.get_one(user_id = current_user.id, uuid = uuid)
+        if folder is None:
+            status = 'Error'
+            message = 'Projeto não encontrado no servidor.'
+    else:
         status = 'Error'
-        message = 'Projeto não encontrado no servidor.'
+        message = 'UUID inválida.'
+        folder = None
 
     context = {
         'status': status,
