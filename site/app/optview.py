@@ -21,6 +21,7 @@ from sqlalchemy import exc
 
 from database import get_database
 
+# initalized before imporsts that use them
 app = Flask(__name__, static_url_path='',  static_folder='../web', template_folder="../web")
 app.config.from_pyfile('config.py')
 db = get_database(app)
@@ -36,6 +37,7 @@ from models.prices import Prices
 from models.resources import Resources
 from models.resource_limits import ResourceLimits
 from models.folders import Folders
+from models.files import Files
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,
@@ -56,6 +58,15 @@ from actions import execute_action
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+@app.route("/folder/<uuid>", methods=["GET", "POST"])
+@login_required
+def folder(uuid):
+    folder = Folders.get_one(uuid = uuid)
+    context = {
+        'folder': folder,
+    }
+    return render_template("/folder.html", **context)
 
 @app.route("/create_folder/", methods=["GET", "POST"])
 @login_required

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>OptiView Tech | Home Page</title>
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/sidebar_laranja.css">
+  <link rel="stylesheet" href="css/folder.css">
+  <link rel="stylesheet" href="css/rodape.css">
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="icon" href="images/optiview_grande.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  {% include "includes/loader.html" %}
+  {% with user=user %}
+    {% include "includes/sidebar.html" %}
+  {% endwith %}
+  <section class="home-section">
+    <div class="text">MyPlanAI</div>
+    <div class="files-container">
+      {% for file in folder.files %}
+      <div class="file">
+        <div id='{{ file.uuid}}' class="file-name">
+          <span>{{ file.name }}</span>
+          <input type="text" placeholder="{{ file.name }}">
+        </div>
+      </div>
+      {% endfor %}
+      <div class="add-file">+</div>
+    </div>
+    <div class="messages-container"></div>
+  </section>
+  {% include "includes/footer.html" %}
+  <script src="js/sidebar.js"></script>
+  <script src="js/loader.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener to each file name
+      document.querySelectorAll('.file-name').forEach(function(fileName) {
+        fileName.addEventListener('click', function() {
+          const file = this.closest('.file');
+          file.classList.add('edit-mode');
+          const input = file.querySelector('input');
+          input.value = this.querySelector('span').innerText.trim();
+          input.focus();
+        });
+      });
+
+      // Add event listener to file name input fields
+      document.querySelectorAll('.file-name input').forEach(function(input) {
+        input.addEventListener('blur', function() {
+          const file = this.closest('.file');
+          file.classList.remove('edit-mode');
+          const span = file.querySelector('span');
+          span.innerText = this.value.trim();
+        });
+
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            rename_file(this.value, this.parentNode.id)
+            this.blur();
+          }
+        });
+      });
+
+      // Add new file functionality
+      document.querySelector('.add-file').addEventListener('click', create_ffile)
+
+      // create file on server
+      function create_file() {
+        fetch("/create_file")
+        .then((response) => response.json())
+        .then((json) =>  create_file_ui(document.querySelector('.add-file'), json))
+        .catch((error) => create_file_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
+      }
+
+      function create_file_ui(parent, json) {
+        if (json.status == 'Ok') {
+          const newFile = document.createElement('div');
+          newFile.classList.add('file');
+          newFile.innerHTML = `
+            <div id="` + json.uuid + `" class="file-name">
+              <span>` + json.name + `</span>
+              <input type="text" placeholder="` + json.name + `">
+            </div>
+          `;
+          document.querySelector('.files-container').insertBefore(newFile, parent);
+
+          // Reattach event listeners for the new file
+          newFile.querySelector('.file-name').addEventListener('click', function() {
+            const file = this.closest('.file');
+            file.classList.add('edit-mode');
+            const input = file.querySelector('input');
+            input.value = this.querySelector('span').innerText.trim();
+            input.focus();
+          });
+
+          newFile.querySelector('.file-name input').addEventListener('blur', function() {
+            const file = this.closest('.file');
+            file.classList.remove('edit-mode');
+            const span = file.querySelector('span');
+            span.innerText = this.value.trim();
+          });
+
+          newFile.querySelector('.file-name input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              rename_file(this.value, this.parentNode.id)
+              this.blur();
+            }
+          });
+        }
+        else {
+          document.querySelector('.messages-container').innerHTML = json.message
+        }
+
+      };
+      
+      // rename file on server
+      function rename_file(name, uuid) {
+        var url = new URL("/rename_file", window.location.href)
+        var params = {name: name, uuid: uuid}
+        url.search = new URLSearchParams(params).toString();
+        fetch(url)
+        .then((response) => response.json())
+        .then((json) => rename_file(json))
+        .catch((error) => rename_file({status: 'Error', message: 'Falha na comunicação com o servidor'}));
+      }
+
+      function rename_file_ui(json) {
+        document.querySelector('.messages-container').innerHTML = json.message;
+        if (json.status != 'Ok') {
+          div = document.getElementById(json.uuid);
+          if (div != null) {
+            document.getElementById(json.uuid).querySelector('input').placeholder = json.name;
+            document.getElementById(json.uuid).querySelector('span').innerText = json.name;
+          }
+        }
+      }
+
+    });
+  </script>
+</body>
+</html>

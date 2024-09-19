@@ -13,3 +13,5 @@ class Folders(BaseMixin, db.Model):
     uuid = db.Column(db.Uuid, unique=True, nullable=False, default=uuid_default)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=False, nullable=False, default=None)
     name = db.Column(db.String(250), unique=True, nullable=False)
+
+    files = db.relationship('Files', backref='files', lazy='joined')
