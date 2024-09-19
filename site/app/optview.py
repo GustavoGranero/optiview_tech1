@@ -59,11 +59,21 @@ from actions import execute_action
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-@app.route("/folder/<uuid>", methods=["GET", "POST"])
+@app.route("/folder", methods=["GET", "POST"])
 @login_required
-def folder(uuid):
-    folder = Folders.get_one(uuid = uuid)
+def folder():
+    status = 'Ok'
+    message = ''
+    uuid = request.args.get("uuid")
+    folder = Folders.get_one(user_id = current_user.id, uuid = uuid)
+    if folder is None:
+        status = 'Error'
+        message = 'Projeto não encontrado no servidor.'
+
     context = {
+        'status': status,
+        'message': message,
+        'user': current_user,
         'folder': folder,
     }
     return render_template("/folder.html", **context)

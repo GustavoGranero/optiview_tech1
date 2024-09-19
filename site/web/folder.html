@@ -18,16 +18,22 @@
     {% include "includes/sidebar.html" %}
   {% endwith %}
   <section class="home-section">
-    <div class="text">MyPlanAI</div>
+    {% if folder != None %}
+        <div class="text">Projeto {{ folder.name }} </div>
+    {% else %}
+        <div class="text">Projeto</div>
+    {% endif %}
     <div class="files-container">
-      {% for file in folder.files %}
-      <div class="file">
-        <div id='{{ file.uuid}}' class="file-name">
-          <span>{{ file.name }}</span>
-          <input type="text" placeholder="{{ file.name }}">
-        </div>
-      </div>
-      {% endfor %}
+        {% if folder != None %}
+            {% for file in folder.files %}
+            <div class="file">
+                <div id='{{ file.uuid}}' class="file-name">
+                <span>{{ file.name }}</span>
+                <input type="text" placeholder="{{ file.name }}">
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
       <div class="add-file">+</div>
     </div>
     <div class="messages-container"></div>
@@ -35,7 +41,7 @@
   {% include "includes/footer.html" %}
   <script src="js/sidebar.js"></script>
   <script src="js/loader.js"></script>
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Add event listener to each file name
       document.querySelectorAll('.file-name').forEach(function(fileName) {
@@ -140,6 +146,7 @@
       }
 
     });
-  </script>
+  </script> -->
 </body>
 </html>
+
