@@ -10,3 +10,5 @@ CREATE TABLE public.files (
 	CONSTRAINT files_users_fk FOREIGN KEY (user_id) REFERENCES public.users(id),
 	CONSTRAINT files_folders_fk FOREIGN KEY (folder_id) REFERENCES public.folders(id)
 );
+
+INSERT INTO public.versions VALUES ('202409191606', '2024-09-19 16:06:00-03');

@@ -11,7 +11,7 @@ CREATE TABLE public.plan_periods (
 );
 
 INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (1,'Mensal','1 mon'::interval,'Mensais', 'Mês');
-INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (2,'Anual','1 year'::interval),'Anuais', 'Ano';
+INSERT INTO public.plan_periods (id,"name","period",name_plural,unit_name) OVERRIDING SYSTEM VALUE VALUES (2,'Anual','1 year'::interval,'Anuais', 'Ano');
 
 CREATE TABLE public.currencies (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -38,11 +38,11 @@ CREATE TABLE public.plan_prices (
 ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_currencies_fk FOREIGN KEY (currency_id) REFERENCES currencies(id);
 ALTER TABLE public.plan_prices ADD CONSTRAINT plan_prices_plan_periods_fk FOREIGN KEY (period_id) REFERENCES plan_periods(id);
 
-INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (1,R$ 0,00,1,NULL);
-INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (2,R$ 67,90,1,1);
-INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (3,R$ 390,90,1,1);
-INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (4,R$ 730,90,1,2);
-INSERT INTO public.plan_prices (id,price,currency_id,period_id) VALUES (5,R$ 3.982,90,1,2);
+INSERT INTO public.plan_prices (id,price,currency_id,period_id) OVERRIDING SYSTEM VALUE VALUES (1,0.0,1,NULL);
+INSERT INTO public.plan_prices (id,price,currency_id,period_id) OVERRIDING SYSTEM VALUE VALUES (2,67.9,1,1);
+INSERT INTO public.plan_prices (id,price,currency_id,period_id) OVERRIDING SYSTEM VALUE VALUES (3,390.9,1,1);
+INSERT INTO public.plan_prices (id,price,currency_id,period_id) OVERRIDING SYSTEM VALUE VALUES (4,730.9,1,2);
+INSERT INTO public.plan_prices (id,price,currency_id,period_id) OVERRIDING SYSTEM VALUE VALUES (5,3982.9,1,2);
 
 ALTER TABLE public."plans" ADD price_id int8 NULL;
 ALTER TABLE public."plans" ADD CONSTRAINT plans_plan_prices_fk FOREIGN KEY (price_id) REFERENCES plan_prices(id);
@@ -122,4 +122,4 @@ CREATE VIEW public.view_resources_limits AS
      LEFT JOIN public.plan_periods per ON ((rl.period_id = per.id)))
   ORDER BY p.id;
 
-INSERT INTO public.versions VALUES ('202409041044', '2024-09-04 10:44:00.000000-03');
+INSERT INTO public.versions VALUES ('202409041044', '2024-09-04 10:44:00-03');
