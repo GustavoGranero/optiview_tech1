@@ -21,7 +21,7 @@
     <div class="text">MyPlanAI</div>
     <div class="folders-container">
       {% for folder in user.folders %}
-      <div class="folder">
+      <div id='{{ folder.uuid}}' class="folder">
         <div id='{{ folder.uuid}}' class="folder-name">
           <span>{{ folder.name }}</span>
           <input type="text" placeholder="{{ folder.name }}">
@@ -59,9 +59,16 @@
 
         input.addEventListener('keypress', function(e) {
           if (e.key === 'Enter') {
-            rename_folder(this.value, this.parentNode.id)
+            rename_folder(this.value, this.parentNode.parentNode.id)
             this.blur();
           }
+        });
+      });
+
+      // Add link functionality
+      document.querySelectorAll('.folder').forEach(function(folder) {
+          folder.addEventListener('click', function() {
+          window.location.href = '/folder/' + folder.id
         });
       });
 
@@ -79,9 +86,10 @@
       function create_folder_ui(parent, json) {
         if (json.status == 'Ok') {
           const newFolder = document.createElement('div');
+          newFolder.setAttribute("id", json.uuid);
           newFolder.classList.add('folder');
           newFolder.innerHTML = `
-            <div id="` + json.uuid + `" class="folder-name">
+            <div class="folder-name">
               <span>` + json.name + `</span>
               <input type="text" placeholder="` + json.name + `">
             </div>
@@ -106,10 +114,16 @@
 
           newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-              rename_folder(this.value, this.parentNode.id)
+              rename_folder(this.value, this.parentNode.parentNode.id)
               this.blur();
             }
+            
           });
+
+          newFolder.addEventListener('click', function() {
+            window.location.href = '/folder/' + this.id;
+          });
+
         }
         else {
           document.querySelector('.messages-container').innerHTML = json.message
