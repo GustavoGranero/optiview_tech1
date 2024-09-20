@@ -60,12 +60,11 @@ from actions import execute_action
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-@app.route("/folder", methods=["GET", "POST"])
+@app.route("/folder/<uuid>", methods=["GET", "POST"])
 @login_required
-def folder():
+def folder(uuid):
     status = 'Ok'
     message = ''
-    uuid = request.args.get("uuid")
 
     if is_valid_uuid(uuid):
         folder = Folders.get_one(user_id = current_user.id, uuid = uuid)
