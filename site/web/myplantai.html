@@ -21,19 +21,22 @@
     <div class="text">MyPlanAI</div>
     <div class="folders-container">
       {% for folder in user.folders %}
-        <!-- <div id='{{ folder.uuid}}' class="folder"> -->
-        <div id='{{ folder.uuid}}' class="folder" style="background-color: rgba(255,255,255, 0.0); height: 150px;">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" style="fill: #666; position: absolute; top: 0; z-index: 1;"><path d="M180 16.6667h-95.86L67.07 2.4417A9.97 8.3083 0 0060 0H20c-11.03 0-20 7.475-20 16.6667v116.6667c0 9.1917 8.97 16.6667 20 16.6667h160c11.03 0 20-7.475 20-16.6667V33.3333c0-9.1917-8.97-16.6667-20-16.6667z"></path></svg>       
+        <div id='{{ folder.uuid}}' class="folder" style="background-color: rgba(255,255,255, 0.0);">
+          <svg viewBox="0 0 200 150" style="fill: #666;">
+            <path d="M180 16.6667h-95.86L67.07 2.4417A9.97 8.3083 0 0060 0H20c-11.03 0-20 7.475-20 16.6667v116.6667c0 9.1917 8.97 16.6667 20 16.6667h160c11.03 0 20-7.475 20-16.6667V33.3333c0-9.1917-8.97-16.6667-20-16.6667z"></path>
+          </svg>       
           <div id='{{ folder.uuid}}' class="folder-name" style="position: absolute; top: 110px; z-index: 2;">
             <span>{{ folder.name }}</span>
             <input type="text" placeholder="{{ folder.name }}">
           </div>
         </div>
       {% endfor %}
-      <div class="add-folder">+</div>
-      <!-- <div class="">
-        <i class='bx bxs-folder-plus' style="font-size: 210px; color:gray"></i>
-      </div> -->
+      <!-- <div class="add-folder">+</div> -->
+      <div class="add-folder" style="background-color: rgba(255,255,255, 0.0);">
+        <svg viewBox="0 0 200 150" style="fill: #666;">
+          <path d="M180 16.6667h-95.86L67.07 2.4417A9.97 8.3083 0 0060 0H20c-11.03 0-20 7.475-20 16.6667v116.6667c0 9.1917 8.97 16.6667 20 16.6667h160c11.03 0 20-7.475 20-16.6667V33.3333c0-9.1917-8.97-16.6667-20-16.6667zm-40 75h-30v25h-20v-25H60v-16.6667h30V50h20v25h30v16.6667z"></path>
+        </svg>       
+      </div>
     </div>
     <div class="messages-container"></div>
   </section>

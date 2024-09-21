@@ -53,14 +53,14 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s;
+  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s; */
   position: relative;
 }
 
-.folder:hover {
+/* .folder:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+} */
 
 /* Folder name styles */
 .folder-name {
@@ -104,14 +104,14 @@ body {
   cursor: pointer;
   font-size: 24px;
   font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: background-color 0.3s, box-shadow 0.3s;
+  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+  /* transition: background-color 0.3s, box-shadow 0.3s; */
 }
 
-.add-folder:hover {
+/* .add-folder:hover {
   background-color: #999;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+} */
 
 /* Hide input on load */
 .folder-name input {
