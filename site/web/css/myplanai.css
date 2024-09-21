@@ -45,7 +45,7 @@ body {
 /* Folder container */
 .folder {
   background-color: #666;
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 0;
   width: 200px;
   height: 150px;
@@ -94,8 +94,9 @@ body {
 .add-folder {
   background-color: #bbb;
   color: #333;
-  border: none;
   border-radius: 10px;
+  border: none;
+  border-radius: 16px;
   width: 200px;
   height: 150px;
   display: flex;
