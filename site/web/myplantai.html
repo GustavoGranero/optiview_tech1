@@ -73,9 +73,9 @@
       });
 
       // Add link functionality
-      document.querySelectorAll('.folder').forEach(function(folder) {
-          folder.addEventListener('click', function() {
-          window.location.href = '/folder/' + folder.id
+      document.querySelectorAll('.folder-image').forEach(function(folder_image) {
+          folder_image.addEventListener('click', function() {
+          window.location.href = '/folder/' + folder_image.parentNode.id
         });
       });
 
@@ -127,7 +127,7 @@
             
           });
 
-          newFolder.addEventListener('click', function() {
+          newFolder.querySelector('.folder-image').addEventListener('click', function() {
             window.location.href = '/folder/' + this.id;
           });
 
