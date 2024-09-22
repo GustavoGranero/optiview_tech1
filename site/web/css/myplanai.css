@@ -44,7 +44,7 @@ body {
 
 /* Folder container */
 .folder {
-  background-color: #666;
+  background-color: rgba(255,255,255, 0.0);
   border-radius: 16px;
   padding: 0;
   width: 200px;
@@ -53,14 +53,19 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s; */
   position: relative;
 }
 
-/* .folder:hover {
+.folder-image {
+  fill: #666;
+  filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.1));
+  transition: fill 0.3s, filter 0.3s;
+}
+
+.folder-image:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-} */
+  filter: drop-shadow(0px 25x 15px rgba(0,0,0,0.2));
+}
 
 /* Folder name styles */
 .folder-name {
@@ -74,6 +79,9 @@ body {
   height: 40px; /* Ensure height stays consistent */
   display: flex;
   align-items: center;
+  position: absolute;
+  top: 110px;
+  z-index: 2;
 }
 
 .folder-name input {
@@ -105,14 +113,19 @@ body {
   cursor: pointer;
   font-size: 24px;
   font-weight: bold;
-  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
-  /* transition: background-color 0.3s, box-shadow 0.3s; */
 }
 
-/* .add-folder:hover {
-  background-color: #999;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-} */
+.add-folder-image {
+  fill: #bbb;
+  filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.1));
+  transition: fill 0.3s, box-filter 0.3s;
+}
+
+.add-folder-image:hover {
+  fill: #999;
+  filter: drop-shadow(0px 5px 15px rgba(0,0,0,0.2));
+}
+
 
 /* Hide input on load */
 .folder-name input {
