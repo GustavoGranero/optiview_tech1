@@ -92,7 +92,8 @@ body {
 
 /* Add folder button styles */
 .add-file {
-  background-color: #bbb;
+  /* background-color: #bbb; */
+  background-color: rgba(255,255,255, 0.0);
   color: #333;
   border: none;
   border-radius: 10px;
@@ -107,6 +108,13 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   transition: background-color 0.3s, box-shadow 0.3s;
 }
+
+.add-file-image {
+  fill: #bbb;
+  filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.1));
+  /* transition: fill 0.3s, box-filter 0.3s; */
+}
+
 
 .add-file:hover {
   background-color: #999;
