@@ -37,6 +37,7 @@
           {% endfor %}
       {% endif %}
       <div class="add-file">
+        <input class="add-file-input" type="file" id="file" name="file" style="display:none"/>
         <svg class="add-file-image">
           <path></path>
         </svg>
@@ -47,7 +48,7 @@
   {% include "includes/footer.html" %}
   <script src="/js/sidebar.js"></script>
   <script src="/js/loader.js"></script>
-  <!-- <script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Add event listener to each file name
       document.querySelectorAll('.file-name').forEach(function(fileName) {
@@ -55,8 +56,9 @@
           const file = this.closest('.file');
           file.classList.add('edit-mode');
           const input = file.querySelector('input');
-          input.value = this.querySelector('span').innerText.trim();
           input.focus();
+          input.value = ''; // force change so cursor goes to end of text
+          input.value = this.querySelector('span').innerText.trim();
         });
       });
 
@@ -71,18 +73,38 @@
 
         input.addEventListener('keypress', function(e) {
           if (e.key === 'Enter') {
-            rename_file(this.value, this.parentNode.id)
             this.blur();
           }
         });
+
+        input.addEventListener('focusout', function(e) {
+          rename_file(this.value, this.parentNode.id)
+          this.blur();
+        }); 
       });
 
+
       // Add new file functionality
-      document.querySelector('.add-file').addEventListener('click', create_ffile)
+      document.querySelector('.add-file').addEventListener('click', function(e) {
+        console.log('============= click')
+        document.querySelector('.add-file-input').click();
+      });
+
+      document.querySelector('.add-file-input').addEventListener('change', create_file);  
 
       // create file on server
       function create_file() {
-        fetch("/create_file")
+        var file = document.querySelector('.add-file-input').files[0]
+        var data = new FormData()
+        data.append('file', file)
+
+        fetch(
+          '/create_file',
+          {
+            method: 'POST',
+            body: data,
+          }
+        )
         .then((response) => response.json())
         .then((json) =>  create_file_ui(document.querySelector('.add-file'), json))
         .catch((error) => create_file_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
@@ -92,8 +114,12 @@
         if (json.status == 'Ok') {
           const newFile = document.createElement('div');
           newFile.classList.add('file');
+          newFile.setAttribute("id", json.uuid);
           newFile.innerHTML = `
-            <div id="` + json.uuid + `" class="file-name">
+            <svg class="file-image">
+              <path></path>
+            </svg>  
+            <div class="file-name">
               <span>` + json.name + `</span>
               <input type="text" placeholder="` + json.name + `">
             </div>
@@ -105,8 +131,9 @@
             const file = this.closest('.file');
             file.classList.add('edit-mode');
             const input = file.querySelector('input');
-            input.value = this.querySelector('span').innerText.trim();
             input.focus();
+            input.value = ''; // force change so cursor goes to end of text
+            input.value = this.querySelector('span').innerText.trim();
           });
 
           newFile.querySelector('.file-name input').addEventListener('blur', function() {
@@ -118,10 +145,20 @@
 
           newFile.querySelector('.file-name input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-              rename_file(this.value, this.parentNode.id)
               this.blur();
             }
           });
+
+          newFile.querySelector('.file-name input').addEventListener('focusout', function(e) {
+            rename_file(this.value, this.parentNode.parentNode.id)
+            this.blur();
+          });
+
+          newFolder.querySelector('.file-image').addEventListener('click', function() {
+            window.location.href = '/file/' + this.parentNode.id;
+          });
+
+
         }
         else {
           document.querySelector('.messages-container').innerHTML = json.message
@@ -136,8 +173,8 @@
         url.search = new URLSearchParams(params).toString();
         fetch(url)
         .then((response) => response.json())
-        .then((json) => rename_file(json))
-        .catch((error) => rename_file({status: 'Error', message: 'Falha na comunicação com o servidor'}));
+        .then((json) => rename_file_ui(json))
+        .catch((error) => rename_file_ui({status: 'Error', message: 'Falha na comunicação com o servidor'}));
       }
 
       function rename_file_ui(json) {
@@ -152,7 +189,7 @@
       }
 
     });
-  </script> -->
+  </script>
 </body>
 </html>
 

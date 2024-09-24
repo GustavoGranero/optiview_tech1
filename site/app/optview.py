@@ -152,6 +152,26 @@ def rename_folder():
     }
     return status
 
+@app.route("/create_file/", methods=["GET", "POST"])
+@login_required
+def create_file():
+        status = 'Ok'
+        message = ''
+        file = request.files['file']
+        file_name = file.filename
+        file_data = file.read()
+
+        # TODO colocar arquivo na base
+
+        status = 'Error'
+        message = 'Stud de teste'
+
+        status = {
+            'status': status,
+            'message': message,
+        }
+        return status
+
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):
     return execute_action(token, request)
