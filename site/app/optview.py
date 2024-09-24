@@ -157,6 +157,7 @@ def rename_folder():
 def create_file():
         status = 'Ok'
         message = ''
+        folder_uuid = request.form['folder_uuid']
         file = request.files['file']
         file_name = file.filename
         file_data = file.read()
@@ -164,11 +165,13 @@ def create_file():
         # TODO colocar arquivo na base
 
         status = 'Error'
-        message = 'Stud de teste'
+        message = 'Stub de teste'
 
         status = {
             'status': status,
             'message': message,
+            'name': file_name,
+            'uuid': '',
         }
         return status
 

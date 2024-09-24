@@ -18,11 +18,11 @@
   {% endwith %}
   <section class="home-section">
     {% if folder != None %}
-        <div class="text">Projeto {{ folder.name }} </div>
+        <div class="text">Projeto {{ folder.name }}</div>
     {% else %}
         <div class="text">Projeto</div>
     {% endif %}
-    <div class="files-container">
+    <div class="files-container" id="{{ folder.uuid }}">
       {% if folder != None %}
           {% for file in folder.files %}
             <div class="file">
@@ -86,7 +86,6 @@
 
       // Add new file functionality
       document.querySelector('.add-file').addEventListener('click', function(e) {
-        console.log('============= click')
         document.querySelector('.add-file-input').click();
       });
 
@@ -94,8 +93,10 @@
 
       // create file on server
       function create_file() {
+        var folder_uuid = document.querySelector('.files-container').id
         var file = document.querySelector('.add-file-input').files[0]
         var data = new FormData()
+        data.append('folder_uuid', folder_uuid)
         data.append('file', file)
 
         fetch(
