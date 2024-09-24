@@ -25,7 +25,7 @@
           <svg class="folder-image">
             <path></path>
           </svg>       
-          <div id='{{ folder.uuid}}' class="folder-name">
+          <div class="folder-name">
             <span>{{ folder.name }}</span>
             <input type="text" placeholder="{{ folder.name }}">
           </div>
@@ -50,8 +50,9 @@
           const folder = this.closest('.folder');
           folder.classList.add('edit-mode');
           const input = folder.querySelector('input');
-          input.value = this.querySelector('span').innerText.trim();
           input.focus();
+          input.value = ''; // force change so cursor goes to end of text
+          input.value = this.querySelector('span').innerText.trim();
         });
       });
 
@@ -66,9 +67,14 @@
 
         input.addEventListener('keypress', function(e) {
           if (e.key === 'Enter') {
-            rename_folder(this.value, this.parentNode.parentNode.id)
             this.blur();
           }
+        });
+
+        input.addEventListener('focusout', function(e) {
+
+            rename_folder(this.value, this.parentNode.parentNode.id)
+            this.blur();
         });
       });
 
@@ -96,6 +102,9 @@
           newFolder.setAttribute("id", json.uuid);
           newFolder.classList.add('folder');
           newFolder.innerHTML = `
+            <svg class="folder-image">
+              <path></path>
+            </svg>  
             <div class="folder-name">
               <span>` + json.name + `</span>
               <input type="text" placeholder="` + json.name + `">
@@ -108,8 +117,9 @@
             const folder = this.closest('.folder');
             folder.classList.add('edit-mode');
             const input = folder.querySelector('input');
-            input.value = this.querySelector('span').innerText.trim();
             input.focus();
+            input.value = ''; // force change so cursor goes to end of text
+            input.value = this.querySelector('span').innerText.trim();
           });
 
           newFolder.querySelector('.folder-name input').addEventListener('blur', function() {
@@ -121,15 +131,19 @@
 
           newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-              rename_folder(this.value, this.parentNode.parentNode.id)
               this.blur();
             }
-            
+          });
+
+          newFolder.querySelector('.folder-name input').addEventListener('focusout', function(e) {
+              rename_folder(this.value, this.parentNode.parentNode.id);
+              this.blur();
           });
 
           newFolder.querySelector('.folder-image').addEventListener('click', function() {
-            window.location.href = '/folder/' + this.id;
+            window.location.href = '/folder/' + this.parentNode.id;
           });
+          
 
         }
         else {
