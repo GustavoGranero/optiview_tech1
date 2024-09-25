@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    background-color: #f0e5d8; /* Cor de fundo semelhante à da imagem */
+    font-family: Arial, sans-serif;
+  }
+  
+  .home-section {
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    padding: 0; /* Removido padding do container para alinhar */
+    margin: 0 auto; /* Centraliza o header */
+  }
+  
+  .tab {
+    color: #fff;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #555; /* Cor inicial */
+    font-size: 13px;
+    border: 1px solid #1e1e1e; /* Conecta a aba com o container */
+  }
+  
+  .tab:not(:last-child) {
+    border-right: none; /* Remove borda direita para não duplicar */
+  }
+  
+  .tab.active {
+    background-color: #1e1e1e; /* Fundo mais escuro para a aba ativa */
+    border-bottom: 1px solid #1e1e1e; /* Conecta a aba com o container */
+  }
+  
+  .tab:hover {
+    background-color: #777; /* Cor de hover para os botões */
+  }
+  
+  /* Estilo para o bloco que contém o texto superior */
+  .header-container {
+    width: 100%;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border: 1px solid #1e1e1e;
+    position: relative;
+    padding-bottom: 62px; /* Adiciona espaço abaixo do texto */
+    border-bottom: 1px solid #fff;
+    border-radius: 0px 18px 0px 0px;
+  }
+  
+  /* Estilização para o texto principal */
+  .header-text {
+    position: absolute;
+    top: 10px; /* Mantém o texto na parte superior */
+    left: 20px; /* Alinha o texto à esquerda */
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+  /* Estilização para os subtítulos */
+  .sub-text {
+    position: absolute;
+    top: 28px; /* Ajusta a posição para os subtítulos */
+    left: 150px;
+    color: white;
+    font-size: 14px;
+    font-weight: normal;
+  }
+  
+  /* Estilo para o bloco onde começa a sequência de linhas */
+  .lines-container {
+    width: 100%;
+    height: 400px;
+    background-color: #1e1e1e;
+    border-radius: 0px 0px 18px 18px;
+    border: 1px solid #1e1e1e;
+    position: relative;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      #1e1e1e,
+      #1e1e1e 30px, /* Ajuste o valor para o espaçamento entre as linhas */
+      white 30px,
+      white 31px
+    );
+    background-position: 0px 0px; /* Começa logo abaixo do bloco de texto */
+  }
+  
