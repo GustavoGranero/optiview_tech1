@@ -157,21 +157,33 @@ def rename_folder():
 def create_file():
         status = 'Ok'
         message = ''
+        uuid = ''
+
         folder_uuid = request.form['folder_uuid']
         file = request.files['file']
         file_name = file.filename
         file_data = file.read()
 
-        # TODO colocar arquivo na base
+        folder_by_uuid = Folders.get_one(user_id = current_user.id, uuid = folder_uuid)
+        file_by_name = Files.get_one(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name)
 
-        status = 'Error'
-        message = 'Stub de teste'
+        if file_by_name is None:
+            try:
+                new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
+                uuid = new_file.uuid
+            except  exc.SQLAlchemyError as e:
+                # TODO log error
+                status = 'Error'
+                message = "Houve um erro na criação do novo arquivo."
+        else:
+            status = 'Error'
+            message = f"O arquivo '{file_name}' já existe."
 
         status = {
             'status': status,
             'message': message,
             'name': file_name,
-            'uuid': '',
+            'uuid': uuid,
         }
         return status
 
