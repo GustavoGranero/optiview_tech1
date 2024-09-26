@@ -164,6 +164,7 @@ body {
     background-color: #556acb; 
     border: none; 
     border-radius: 6px;
+    cursor: pointer;
   }
 
   .button-processed {
@@ -171,6 +172,7 @@ body {
     background-color: #6f9649; 
     border: none; 
     border-radius: 6px;
+    cursor: pointer;
   }
 
   .icon-pdf svg {
@@ -211,4 +213,8 @@ body {
 
   .icon-vdots path {
     d: path("M12 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z");
+  }
+
+  .icon-button {
+    cursor: pointer;
   }
