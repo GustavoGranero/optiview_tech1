@@ -1,4 +1,4 @@
-from our_secrets_model import *
+from our_secrets import *
 
 COMPANY = "Optiview Tech"
 PRODUCT = "MyPlanAI"
@@ -22,10 +22,7 @@ PAGES_NO_AUTHENTICANTION_REQUIRED = [
     'login.html', 
     'contact.html',
     'cadastro.html',
-    'request_password_reset.html',
-    'myplantai.html',
-    'files.html',
-    'folders.html',
+    'request_password_reset.html'
     ]
 
 EMAIL_API_TOKEN = SECRET_EMAIL_API_TOKEN
