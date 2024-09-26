@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Imagem</title>
+    <script>
+        // Função para enviar a imagem ao servidor Flask
+        function uploadImage() {
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Por favor, selecione uma imagem!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Enviar o arquivo para o backend via POST
+            fetch('http://127.0.0.1:5000/upload-image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert("Erro: " + data.error);
+                } else {
+                    document.getElementById('result').textContent = "Arquivo enviado com sucesso: " + data.filename;
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao enviar a imagem:', error);
+                alert('Ocorreu um erro. Tente novamente.');
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Envie sua Imagem</h1>
+
+    <!-- Botão para selecionar a imagem -->
+    <input type="file" id="imageInput" accept="image/jpeg, image/png">
+
+    <!-- Botão para enviar a imagem -->
+    <button onclick="uploadImage()">Enviar Imagem</button>
+
+    <!-- Área para exibir o nome do arquivo enviado -->
+    <p id="result"></p>
+
+</body>
+</html>

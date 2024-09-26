@@ -19,12 +19,7 @@ Para executar o projeto, siga os passos abaixo:
 
 4. Exporte a variável de ambiente FLASK_APP:
    ```
-   export FLASK_APP=optview.py
-   ```
-
-5. Entre no diretório site/app:
-   ```
-   cd site/app
+   export FLASK_APP=main.py
    ```
 
 6. Execute o Flask:
@@ -32,4 +27,8 @@ Para executar o projeto, siga os passos abaixo:
    flask run
    ```
 
-Agora o projeto deve estar em execução e acessível através do navegador.
+
+7. Execute o o servidor do intex.html:
+   ```
+   python -m http.server 8000
+   ```

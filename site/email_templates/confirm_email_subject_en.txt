@@ -1,1 +1,0 @@
-{{ company }} - Bem vindo {{ full_name }}
