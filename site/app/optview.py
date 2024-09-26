@@ -60,6 +60,11 @@ from actions import execute_action
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@app.route("/process/<uuid>", methods=["GET", "POST"])
+@login_required
+def proceess_images(uuid):
+    pass
+
 @app.route("/folder/<uuid>", methods=["GET", "POST"])
 @login_required
 def folder(uuid):
@@ -82,7 +87,7 @@ def folder(uuid):
         'user': current_user,
         'folder': folder,
     }
-    return render_template("/folder.html", **context)
+    return render_template("/files.html", **context)
 
 @app.route("/create_folder/", methods=["GET", "POST"])
 @login_required

@@ -1,4 +1,6 @@
 import uuid
+from math import floor
+from math import log
 
 from optview import db
 from models.base_mixin import BaseMixin
@@ -15,3 +17,11 @@ class Files(BaseMixin, db.Model):
     folder_id = db.Column(db.Integer, db.ForeignKey('folders.id'), unique=False, nullable=False, default=None)
     name = db.Column(db.String(250), unique=False, nullable=False)
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
+    
+    @property
+    def file_size(self):
+        size = len(self.file)
+        power = 0 if size <= 0 else floor(log(size, 1024))
+        return f"{round(size / 1024 ** power, 2)} {['B', 'KB', 'MB', 'GB', 'TB'][int(power)]}"
+    
+    
