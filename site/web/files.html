@@ -32,14 +32,128 @@
       <!-- Texto superior -->
       <div class="header-text">Folder 1</div>
       <div class="sub-text">OptiView Tech - 54 itens</div>
-      <div class="sub-text" style="top: 60px; left: 20px">Nome do arquivo</div>
-      <div class="sub-text" style="top: 60px; left: 300px;">Proprietário</div>
-      <div class="sub-text" style="top: 60px; left: 500px;">Tamanho</div>
+      <div style="display: table; width: 100%; position: absolute; top: 60px; left: 0px">
+        <div class="col-spacer"></div>
+        <div class="col-icon"></div>
+        <div class="col-name"></div>
+        <div class="col-owner"></div>
+        <div class="col-size"></div>
+        <div class="col-analize"></div>
+        <div class="col-view"></div>
+        <div class="col-icon"></div>
+        <div class="col-icon"></div>
+        <div class="col-icon"></div>
+        <div class="col-filler"></div>
+
+        <div style="display: table-row;">
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell">Nome</div>
+          <div class="cell cell-centered">Proprietário</div>
+          <div class="cell cell-centered">Tamanho</div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+        </div>
+      </div>
     </div>
     
     <!-- Container para as linhas -->
-    <div class="lines-container"></div>
-    
+    <div class="lines-container">
+      <div style="display: table; width: 100%">
+        <div class="col-spacer"></div>
+        <div class="col-icon"></div>
+        <div class="col-name"></div>
+        <div class="col-owner"></div>
+        <div class="col-size"></div>
+        <div class="col-analize"></div>
+        <div class="col-view"></div>
+        <div class="col-icon"></div>
+        <div class="col-icon"></div>
+        <div class="col-icon"></div>
+        <div class="col-filler"></div>
+
+        <div class="row">
+          <div class="cell"></div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: red;">
+              <path d="M8.267 16.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268zM14 4H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V10l-6-6zM9.498 18.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 01-.308-.018v1.426H7v-3.936A7.558 7.558 0 018.219 16c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0111.66 16c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 16.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V16.03H17v.74zM14 11h-1V6l5 5h-4z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell">Arquivo.pdf</div>
+          <div class="cell cell-centered">agranero</div>
+          <div class="cell cell-centered">1Mb</div>
+          <div class="cell">
+            <button class="button-not-processed">Analizar planta</button>
+          </div>
+          <div class="cell">
+            <button class="button-not-processed">Visualizar</button>
+          </div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: white;">
+              <path d="m12 20 4-5h-3V8h-2v7H8zM20 22H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: red;">
+              <path d="M6 9H5v13a2 2 0 002 2h10a2 2 0 002-2V9H6zm4 12H8v-9h2v9zm6 0h-2v-9h2v9zm.618-15L15 4H9L7.382 6H3v2h18V6z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: white;">
+              <path d="M12 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell"></div>
+        </div>
+        
+        <div class="row">
+          <div class="cell"></div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: red;">
+              <path d="M8.267 16.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268zM14 4H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V10l-6-6zM9.498 18.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 01-.308-.018v1.426H7v-3.936A7.558 7.558 0 018.219 16c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0111.66 16c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 16.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V16.03H17v.74zM14 11h-1V6l5 5h-4z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell">Arquivo.pdf</div>
+          <div class="cell cell-centered">agranero</div>
+          <div class="cell cell-centered">1Mb</div>
+          <div class="cell">
+            <button class="button-processed">Analisada</button>
+          </div>
+          <div class="cell">
+            <button class="button-processed">Vis. detalhada</button>
+          </div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: white;">
+              <path d="m12 20 4-5h-3V8h-2v7H8zM20 22H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: red;">
+              <path d="M6 9H5v13a2 2 0 002 2h10a2 2 0 002-2V9H6zm4 12H8v-9h2v9zm6 0h-2v-9h2v9zm.618-15L15 4H9L7.382 6H3v2h18V6z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell cell-icon">
+            <svg width="24" height="24" style="fill: white;">
+              <path d="M12 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z">
+              </path>
+            </svg>
+          </div>
+          <div class="cell"></div>
+        </div>
+
+      </div>
+    </div>
   </section>
 
   {% include "includes/footer.html" %}

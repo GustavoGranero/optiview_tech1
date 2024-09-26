@@ -67,22 +67,94 @@ body {
     font-size: 14px;
     font-weight: normal;
   }
-  
+
+  .header-cell {
+    display: table-cell; 
+    color: white;
+  }
+
+  .header-cell-centered {
+    text-align: center;
+  }
+
+  .col-spacer {
+    display: table-column; 
+    width: 20px;
+  }
+
+  .col-icon {
+    display: table-column; 
+    width:35px;
+  }
+
+  .col-name {
+    display: table-column; 
+    width:350px;
+  }
+
+  .col-owner {
+    display: table-column; 
+    width:250px;
+  }
+
+  .col-size {
+    display: table-column; 
+    width:100px;
+  }
+
+  .col-analize {
+    display: table-column; 
+    width:150px;
+  }
+
+  .col-view {
+    display: table-column; 
+    width:150px;
+  }
+
+  .col-filler {
+    display: table-column;
+  }
+
   /* Estilo para o bloco onde começa a sequência de linhas */
   .lines-container {
     width: 100%;
-    height: 400px;
+    height: calc(100vh - 250px);
     background-color: #1e1e1e;
     border-radius: 0px 0px 18px 18px;
     border: 1px solid #1e1e1e;
-    position: relative;
-    background-image: repeating-linear-gradient(
-      to bottom,
-      #1e1e1e,
-      #1e1e1e 30px, /* Ajuste o valor para o espaçamento entre as linhas */
-      white 30px,
-      white 31px
-    );
-    background-position: 0px 0px; /* Começa logo abaixo do bloco de texto */
+  }
+
+  .row {
+    display: table-row;
+  }
+
+  .cell {
+    display: table-cell; 
+    vertical-align: middle; 
+    color: white; 
+    border-bottom: white solid 1px;
+  }
+
+  .cell-icon {
+    height: 35px;
+  }
+
+  .cell-centered {
+    text-align: center;
+  }
+
+  .button-not-processed {
+    width: 140px; 
+    background-color: #556acb; 
+    border: none; 
+    border-radius: 6px;
+  }
+
+  .button-processed {
+    width: 140px; 
+    background-color: #6f9649; 
+    border: none; 
+    border-radius: 6px;
   }
   
