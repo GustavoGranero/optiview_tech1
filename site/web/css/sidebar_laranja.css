@@ -39,6 +39,10 @@
   color: #FFA318;
 }
 
+.sidebar li.profile a{
+  background: transparent;
+}
+
 .sidebar li.profile a:hover .links_name,
 .sidebar li.profile a:hover i {
   color: #FFA318;
