@@ -1,5 +1,6 @@
 import re
 import os
+import io
 
 from flask import (
     Flask,
@@ -9,6 +10,7 @@ from flask import (
     redirect,
     abort,
     Response,
+    send_file,
 )
 from flask_login import (
     login_user,
@@ -121,6 +123,26 @@ def create_folder():
         'uuid': uuid,
     }
     return status
+
+@app.route("/file//<uuid>", methods=["GET", "POST"])
+@login_required
+def download_file(uuid):
+    if not is_valid_uuid(uuid):
+        abort(400, {'error': 'UUID inválida.'})
+    
+    try:
+        file = Files.get_one(user_id = current_user.id, uuid = uuid)
+        if file is None:
+            abort(404)
+
+        return send_file(
+            io.BytesIO(file.file),
+            download_name=file.name,
+            as_attachment=True
+        )
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        abort(500, {'error': 'Houve um erro no download do arquivo.'})
 
 @app.route("/rename_folder/", methods=["GET", "POST"])
 @login_required
@@ -451,7 +473,6 @@ def plans():
         'plans': plans,
     }
     return render_template('plan_myplantai.html', **context)
-
 
 @app.route("/")
 @app.route("/<name>")
