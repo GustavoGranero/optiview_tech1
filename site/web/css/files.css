@@ -8,6 +8,12 @@ body {
     padding: 20px;
   }
   
+  .main-container {
+    position: absolute; 
+    left: 200px;
+    width: 80%;
+  }
+
   .header {
     display: flex;
     padding: 0; /* Removido padding do container para alinhar */
@@ -179,6 +185,7 @@ body {
     background-color: #1e1e1e;
     border-radius: 0px 0px 18px 18px;
     border: 1px solid #1e1e1e;
+    overflow: scroll;
   }
 
   .row {
