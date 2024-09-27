@@ -168,6 +168,8 @@ def create_file():
         file = request.files['file']
         file_name = file.filename
         file_data = file.read()
+        file_owner = None
+        file_size = None
 
         folder_by_uuid = Folders.get_one(user_id = current_user.id, uuid = folder_uuid)
         file_by_name = Files.get_one(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name)
@@ -176,6 +178,8 @@ def create_file():
             try:
                 new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
                 uuid = new_file.uuid
+                user_name = new_file.user.user_name
+                file_size = new_file.file_size
             except  exc.SQLAlchemyError as e:
                 # TODO log error
                 status = 'Error'
@@ -189,6 +193,8 @@ def create_file():
             'message': message,
             'name': file_name,
             'uuid': uuid,
+            'owner': user_name,
+            'size' : file_size,
         }
         return status
 

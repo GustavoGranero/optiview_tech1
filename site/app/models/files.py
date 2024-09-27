@@ -17,6 +17,8 @@ class Files(BaseMixin, db.Model):
     folder_id = db.Column(db.Integer, db.ForeignKey('folders.id'), unique=False, nullable=False, default=None)
     name = db.Column(db.String(250), unique=False, nullable=False)
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
+
+    user = db.relationship('Users', backref='files', lazy='joined')
     
     @property
     def file_size(self):

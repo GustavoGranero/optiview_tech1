@@ -37,9 +37,7 @@ body {
   }
 
   .messages-container {
-    display: block;
-    padding: 20px;
-    align-self: center;
+    padding: 6px 12px;
     justify-content: center;
     font-size: 16px;
     color: #990a0a;
@@ -52,7 +50,7 @@ body {
     padding: 20px;
     border: 1px solid #1e1e1e;
     position: relative;
-    padding-bottom: 62px; /* Adiciona espaço abaixo do texto */
+    padding-bottom: 62px;
     border-bottom: 1px solid #fff;
     border-radius: 0px 18px 0px 0px;
   }
@@ -60,8 +58,8 @@ body {
   /* Estilização para o texto principal */
   .header-text {
     position: absolute;
-    top: 10px; /* Mantém o texto na parte superior */
-    left: 20px; /* Alinha o texto à esquerda */
+    top: 0px;
+    left: 20px;
     color: white;
     font-size: 30px;
     font-weight: bold;
@@ -70,11 +68,49 @@ body {
   /* Estilização para os subtítulos */
   .sub-text {
     position: absolute;
-    top: 28px; /* Ajusta a posição para os subtítulos */
-    left: 150px;
+    top: 40px;
+    left: 20px;
     color: white;
     font-size: 14px;
     font-weight: normal;
+  }
+
+  .button-add {
+    position: absolute;
+    top: 0px;
+    left: calc(100% - 48px - 5px);
+  }
+
+  .button-add input {
+    display: none;
+  }
+
+  .button-add svg {
+    width: 48px;
+    height: 48px;
+    fill: white;
+    cursor: pointer;
+  }
+
+  .button-add path {
+    d: path("M26 14h-4v8H14v4h8v8h4v-8h8v-4h-8zM24 4C12.972 4 4 12.972 4 24s8.972 20 20 20 20-8.972 20-20S35.028 4 24 4zm0 36c-8.822 0-16-7.178-16-16s7.178-16 16-16 16 7.178 16 16-7.178 16-16 16z");
+  }
+
+  .button-upload {
+    position: absolute;
+    top: 0px;
+    left: calc(100% - 48px - 5px);
+  }
+
+  .button-upload svg {
+    width: 48px;
+    height: 48px;
+    fill: white;
+    cursor: pointer;
+  }
+
+  .button-upload path {
+    d: path("M22 30h4V18h6l-8-10-8 10h6zM40 36H8v-14H4v14c0 2.206 1.794 4 4 4h32c2.206 0 4-1.794 4-4v-14h-4v14z");
   }
 
   .table {
@@ -85,7 +121,7 @@ body {
   .table-header {
     position: absolute; 
     top: 60px; 
-    left: 0px
+    left: 0px;
   }
 
   .header-cell {
