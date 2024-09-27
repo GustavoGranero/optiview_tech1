@@ -104,11 +104,14 @@
                 <div class="cell">
                   <button class="button-not-processed">Visualizar</button>
                 </div>
-                <div class="cell cell-icon icon-download icon-button">
-                  <svg>
-                    <path></path>
-                  </svg>
-                </div>
+                  <div class="cell cell-icon icon-download icon-button">
+                    <a href="/file/{{ file.uuid }}">
+                      <svg>
+                        <path></path>
+                      </svg>
+                    </a>
+                  </div>
+               
                 <div class="cell cell-icon icon-trash icon-button">
                   <svg>
                     <path></path>
@@ -190,9 +193,11 @@
                     <button class="button-not-processed">Visualizar</button>
                   </div>
                   <div class="cell cell-icon icon-download icon-button">
-                    <svg>
-                      <path></path>
-                    </svg>
+                    <a href="/file/`+ json.uuid + `">
+                      <svg>
+                        <path></path>
+                      </svg>
+                    </a>
                   </div>
                   <div class="cell cell-icon icon-trash icon-button">
                     <svg>
