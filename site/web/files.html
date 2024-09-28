@@ -95,7 +95,7 @@
                     <path></path>
                   </svg>
                 </div>
-                <div class="cell">{{ file.name }}</div>
+                <div class="cell file-name">{{ file.name }}</div>
                 <div class="cell cell-centered">{{ file.user.user_name }}</div>
                 <div class="cell cell-centered">{{ file.file_size }}</div>
                 <div class="cell">
@@ -104,14 +104,11 @@
                 <div class="cell">
                   <button class="button-not-processed">Visualizar</button>
                 </div>
-                  <div class="cell cell-icon icon-download icon-button">
-                    <a href="/file/{{ file.uuid }}">
-                      <svg>
-                        <path></path>
-                      </svg>
-                    </a>
-                  </div>
-               
+                <div class="cell cell-icon icon-download icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
                 <div class="cell cell-icon icon-trash icon-button">
                   <svg>
                     <path></path>
@@ -138,18 +135,61 @@
   <script src="/js/files.js"></script>
   <script src="/js/loader.js"></script>
   <script>
+    function show_error(message) {
+      document.querySelector('.messages-container').innerHTML = message
+    }
+
+    // Event listener adding functions ...
+
+    // ... add click event treament to one download icon
+    function iconDownloadAddEventListener(element) {
+      element.addEventListener('click', function(e) {
+        line = this.parentNode.parentNode
+
+        file_uuid = line.id;
+        file_name = line.querySelector('.file-name').innerHTML;
+
+        // call download endpoint
+        fetch('/file/' + file_uuid)
+        .then(response => {
+          if(response.status < 300)
+            return response.blob();
+          else
+            throw(response.status + ' ' + response.statusText);
+        })
+        .then(blob => {
+          // create invisible link
+          link = document.createElement('a');
+          link.className = "download";
+          link.setAttribute('href', URL.createObjectURL(blob));
+          link.setAttribute('download', file_name);
+          this.parentNode.appendChild(link);
+          // call click event of invisble link to start download
+          link.click();
+          // remove link
+          this.parentNode.removeChild(link);
+        })
+        .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+        
+      });
+    }
+  </script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener to each file name
+      document.querySelectorAll('.icon-download svg').forEach(function(el) {
+        iconDownloadAddEventListener(el);
+      })
 
-      // Add new file functionality ...
-
-      // ... clicking buttun is the same as prresssing browse on invisible control
+      // Add new file button functionality ...
+      // ... clicking button is the same as prresssing browse on invisible control
       document.querySelector('.button-add').addEventListener('click', function(e) {
         document.querySelector('.add-file-input').click();
       });
 
       // ... call endpoint when input content changes aka file is chosen
       document.querySelector('.add-file-input').addEventListener('change', create_file); 
-
+      
       // Call create_file endpoint
       function create_file() {
         var folder_uuid = document.querySelector('.lines-container').id
@@ -169,7 +209,6 @@
         .then((json) =>  create_file_ui(document.querySelector('.add-file'), json))
         .catch((error) => create_file_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
       }
-
       // Create file line on page
       function create_file_ui(parent, json) {
         if (json.status == 'Ok') {
@@ -183,7 +222,7 @@
                       <path></path>
                     </svg>
                   </div>
-                  <div class="cell">` + json.name + `</div>
+                  <div class="cell file-name">` + json.name + `</div>
                   <div class="cell cell-centered">` + json.owner + `</div>
                   <div class="cell cell-centered">` + json.size + `</div>
                   <div class="cell">
@@ -193,11 +232,9 @@
                     <button class="button-not-processed">Visualizar</button>
                   </div>
                   <div class="cell cell-icon icon-download icon-button">
-                    <a href="/file/`+ json.uuid + `">
-                      <svg>
-                        <path></path>
-                      </svg>
-                    </a>
+                    <svg>
+                      <path></path>
+                    </svg>
                   </div>
                   <div class="cell cell-icon icon-trash icon-button">
                     <svg>
@@ -212,11 +249,15 @@
                   <div class="cell"></div>
           `;
           document.querySelector('.table-lines').insertBefore(newFile, null);
+
+          // add download event to download icon
+          iconDownloadAddEventListener(newFile.querySelector('.icon-download svg'));
         }
         else {
           document.querySelector('.messages-container').innerHTML = json.message
         }
       }
+
     });
   </script>
 </body>
