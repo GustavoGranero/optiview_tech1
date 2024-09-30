@@ -47,7 +47,7 @@
       // dialog_error = document.querySelector('.dialog-error');
       // document.querySelector('.dialog-error div').innerHTML = message
       // dialog_error.showModal();
-      document.querySelector('.messages-container').innerHTML = json.message;
+      document.querySelector('.messages-container').innerHTML = message;
     }
 
     // Event listener adding functions ...
@@ -128,7 +128,7 @@
         folderImageClickEventListener(newFolder.querySelector('.folder-image'))
       }
       else {
-        document.querySelector('.messages-container').innerHTML = json.message
+        show_error(json.message)
       }
 
     };
@@ -148,7 +148,7 @@
 
     // ... rename folder on the UI
     function rename_folder_ui(json) {
-      document.querySelector('.messages-container').innerHTML = json.message;
+      show_error(json.message) // TODO está aqui agora para apagar a mensagem anterior mudar para o else depois de colocar o dialog
       if (json.status != 'Ok') {
         div = document.getElementById(json.uuid);
         if (div != null) {
@@ -181,6 +181,7 @@
     
       // Add new folder functionality
       document.querySelector('.add-folder').addEventListener('click', create_folder)
+
     });
   </script>
 </body>
