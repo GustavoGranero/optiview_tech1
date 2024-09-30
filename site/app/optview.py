@@ -124,26 +124,6 @@ def create_folder():
     }
     return status
 
-@app.route("/file//<uuid>", methods=["GET", "POST"])
-@login_required
-def download_file(uuid):
-    if not is_valid_uuid(uuid):
-        abort(400, {'error': 'UUID inválida.'})
-    
-    try:
-        file = Files.get_one(user_id = current_user.id, uuid = uuid)
-        if file is None:
-            abort(404)
-
-        return send_file(
-            io.BytesIO(file.file),
-            download_name=file.name,
-            as_attachment=True
-        )
-    except exc.SQLAlchemyError as e:
-        # TODO log error
-        abort(500, {'error': 'Houve um erro no download do arquivo.'})
-
 @app.route("/rename_folder/", methods=["GET", "POST"])
 @login_required
 def rename_folder():
@@ -179,6 +159,26 @@ def rename_folder():
     }
     return status
 
+@app.route("/file//<uuid>", methods=["GET", "POST"])
+@login_required
+def download_file(uuid):
+    if not is_valid_uuid(uuid):
+        abort(400, {'error': 'UUID inválida.'})
+    
+    try:
+        file = Files.get_one(user_id = current_user.id, uuid = uuid)
+        if file is None:
+            abort(404)
+
+        return send_file(
+            io.BytesIO(file.file),
+            download_name=file.name,
+            as_attachment=True
+        )
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        abort(500)
+
 @app.route("/create_file/", methods=["GET", "POST"])
 @login_required
 def create_file():
@@ -200,7 +200,7 @@ def create_file():
             try:
                 new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
                 uuid = new_file.uuid
-                user_name = new_file.user.user_name
+                file_owner = new_file.user.user_name
                 file_size = new_file.file_size
             except  exc.SQLAlchemyError as e:
                 # TODO log error
@@ -215,10 +215,28 @@ def create_file():
             'message': message,
             'name': file_name,
             'uuid': uuid,
-            'owner': user_name,
+            'owner': file_owner,
             'size' : file_size,
         }
         return status
+
+@app.route("/delete_file//<uuid>", methods=["GET", "POST"])
+@login_required
+def delete_file(uuid):
+    if not is_valid_uuid(uuid):
+        abort(400, {'error': 'UUID inválida.'})
+    
+    try:
+        file = Files.get_one(user_id = current_user.id, uuid = uuid)
+        if file is None:
+            abort(404)
+
+        db.session.delete(user)
+        db.session.commit()
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        abort(500)
+
 
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):
