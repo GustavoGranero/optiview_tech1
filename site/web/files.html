@@ -24,7 +24,6 @@
         <div class="tab active">Arquivos</div>
         <div class="tab">Plantas</div>
         <div class="tab">Legendas</div>
-        <div class="messages-container">{{ message }}</div>
       </div>
       
       <!-- Container com espaço superior para o texto -->
@@ -123,9 +122,25 @@
               </div>
             {% endfor %}
           {% endif %}
-
         </div>
       </div>
+
+      <!-- Containers das caixas de diálogo -->
+      <dialog class="dialog dialog-error">
+        <div style="text-align: center; margin: 5px; font-size: 16px; color: #990a0a;">Curta.</div>
+        <form method="dialog">
+          <button class="button-ok" value="default">Ok</button>
+        </form>
+      </dialog>
+
+      <dialog class="dialog dialog-confirm-cancel">
+        <div style="text-align: center; margin: 5px; font-size: 16px; color: #990a0a;">Curta.</div>
+        <form method="dialog">
+          <button class="button-confirm" value="default">Confirmar</button>
+          <button class="button-cancel" value="cancel">Cancela</button>
+        </form>
+      </dialog>
+
     </div>
 
   </section>
@@ -136,7 +151,15 @@
   <script src="/js/loader.js"></script>
   <script>
     function show_error(message) {
-      document.querySelector('.messages-container').innerHTML = message
+      dialog_error = document.querySelector('.dialog-error');
+      document.querySelector('.dialog-error div').innerHTML = message
+      dialog_error.showModal();
+    }
+
+    function show_confirm_cancel(message) {
+      dialog_error = document.querySelector('.dialog-confirm-cancel');
+      document.querySelector('.dialog-confirm-cancel div').innerHTML = message
+      dialog_error.showModal();
     }
 
     // Event listener adding functions ...
@@ -181,26 +204,38 @@
 
         file_uuid = line.id;
         file_name = line.querySelector('.file-name').innerHTML;
-
-        // call delete endpoint
-        fetch('/delete_file/' + file_uuid)
-        .then(response => {
-          if(response.status < 300)
-            return response;
-          else
-            throw(response.status + ' ' + response.statusText);
-        })
-        .then(response => {
-          // remove line
-          row = this.parentNode.parentNode;
-          row.remove();
-
-        })
-        .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
-        
+        document.querySelector('.dialog-confirm-cancel').line = file_uuid;
+        show_confirm_cancel('Apagar o arquivo ' + file_name + '?')
       });
     }
   
+    // ... add close event to dialog-confirm-cancel
+    function dialogConfirmCancelAddEventListener(element) {
+      element.addEventListener('close', function(e) {
+        dialog_confirm_cancel = document.querySelector('.dialog-confirm-cancel');
+        if (dialog_confirm_cancel.returnValue == 'default') {
+          file_uuid = element.line;
+          line = document.getElementById(file_uuid)
+          file_name = line.querySelector('.file-name').innerHTML;
+
+          // call delete endpoint
+          fetch('/delete_file/' + file_uuid)
+          .then(response => {
+            if(response.status < 300)
+              return response;
+            else
+              throw(response.status + ' ' + response.statusText);
+          })
+          .then(response => {
+            // remove line
+            line.remove();
+
+          })
+          .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+        }
+      });
+    }
+    
     // Create file functions ...
 
     // ... call create_file endpoint
@@ -286,6 +321,9 @@
       document.querySelectorAll('.icon-trash svg').forEach(function(el) {
         iconDeleteAddEventListener(el);
       })
+
+      // ... add event listener to dialog-confirm-cancel
+      dialogConfirmCancelAddEventListener(document.querySelector('.dialog-confirm-cancel'))
 
       // Add new file button functionality ...
       // ... clicking button is the same as prresssing browse on invisible control
