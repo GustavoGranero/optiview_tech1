@@ -141,7 +141,7 @@
 
     // Event listener adding functions ...
 
-    // ... add click event treament to one download icon
+    // ... add click event handler to download icon
     function iconDownloadAddEventListener(element) {
       element.addEventListener('click', function(e) {
         line = this.parentNode.parentNode
@@ -173,12 +173,118 @@
         
       });
     }
+
+    // ... add click event handler to delete icon
+    function iconDeleteAddEventListener(element) {
+      element.addEventListener('click', function(e) {
+        line = this.parentNode.parentNode
+
+        file_uuid = line.id;
+        file_name = line.querySelector('.file-name').innerHTML;
+
+        // call delete endpoint
+        fetch('/delete_file/' + file_uuid)
+        .then(response => {
+          if(response.status < 300)
+            return response;
+          else
+            throw(response.status + ' ' + response.statusText);
+        })
+        .then(response => {
+          // remove line
+          row = this.parentNode.parentNode;
+          row.remove();
+
+        })
+        .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+        
+      });
+    }
+  
+    // Create file functions ...
+
+    // ... call create_file endpoint
+    function create_file() {
+      var folder_uuid = document.querySelector('.lines-container').id
+      var file = document.querySelector('.add-file-input').files[0]
+      var data = new FormData()
+      data.append('folder_uuid', folder_uuid)
+      data.append('file', file)
+
+      fetch(
+        '/create_file',
+        {
+          method: 'POST',
+          body: data,
+        }
+      )
+      .then((response) => response.json())
+      .then((json) =>  create_file_ui(document.querySelector('.add-file'), json))
+      .catch((error) => create_file_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
+    }
+    // ... create file line on page
+    function create_file_ui(parent, json) {
+      if (json.status == 'Ok') {
+        const newFile = document.createElement('div');
+        newFile.classList.add('row');
+        newFile.setAttribute("id", json.uuid);
+        newFile.innerHTML = `
+                <div class="cell"></div>
+                <div class="cell cell-icon icon-pdf">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell file-name">` + json.name + `</div>
+                <div class="cell cell-centered">` + json.owner + `</div>
+                <div class="cell cell-centered">` + json.size + `</div>
+                <div class="cell">
+                  <button class="button-not-processed">Analizar planta</button>
+                </div>
+                <div class="cell">
+                  <button class="button-not-processed">Visualizar</button>
+                </div>
+                <div class="cell cell-icon icon-download icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell cell-icon icon-trash icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell cell-icon icon-vdots icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell"></div>
+        `;
+        document.querySelector('.table-lines').insertBefore(newFile, null);
+
+        // add download event to download icon
+        iconDownloadAddEventListener(newFile.querySelector('.icon-download svg'));
+        // add delete event to delete icon
+        iconDeleteAddEventListener(newFile.querySelector('.icon-trash svg'))
+      }
+      else {
+        show_error(json.message)
+      }
+    }
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Add event listener to each file name
+      // Add event listeners ...
+
+      // ... add event listener for download
       document.querySelectorAll('.icon-download svg').forEach(function(el) {
         iconDownloadAddEventListener(el);
+      })
+
+      // ... add event listener to delete
+      document.querySelectorAll('.icon-trash svg').forEach(function(el) {
+        iconDeleteAddEventListener(el);
       })
 
       // Add new file button functionality ...
@@ -189,75 +295,6 @@
 
       // ... call endpoint when input content changes aka file is chosen
       document.querySelector('.add-file-input').addEventListener('change', create_file); 
-      
-      // Call create_file endpoint
-      function create_file() {
-        var folder_uuid = document.querySelector('.lines-container').id
-        var file = document.querySelector('.add-file-input').files[0]
-        var data = new FormData()
-        data.append('folder_uuid', folder_uuid)
-        data.append('file', file)
-
-        fetch(
-          '/create_file',
-          {
-            method: 'POST',
-            body: data,
-          }
-        )
-        .then((response) => response.json())
-        .then((json) =>  create_file_ui(document.querySelector('.add-file'), json))
-        .catch((error) => create_file_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
-      }
-      // Create file line on page
-      function create_file_ui(parent, json) {
-        if (json.status == 'Ok') {
-          const newFile = document.createElement('div');
-          newFile.classList.add('row');
-          newFile.setAttribute("id", json.uuid);
-          newFile.innerHTML = `
-                  <div class="cell"></div>
-                  <div class="cell cell-icon icon-pdf">
-                    <svg>
-                      <path></path>
-                    </svg>
-                  </div>
-                  <div class="cell file-name">` + json.name + `</div>
-                  <div class="cell cell-centered">` + json.owner + `</div>
-                  <div class="cell cell-centered">` + json.size + `</div>
-                  <div class="cell">
-                    <button class="button-not-processed">Analizar planta</button>
-                  </div>
-                  <div class="cell">
-                    <button class="button-not-processed">Visualizar</button>
-                  </div>
-                  <div class="cell cell-icon icon-download icon-button">
-                    <svg>
-                      <path></path>
-                    </svg>
-                  </div>
-                  <div class="cell cell-icon icon-trash icon-button">
-                    <svg>
-                      <path></path>
-                    </svg>
-                  </div>
-                  <div class="cell cell-icon icon-vdots icon-button">
-                    <svg>
-                      <path></path>
-                    </svg>
-                  </div>
-                  <div class="cell"></div>
-          `;
-          document.querySelector('.table-lines').insertBefore(newFile, null);
-
-          // add download event to download icon
-          iconDownloadAddEventListener(newFile.querySelector('.icon-download svg'));
-        }
-        else {
-          document.querySelector('.messages-container').innerHTML = json.message
-        }
-      }
-
     });
   </script>
 </body>

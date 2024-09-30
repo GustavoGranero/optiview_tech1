@@ -227,12 +227,14 @@ def delete_file(uuid):
         abort(400, {'error': 'UUID inválida.'})
     
     try:
+        # TODO test later if the file has no dependencies (files reulting of processing)
         file = Files.get_one(user_id = current_user.id, uuid = uuid)
         if file is None:
             abort(404)
 
-        db.session.delete(user)
+        db.session.delete(file)
         db.session.commit()
+        return {}
     except exc.SQLAlchemyError as e:
         # TODO log error
         abort(500)
