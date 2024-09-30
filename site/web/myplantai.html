@@ -43,137 +43,144 @@
   <script src="js/sidebar.js"></script>
   <script src="js/loader.js"></script>
   <script>
+    function show_error(message) {
+      // dialog_error = document.querySelector('.dialog-error');
+      // document.querySelector('.dialog-error div').innerHTML = message
+      // dialog_error.showModal();
+      document.querySelector('.messages-container').innerHTML = json.message;
+    }
+
+    // Event listener adding functions ...
+
+    function folderNameClickAddEventListener(element) {
+      element.addEventListener('click', function(e) {    
+        const folder = this.closest('.folder');
+        folder.classList.add('edit-mode');
+        const input = folder.querySelector('input');
+        input.focus();
+        input.value = ''; // force change so cursor goes to end of text
+        input.value = this.querySelector('span').innerText.trim();
+      });
+    }
+
+    function folderNameInputBlurAddEventListener(element) {
+      element.addEventListener('blur', function(e) {
+        const folder = this.closest('.folder');
+        folder.classList.remove('edit-mode');
+        const span = folder.querySelector('span');
+        span.innerText = this.value.trim();
+      });
+    }
+
+    function folderNameInputEnterAddEventListener(element) {
+      element.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        this.blur();
+      }
+      });
+    }
+
+    function folderNameInputFocusoutAddEventListener(element) {
+      element.addEventListener('focusout', function(e) {
+        rename_folder(this.value, this.parentNode.parentNode.id)
+        this.blur();
+      });
+    }
+
+    function folderImageClickEventListener(element) {
+      element.addEventListener('click', function() {
+        window.location.href = '/folder/' + this.parentNode.id;
+      });
+    }
+
+    // Create folder functions ...
+
+    // ... create folder on server
+    function create_folder() {
+      fetch("/create_folder")
+      .then((response) => response.json())
+      .then((json) =>  create_folder_ui(document.querySelector('.add-folder'), json))
+      .catch((error) => create_folder_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
+    }
+
+    // ... create folder on the UI
+    function create_folder_ui(parent, json) {
+      if (json.status == 'Ok') {
+        const newFolder = document.createElement('div');
+        newFolder.setAttribute("id", json.uuid);
+        newFolder.classList.add('folder');
+        newFolder.innerHTML = `
+          <svg class="folder-image">
+            <path></path>
+          </svg>  
+          <div class="folder-name">
+            <span>` + json.name + `</span>
+            <input type="text" placeholder="` + json.name + `">
+          </div>
+        `;
+        document.querySelector('.folders-container').insertBefore(newFolder, parent);
+
+        // Reattach event listeners for the new folder
+        folderNameClickAddEventListener(newFolder.querySelector('.folder-name'))
+        folderNameInputBlurAddEventListener(newFolder.querySelector('.folder-name input'));
+        folderNameInputEnterAddEventListener(newFolder.querySelector('.folder-name input'))
+        folderNameInputFocusoutAddEventListener(newFolder.querySelector('.folder-name input'));
+        folderImageClickEventListener(newFolder.querySelector('.folder-image'))
+      }
+      else {
+        document.querySelector('.messages-container').innerHTML = json.message
+      }
+
+    };
+    
+    // Rename folder functions ...
+
+    // ... rename folder on server
+    function rename_folder(name, uuid) {
+      var url = new URL("/rename_folder", window.location.href)
+      var params = {name: name, uuid: uuid}
+      url.search = new URLSearchParams(params).toString();
+      fetch(url)
+      .then((response) => response.json())
+      .then((json) => rename_folder_ui(json))
+      .catch((error) => rename_folder_ui({status: 'Error', message: 'Falha na comunicação com o servidor'}));
+    }
+
+    // ... rename folder on the UI
+    function rename_folder_ui(json) {
+      document.querySelector('.messages-container').innerHTML = json.message;
+      if (json.status != 'Ok') {
+        div = document.getElementById(json.uuid);
+        if (div != null) {
+          document.getElementById(json.uuid).querySelector('input').placeholder = json.name;
+          document.getElementById(json.uuid).querySelector('span').innerText = json.name;
+        }
+      }
+    }
+
+  </script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Add event listener to each folder name
-      document.querySelectorAll('.folder-name').forEach(function(folderName) {
-        folderName.addEventListener('click', function() {
-          const folder = this.closest('.folder');
-          folder.classList.add('edit-mode');
-          const input = folder.querySelector('input');
-          input.focus();
-          input.value = ''; // force change so cursor goes to end of text
-          input.value = this.querySelector('span').innerText.trim();
-        });
-      });
 
-      // Add event listener to folder name input fields
+      // Add event listener to each folder-name
+      document.querySelectorAll('.folder-name').forEach(function(el) {
+        folderNameClickAddEventListener(el);
+      })
+
+      // Add event listener to folder-name input fields
       document.querySelectorAll('.folder-name input').forEach(function(input) {
-        input.addEventListener('blur', function() {
-          const folder = this.closest('.folder');
-          folder.classList.remove('edit-mode');
-          const span = folder.querySelector('span');
-          span.innerText = this.value.trim();
-        });
-
-        input.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            this.blur();
-          }
-        });
-
-        input.addEventListener('focusout', function(e) {
-
-            rename_folder(this.value, this.parentNode.parentNode.id)
-            this.blur();
-        });
+        folderNameInputBlurAddEventListener(input);
+        folderNameInputEnterAddEventListener(input)
+        folderNameInputFocusoutAddEventListener(input);
       });
 
-      // Add link functionality
+      // Add link to  files functionality
       document.querySelectorAll('.folder-image').forEach(function(folder_image) {
-          folder_image.addEventListener('click', function() {
-          window.location.href = '/folder/' + folder_image.parentNode.id
-        });
+        folderImageClickEventListener(folder_image)
       });
-
+    
       // Add new folder functionality
       document.querySelector('.add-folder').addEventListener('click', create_folder)
-
-      // create folder on server
-      function create_folder() {
-        fetch("/create_folder")
-        .then((response) => response.json())
-        .then((json) =>  create_folder_ui(document.querySelector('.add-folder'), json))
-        .catch((error) => create_folder_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
-      }
-
-      function create_folder_ui(parent, json) {
-        if (json.status == 'Ok') {
-          const newFolder = document.createElement('div');
-          newFolder.setAttribute("id", json.uuid);
-          newFolder.classList.add('folder');
-          newFolder.innerHTML = `
-            <svg class="folder-image">
-              <path></path>
-            </svg>  
-            <div class="folder-name">
-              <span>` + json.name + `</span>
-              <input type="text" placeholder="` + json.name + `">
-            </div>
-          `;
-          document.querySelector('.folders-container').insertBefore(newFolder, parent);
-
-          // Reattach event listeners for the new folder
-          newFolder.querySelector('.folder-name').addEventListener('click', function() {
-            const folder = this.closest('.folder');
-            folder.classList.add('edit-mode');
-            const input = folder.querySelector('input');
-            input.focus();
-            input.value = ''; // force change so cursor goes to end of text
-            input.value = this.querySelector('span').innerText.trim();
-          });
-
-          newFolder.querySelector('.folder-name input').addEventListener('blur', function() {
-            const folder = this.closest('.folder');
-            folder.classList.remove('edit-mode');
-            const span = folder.querySelector('span');
-            span.innerText = this.value.trim();
-          });
-
-          newFolder.querySelector('.folder-name input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-              this.blur();
-            }
-          });
-
-          newFolder.querySelector('.folder-name input').addEventListener('focusout', function(e) {
-              rename_folder(this.value, this.parentNode.parentNode.id);
-              this.blur();
-          });
-
-          newFolder.querySelector('.folder-image').addEventListener('click', function() {
-            window.location.href = '/folder/' + this.parentNode.id;
-          });
-          
-
-        }
-        else {
-          document.querySelector('.messages-container').innerHTML = json.message
-        }
-
-      };
-      
-      // rename folder on server
-      function rename_folder(name, uuid) {
-        var url = new URL("/rename_folder", window.location.href)
-        var params = {name: name, uuid: uuid}
-        url.search = new URLSearchParams(params).toString();
-        fetch(url)
-        .then((response) => response.json())
-        .then((json) => rename_folder_ui(json))
-        .catch((error) => rename_folder_ui({status: 'Error', message: 'Falha na comunicação com o servidor'}));
-      }
-
-      function rename_folder_ui(json) {
-        document.querySelector('.messages-container').innerHTML = json.message;
-        if (json.status != 'Ok') {
-          div = document.getElementById(json.uuid);
-          if (div != null) {
-            document.getElementById(json.uuid).querySelector('input').placeholder = json.name;
-            document.getElementById(json.uuid).querySelector('span').innerText = json.name;
-          }
-        }
-      }
-
     });
   </script>
 </body>
