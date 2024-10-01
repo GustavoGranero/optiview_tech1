@@ -38,16 +38,25 @@
       </div>
     </div>
     <div class="messages-container"></div>
+
+    <!-- Containers das caixas de diálogo -->
+    <dialog class="dialog dialog-error">
+      <div style="text-align: center; margin: 5px; font-size: 16px; color: #990a0a;">Curta.</div>
+      <form method="dialog">
+        <button class="button-ok" value="default">Ok</button>
+      </form>
+    </dialog>
+
   </section>
   {% include "includes/footer.html" %}
   <script src="js/sidebar.js"></script>
   <script src="js/loader.js"></script>
   <script>
     function show_error(message) {
-      // dialog_error = document.querySelector('.dialog-error');
-      // document.querySelector('.dialog-error div').innerHTML = message
-      // dialog_error.showModal();
-      document.querySelector('.messages-container').innerHTML = message;
+      dialog_error = document.querySelector('.dialog-error');
+      document.querySelector('.dialog-error div').innerHTML = message
+      dialog_error.showModal();
+      // document.querySelector('.messages-container').innerHTML = message;
     }
 
     // Event listener adding functions ...

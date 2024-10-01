@@ -149,3 +149,28 @@ body {
 .folder.edit-mode .folder-name input {
   display: inline-block;
 }
+
+.dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20%; 
+  height: max-content;
+  text-align: center; 
+  background-color: #777;
+  border-style: solid;
+  border-color: white;
+  border-width: 2px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.dialog button {
+  background-color: #556acb; 
+  width: 30%;
+  margin: 10px;
+  border-width: 0px;
+  border-radius: 10px;
+  cursor: pointer;
+}
