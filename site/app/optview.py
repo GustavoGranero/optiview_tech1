@@ -239,7 +239,6 @@ def delete_file(uuid):
         # TODO log error
         abort(500)
 
-
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):
     return execute_action(token, request)
