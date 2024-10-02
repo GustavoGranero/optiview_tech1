@@ -89,7 +89,11 @@
             {% for file in folder.files %}
               <div id="{{ file.uuid }}" class="row">
                 <div class="cell"></div>
+                {% if (file.name|lower).endswith('.pdf') %}
                 <div class="cell cell-icon icon-pdf">
+                {% else %}
+                <div class="cell cell-icon icon-dwg">
+                {% endif %}
                   <svg>
                     <path></path>
                   </svg>
@@ -263,9 +267,10 @@
         const newFile = document.createElement('div');
         newFile.classList.add('row');
         newFile.setAttribute("id", json.uuid);
+        extension = json.name.slice(-3).toLowerCase()
         newFile.innerHTML = `
                 <div class="cell"></div>
-                <div class="cell cell-icon icon-pdf">
+                <div class="cell cell-icon icon-` + extension + `">
                   <svg>
                     <path></path>
                   </svg>
