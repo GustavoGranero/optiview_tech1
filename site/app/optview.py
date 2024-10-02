@@ -40,6 +40,7 @@ from models.resources import Resources
 from models.resource_limits import ResourceLimits
 from models.folders import Folders
 from models.files import Files
+from models.files_processed import FilesProcessed
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,
@@ -183,60 +184,60 @@ def download_file(uuid):
 @app.route("/create_file/", methods=["GET", "POST"])
 @login_required
 def create_file():
-        status = 'Ok'
-        message = ''
-        file_name = None
-        uuid = ''
-        file_owner = None
-        file_size = None
+    status = 'Ok'
+    message = ''
+    file_name = None
+    uuid = ''
+    file_owner = None
+    file_size = None
 
-        file_by_name = None
-        folder_by_uuid = None
-        file_data = None
+    file_by_name = None
+    folder_by_uuid = None
+    file_data = None
 
-        folder_uuid = request.form.get('folder_uuid')
-        file = request.files.get('file')
+    folder_uuid = request.form.get('folder_uuid')
+    file = request.files.get('file')
 
-        if file is not None:
-            file_name = file.filename
-            file_data = file.read()
+    if file is not None:
+        file_name = file.filename
+        file_data = file.read()
 
-        if is_valid_uuid(folder_uuid):
-            folder_by_uuid = Folders.get_one(user_id = current_user.id, uuid = folder_uuid)
-            file_by_name = Files.get_one(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name)
+    if is_valid_uuid(folder_uuid):
+        folder_by_uuid = Folders.get_one(user_id = current_user.id, uuid = folder_uuid)
+        file_by_name = Files.get_one(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name)
 
-        if not is_valid_uuid(folder_uuid):
+    if not is_valid_uuid(folder_uuid):
+        status = 'Error'
+        message = f"A UUID da pasta é inválida."
+    elif not is_valid_file_type(file_data, file_name):
+        status = 'Error'
+        message = f"O arquivo não é um dos tipos aceitos: PDF ou DWG."
+    elif file_by_name is not None:
+        status = 'Error'
+        message = f"O arquivo '{file_name}' já existe."
+    elif folder_by_uuid is None:
+        status = 'Error'
+        message = f"O folder com UUID '{folder_by_uuid}' não existe no servidor."
+    else:
+        try:
+            new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
+            uuid = new_file.uuid
+            file_owner = new_file.user.user_name
+            file_size = new_file.file_size
+        except  exc.SQLAlchemyError as e:
+            # TODO log error
             status = 'Error'
-            message = f"A UUID da pasta é inválida."
-        elif not is_valid_file_type(file_data, file_name):
-            status = 'Error'
-            message = f"O arquivo não é um dos tipos aceitos: PDF ou DWG."
-        elif file_by_name is not None:
-            status = 'Error'
-            message = f"O arquivo '{file_name}' já existe."
-        elif folder_by_uuid is None:
-            status = 'Error'
-            message = f"O folder com UUID '{folder_by_uuid}' não existe no servidor."
-        else:
-            try:
-                new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
-                uuid = new_file.uuid
-                file_owner = new_file.user.user_name
-                file_size = new_file.file_size
-            except  exc.SQLAlchemyError as e:
-                # TODO log error
-                status = 'Error'
-                message = "Houve um erro na criação do novo arquivo."
+            message = "Houve um erro na criação do novo arquivo."
 
-        status = {
-            'status': status,
-            'message': message,
-            'name': file_name,
-            'uuid': uuid,
-            'owner': file_owner,
-            'size' : file_size,
-        }
-        return status
+    status = {
+        'status': status,
+        'message': message,
+        'name': file_name,
+        'uuid': uuid,
+        'owner': file_owner,
+        'size' : file_size,
+    }
+    return status
 
 @app.route("/delete_file//<uuid>", methods=["GET", "POST"])
 @login_required
