@@ -2,8 +2,11 @@ import pathlib
 import io
 
 import pypdfium2 as pdfium 
+from sqlalchemy import exc
 
 from models.files import Files
+from models.files_processed import FilesProcessed
+from models.files_processed_types import FilesProcessedTypes
 from validate_fields import is_valid_uuid
 
 
@@ -45,7 +48,7 @@ def is_valid_file_type(file_data, file_name):
     else:
         return False
 
-def get_images_from_pdf(current_user, file_uuid):
+def extract_images_from_pdf(app, current_user, file_uuid):
     status = 'Ok'
     message = ''
 
@@ -61,23 +64,27 @@ def get_images_from_pdf(current_user, file_uuid):
         status = 'Error'
         message = f"O arquivo com UUID '{file_uuid}' não existe."
     else:
-        pdf = pdfium.PdfDocument(file)
+        pdf = pdfium.PdfDocument(file.file)
 
         page_count = len(pdf)
         for index in range(page_count):
             page = pdf[index]
-            pil_image = page.render(scale=200/72).to_pil()
-            png_image = io.BytesIO()
-            pil_image.save(png_image, format='PNG')
-            
-            # TODO insert png_image on database
-            pass
+            bitmap = page.render(scale=200/72)
+            pil_image = bitmap.to_pil()
+            buffer = io.BytesIO()
+            pil_image.save(buffer, format='PNG')
+            png_image = buffer.getvalue()
 
-    status = {
-        'status': status,
-        'message': message,
-    }
-    return status
+            try:
+                file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+                processed_type_id = FilesProcessedTypes.get_one(file_processed_type = file_processed_type).id
+                FilesProcessed.add(user_id=current_user.id, parent_file_id=file.id, name=file.name, file=png_image, processed_type_id=processed_type_id)
+            except exc.SQLAlchemyError as e:
+                # TODO log error
+                status = 'Error'
+                message = "Houve um erro na inserção da imagem extraida do arquivo."
+
+    return status, message
 
 
     

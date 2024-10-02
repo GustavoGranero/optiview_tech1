@@ -212,12 +212,20 @@ body {
     cursor: pointer;
   }
 
+  .button-not-processed:disabled {
+    color: grey;
+  }
+
   .button-processed {
     width: 140px; 
     background-color: #6f9649; 
     border: none; 
     border-radius: 6px;
     cursor: pointer;
+  }
+
+  .button-processed:disabled {
+    color: grey;
   }
 
   .icon-pdf svg {

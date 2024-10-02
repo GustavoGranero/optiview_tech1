@@ -17,9 +17,10 @@ class FilesProcessed(BaseMixin, db.Model):
     parent_file_id = db.Column(db.Integer, db.ForeignKey('files.id'), unique=False, nullable=False, default=None)
     name = db.Column(db.String(250), unique=False, nullable=False)
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
+    processed_type_id = db.Column(db.Integer, db.ForeignKey('files_processed_types.id'), unique=False, nullable=False, default=None)
 
     user = db.relationship('Users', backref='files_processed', lazy='joined')
-    parent_file = db.relationship('Files', backref='files_processed', lazy='joined')
+    processed_file_type = db.relationship('FilesProcessedTypes', backref='files_processed', lazy='joined')
     
     @property
     def file_size(self):

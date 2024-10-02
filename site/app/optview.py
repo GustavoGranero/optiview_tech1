@@ -41,6 +41,7 @@ from models.resource_limits import ResourceLimits
 from models.folders import Folders
 from models.files import Files
 from models.files_processed import FilesProcessed
+from models.files_processed_types import FilesProcessedTypes
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,
@@ -59,7 +60,10 @@ from auth import (
 import email_send
 from folders import get_new_folder_name
 from actions import execute_action
-from process_files import is_valid_file_type
+from process_files import (
+    is_valid_file_type,
+    extract_images_from_pdf,
+)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -228,6 +232,8 @@ def create_file():
             # TODO log error
             status = 'Error'
             message = "Houve um erro na criação do novo arquivo."
+
+        status, message = extract_images_from_pdf(app, current_user, uuid)
 
     status = {
         'status': status,
