@@ -58,6 +58,7 @@ from auth import (
 import email_send
 from folders import get_new_folder_name
 from actions import execute_action
+from process_files import is_valid_file_type
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -184,19 +185,39 @@ def download_file(uuid):
 def create_file():
         status = 'Ok'
         message = ''
+        file_name = None
         uuid = ''
-
-        folder_uuid = request.form['folder_uuid']
-        file = request.files['file']
-        file_name = file.filename
-        file_data = file.read()
         file_owner = None
         file_size = None
 
-        folder_by_uuid = Folders.get_one(user_id = current_user.id, uuid = folder_uuid)
-        file_by_name = Files.get_one(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name)
+        file_by_name = None
+        folder_by_uuid = None
+        file_data = None
 
-        if file_by_name is None:
+        folder_uuid = request.form.get('folder_uuid')
+        file = request.files.get('file')
+
+        if file is not None:
+            file_name = file.filename
+            file_data = file.read()
+
+        if is_valid_uuid(folder_uuid):
+            folder_by_uuid = Folders.get_one(user_id = current_user.id, uuid = folder_uuid)
+            file_by_name = Files.get_one(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name)
+
+        if not is_valid_uuid(folder_uuid):
+            status = 'Error'
+            message = f"A UUID da pasta é inválida."
+        elif not is_valid_file_type(file_data, file_name):
+            status = 'Error'
+            message = f"O arquivo não é um dos tipos aceitos: PDF ou DWG."
+        elif file_by_name is not None:
+            status = 'Error'
+            message = f"O arquivo '{file_name}' já existe."
+        elif folder_by_uuid is None:
+            status = 'Error'
+            message = f"O folder com UUID '{folder_by_uuid}' não existe no servidor."
+        else:
             try:
                 new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
                 uuid = new_file.uuid
@@ -206,9 +227,6 @@ def create_file():
                 # TODO log error
                 status = 'Error'
                 message = "Houve um erro na criação do novo arquivo."
-        else:
-            status = 'Error'
-            message = f"O arquivo '{file_name}' já existe."
 
         status = {
             'status': status,
@@ -238,6 +256,7 @@ def delete_file(uuid):
     except exc.SQLAlchemyError as e:
         # TODO log error
         abort(500)
+
 
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):
