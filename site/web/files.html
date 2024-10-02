@@ -102,10 +102,18 @@
                 <div class="cell cell-centered">{{ file.user.user_name }}</div>
                 <div class="cell cell-centered">{{ file.file_size }}</div>
                 <div class="cell">
-                  <button class="button-not-processed">Analizar planta</button>
+                  {% if file.files_processed|length < 2%}
+                    <button class="button-not-processed button-analize">Analizar planta</button>
+                  {% else %}
+                    <button class="button-processed button-analized">Analisada</button>
+                  {% endif %}
                 </div>
                 <div class="cell">
-                  <button class="button-not-processed">Visualizar</button>
+                  {% if file.files_processed|length < 2%}
+                    <button class="button-not-processed button-view">Visualizar</button>
+                  {% else %}
+                    <button class="button-processed button-view-detail">Vis. Detalhada</button>
+                  {% endif %}
                 </div>
                 <div class="cell cell-icon icon-download icon-button">
                   <svg>
@@ -213,6 +221,49 @@
       });
     }
   
+    // ... add click event to button-view
+    function buttonViewClickAddEventListener(element) {
+      element.addEventListener('click', function(e) {
+        line = this.parentNode.parentNode
+        file_uuid = line.id;
+
+        // create invisible link
+        link = document.createElement('a');
+        link.setAttribute('href', '/file_view/' + file_uuid);
+        this.parentNode.appendChild(link);
+        // call click event of invisble link to start download
+        link.click();
+        // remove link
+        this.parentNode.removeChild(link);
+      });
+    }
+
+    // ... add click event to button-analize
+    function buttonAnalizeClickAddEventListener(element) {
+      element.addEventListener('click', function(e) {
+        line = this.parentNode.parentNode
+        file_uuid = line.id;
+
+        // call download endpoint
+        fetch('/file_process/' + file_uuid)
+        .then(response => {
+          if(response.status < 300)
+            return response;
+          else
+            throw(response.status + ' ' + response.statusText);
+        })
+        .then(response => {
+          // TODO change button
+          div_processed = this.parentNode
+          div_processed.innerHTML = `<button class="button-processed button-analized">Analisada</button>`
+
+          div_view = div_processed.parentNode.querySelector('.button-view').parentNode 
+          div_view.innerHTML = `<button class="button-processed button-view-detail">Vis. Detalhada</button>`
+        })
+        .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+      });
+    }
+
     // ... add close event to dialog-confirm-cancel
     function dialogConfirmCancelAddEventListener(element) {
       element.addEventListener('close', function(e) {
@@ -279,10 +330,10 @@
                 <div class="cell cell-centered">` + json.owner + `</div>
                 <div class="cell cell-centered">` + json.size + `</div>
                 <div class="cell">
-                  <button class="button-not-processed">Analizar planta</button>
+                  <button class="button-not-processed button-analize">Analizar planta</button>
                 </div>
                 <div class="cell">
-                  <button class="button-not-processed">Visualizar</button>
+                  <button class="button-not-processed button-view">Visualizar</button>
                 </div>
                 <div class="cell cell-icon icon-download icon-button">
                   <svg>
@@ -307,6 +358,10 @@
         iconDownloadAddEventListener(newFile.querySelector('.icon-download svg'));
         // add delete event to delete icon
         iconDeleteAddEventListener(newFile.querySelector('.icon-trash svg'))
+        // add event to button-view
+        buttonViewClickAddEventListener(newFile.querySelector('.button-view'))
+        // add event to button-analize
+        buttonAnalizeClickAddEventListener(newFile.querySelector('.button-analize'))
       }
       else {
         show_error(json.message)
@@ -325,6 +380,16 @@
       // ... add event listener to delete
       document.querySelectorAll('.icon-trash svg').forEach(function(el) {
         iconDeleteAddEventListener(el);
+      })
+
+      // ... add event listener to button-view
+      document.querySelectorAll('.button-view').forEach(function(el) {
+        buttonViewClickAddEventListener(el)
+      })
+
+      // ... add event listener to button-analize
+      document.querySelectorAll('.button-analize').forEach(function(el) {
+        buttonAnalizeClickAddEventListener(el)
       })
 
       // ... add event listener to dialog-confirm-cancel

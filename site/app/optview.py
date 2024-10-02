@@ -68,10 +68,19 @@ from process_files import (
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-@app.route("/process/<uuid>", methods=["GET", "POST"])
+@app.route("/file_process/<uuid>", methods=["GET", "POST"])
 @login_required
-def proceess_images(uuid):
-    pass
+def file_process(uuid):
+    # TODO create code
+
+    return {}
+
+@app.route("/file_view/<uuid>", methods=["GET", "POST"])
+@login_required
+def file_view(uuid):
+    # TODO create code
+    
+    return {}
 
 @app.route("/folder/<uuid>", methods=["GET", "POST"])
 @login_required
@@ -252,7 +261,6 @@ def delete_file(uuid):
         abort(400, {'error': 'UUID inválida.'})
     
     try:
-        # TODO test later if the file has no dependencies (files reulting of processing)
         file = Files.get_one(user_id = current_user.id, uuid = uuid)
         if file is None:
             abort(404)
