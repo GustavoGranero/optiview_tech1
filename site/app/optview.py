@@ -71,15 +71,48 @@ login_manager.init_app(app)
 @app.route("/file_process/<uuid>", methods=["GET", "POST"])
 @login_required
 def file_process(uuid):
-    # TODO create code
+    status = 'Ok'
+    message = ''
 
-    return {}
+    if not is_valid_uuid(uuid):
+        abort(400, {'error': 'UUID inválida.'})
+
+    try:
+        file = Files.get_one(user_id=current_user.id, uuid=uuid)
+        if file is None:
+            abort(404)
+
+        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
+        files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
+        if len(files_processed) == 0:
+            # image not extracted: extract
+            status, message = extract_images_from_pdf(app, current_user, uuid)
+            files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
+
+        # TODO process file here       
+
+
+
+
+        abort(501)
+
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        abort(500)
+    
+    status = {
+        'status': status,
+        'message': message
+    }
+    return status
 
 @app.route("/file_view/<uuid>", methods=["GET", "POST"])
 @login_required
 def file_view(uuid):
     # TODO create code
     
+    status, message = extract_images_from_pdf(app, current_user, uuid)
     return {}
 
 @app.route("/folder/<uuid>", methods=["GET", "POST"])
@@ -242,8 +275,6 @@ def create_file():
             status = 'Error'
             message = "Houve um erro na criação do novo arquivo."
 
-        status, message = extract_images_from_pdf(app, current_user, uuid)
-
     status = {
         'status': status,
         'message': message,
@@ -271,7 +302,6 @@ def delete_file(uuid):
     except exc.SQLAlchemyError as e:
         # TODO log error
         abort(500)
-
 
 @app.route("/action/<token>", methods=["GET", "POST"])
 def action(token):

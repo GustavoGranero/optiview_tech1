@@ -85,7 +85,3 @@ def extract_images_from_pdf(app, current_user, file_uuid):
                 message = "Houve um erro na inserção da imagem extraida do arquivo."
 
     return status, message
-
-
-    
-
