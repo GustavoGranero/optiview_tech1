@@ -248,17 +248,21 @@
         fetch('/file_process/' + file_uuid)
         .then(response => {
           if(response.status < 300)
-            return response;
+            return response.json();
           else
             throw(response.status + ' ' + response.statusText);
         })
-        .then(response => {
-          // TODO change button
-          div_processed = this.parentNode
-          div_processed.innerHTML = `<button class="button-processed button-analized">Analisada</button>`
+        .then(json => {
+          if (json.status == 'Ok') {
+            div_processed = this.parentNode
+            div_processed.innerHTML = `<button class="button-processed button-analized">Analisada</button>`
 
-          div_view = div_processed.parentNode.querySelector('.button-view').parentNode 
-          div_view.innerHTML = `<button class="button-processed button-view-detail">Vis. Detalhada</button>`
+            div_view = div_processed.parentNode.querySelector('.button-view').parentNode 
+            div_view.innerHTML = `<button class="button-processed button-view-detail">Vis. Detalhada</button>`
+          }
+          else {
+            show_error(json.message)
+          }
         })
         .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
       });

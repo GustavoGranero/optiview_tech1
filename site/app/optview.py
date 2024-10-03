@@ -1,6 +1,7 @@
 import re
 import os
 import io
+import pathlib
 
 from flask import (
     Flask,
@@ -81,25 +82,26 @@ def file_process(uuid):
         file = Files.get_one(user_id=current_user.id, uuid=uuid)
         if file is None:
             abort(404)
-
-        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
-        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
-        files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
-        if len(files_processed) == 0:
-            # image not extracted: extract
-            status, message = extract_images_from_pdf(app, current_user, uuid)
+        elif pathlib.Path(file.name).suffix.lower() == '.dwg':
+            status = 'Error'
+            message = 'O processamento de arquivos do tipo DWG<br>ainda não foi implementado.'
+        else:
+            file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+            processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
             files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
+            if len(files_processed) == 0:
+                # image not extracted: extract
+                status, message = extract_images_from_pdf(app, current_user, uuid)
+                files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
 
-        # TODO process file here       
+            # TODO process file here
 
-
-
-
-        abort(501)
-
+            # TODO remove abort when done       
+            abort(501)
     except exc.SQLAlchemyError as e:
         # TODO log error
-        abort(500)
+        status = 'Error'
+        message = 'Houve um erro no processamento do arquivo'
     
     status = {
         'status': status,
