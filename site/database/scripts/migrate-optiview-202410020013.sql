@@ -1,3 +1,14 @@
+CREATE TABLE public.files_processed_types (
+	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
+	file_processed_type varchar NOT NULL,
+	CONSTRAINT files_processed_types_pk PRIMARY KEY (id),
+	CONSTRAINT files_processed_types_unique UNIQUE (file_processed_type)
+);
+
+INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (1,'extracted_image');
+INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (2,'plan');
+INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (3,'legend');
+
 CREATE TABLE files_processed (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"uuid" uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -12,16 +23,5 @@ CREATE TABLE files_processed (
 	CONSTRAINT files_processed_type_id FOREIGN KEY (processed_type_id) REFERENCES files_processed_types(id),
 	CONSTRAINT files_processed_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
 );
-
-CREATE TABLE public.files_processed_types (
-	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
-	file_processed_type varchar NOT NULL,
-	CONSTRAINT files_processed_types_pk PRIMARY KEY (id),
-	CONSTRAINT files_processed_types_unique UNIQUE (file_processed_type)
-);
-
-INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (1,'extracted_image');
-INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (2,'plan');
-INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (3,'legend');
 
 INSERT INTO public.versions VALUES ('202410020013', '2024-10-02 00:13:00-03');
