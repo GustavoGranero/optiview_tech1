@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>OptiView Tech | Home Page</title>
+  <link rel="stylesheet" href="/css/loader.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/sidebar_laranja.css">
+  <link rel="stylesheet" href="/css/files.css">
+  <link rel="stylesheet" href="/css/rodape.css">
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  {% include "/includes/loader.html" %}
+  {% with user=user %}
+    {% include "/includes/sidebar.html" %}
+  {% endwith %}
+  <section class="home-section">
+
+    <div class="main-container">
+
+      <!-- Container com espaço superior para o texto -->
+      <div class="header-container">
+        <!-- Texto superior -->
+        {% if file != None %}
+          <div class="header-text">Arquivo {{ file.name }}</div>
+        {% else %}
+          <div class="header-text">Arquivo</div>
+        {% endif %}
+        <div class="sub-text">{{ file.files_processed|length }} itens</div>
+      </div>
+      
+      <!-- Containers das caixas de diálogo -->
+      <dialog class="dialog dialog-error">
+        <div>Curta.</div>
+        <form method="dialog">
+          <button class="button-ok" value="default">Ok</button>
+        </form>
+      </dialog>
+
+      <dialog class="dialog dialog-confirm-cancel">
+        <div>Curta.</div>
+        <form method="dialog">
+          <button class="button-confirm" value="default">Confirmar</button>
+          <button class="button-cancel" value="cancel">Cancela</button>
+        </form>
+      </dialog>
+
+    </div>
+
+  </section>
+
+  {% include "includes/footer.html" %}
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/files.js"></script>
+  <script src="/js/loader.js"></script>
+  <script>
+    function show_error(message) {
+      dialog_error = document.querySelector('.dialog-error');
+      document.querySelector('.dialog-error div').innerHTML = message
+      dialog_error.showModal();
+    }
+
+    function show_confirm_cancel(message) {
+      dialog_error = document.querySelector('.dialog-confirm-cancel');
+      document.querySelector('.dialog-confirm-cancel div').innerHTML = message
+      dialog_error.showModal();
+    }
+
+    // Event listener adding functions ...
+
+    // ... add close event to dialog-confirm-cancel
+    function dialogConfirmCancelAddEventListener(element) {
+      element.addEventListener('close', function(e) {
+        dialog_confirm_cancel = document.querySelector('.dialog-confirm-cancel');
+        if (dialog_confirm_cancel.returnValue == 'default') {
+          file_uuid = element.line;
+          line = document.getElementById(file_uuid)
+          file_name = line.querySelector('.file-name').innerHTML;
+
+          // call delete endpoint
+          fetch('/delete_file/' + file_uuid)
+          .then(response => {
+            if(response.status < 300)
+              return response;
+            else
+              throw(response.status + ' ' + response.statusText);
+          })
+          .then(response => {
+            // remove line
+            line.remove();
+
+          })
+          .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
+        }
+      });
+    }
+    
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listeners ...
+
+      // ... add event listener to dialog-confirm-cancel
+      dialogConfirmCancelAddEventListener(document.querySelector('.dialog-confirm-cancel'))
+    });
+  </script>
+</body>
+</html>
