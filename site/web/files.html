@@ -204,7 +204,7 @@
           // remove link
           this.parentNode.removeChild(link);
         })
-        .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+        .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
         
       });
     }
@@ -217,7 +217,7 @@
         file_uuid = line.id;
         file_name = line.querySelector('.file-name').innerHTML;
         document.querySelector('.dialog-confirm-cancel').line = file_uuid;
-        show_confirm_cancel('Apagar o arquivo ' + file_name + '?')
+        show_confirm_cancel('Confirmar a remoção do arquivo <br>' + file_name + '.<br>Os arquivos processados originados <br>dele serão removidos.')
       });
     }
   
@@ -260,7 +260,7 @@
           div_view = div_processed.parentNode.querySelector('.button-view').parentNode 
           div_view.innerHTML = `<button class="button-processed button-view-detail">Vis. Detalhada</button>`
         })
-        .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+        .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
       });
     }
 
@@ -286,7 +286,7 @@
             line.remove();
 
           })
-          .catch((err) => {show_error('Erro comunicação com o servidor: "' + err +'"')})
+          .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
         }
       });
     }

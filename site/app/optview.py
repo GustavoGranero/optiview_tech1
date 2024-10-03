@@ -162,7 +162,7 @@ def create_folder():
             message = "Houve um erro na criação do novo folder."
     else:
         status = 'Error'
-        message = f"O número máximo de projetos para o plano {plan.name} foi atingido"
+        message = f"O número máximo de projetos para o <br>plano {plan.name} foi atingido"
     
     status = {
         'status': status,
@@ -257,13 +257,13 @@ def create_file():
         message = f"A UUID da pasta é inválida."
     elif not is_valid_file_type(file_data, file_name):
         status = 'Error'
-        message = f"O arquivo não é um dos tipos aceitos: PDF ou DWG."
+        message = f"O arquivo não é um dos tipos aceitos:<br>PDF ou DWG."
     elif file_by_name is not None:
         status = 'Error'
-        message = f"O arquivo '{file_name}' já existe."
+        message = f"O arquivo <br>'{file_name}'<br> já existe."
     elif folder_by_uuid is None:
         status = 'Error'
-        message = f"O folder com UUID '{folder_by_uuid}' não existe no servidor."
+        message = f"O folder com UUID <br>'{folder_by_uuid}'<br> não existe no servidor."
     else:
         try:
             new_file = Files.add(user_id=current_user.id, folder_id=folder_by_uuid.id, name=file_name, file=file_data)
