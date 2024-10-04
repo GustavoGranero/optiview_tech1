@@ -2,3 +2,4 @@ site/app/__pycache__/
 site/app/models/__pycache__/
 site/app/our_secrets.py
 venv/
+secrets/

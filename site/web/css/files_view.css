@@ -10,12 +10,12 @@ body {
   
   .main-container {
     position: absolute; 
-    left: 200px;
-    width: 80%;
+    left: 20px;
+    width: 95%;
   }
 
   .header {
-    display: flex;
+    /* display: flex; */
     padding: 0; /* Removido padding do container para alinhar */
     margin: 0 auto; /* Centraliza o header */
   }
@@ -27,16 +27,16 @@ body {
     padding: 20px;
     border: 1px solid #1e1e1e;
     position: relative;
-    padding-bottom: 62px;
+    /* padding-bottom: 62px; */
     border-bottom: 1px solid #fff;
-    border-radius: 0px 18px 0px 0px;
+    border-radius: 18px 18px 0px 0px;
   }
   
   /* Estilização para o texto principal */
   .header-text {
-    position: absolute;
-    top: 0px;
-    left: 20px;
+    /* position: absolute; */
+    /* top: 0px; */
+    /* left: 20px; */
     color: white;
     font-size: 30px;
     font-weight: bold;
@@ -44,13 +44,65 @@ body {
   
   /* Estilização para os subtítulos */
   .sub-text {
-    position: absolute;
-    top: 40px;
-    left: 20px;
+    /* position: absolute; */
+    /* top: 40px; */
+    /* left: 20px; */
+    display:inline-block;
+    justify-content: center;
+    padding-right: 10px;
     color: white;
     font-size: 14px;
     font-weight: normal;
   }
+
+  .icon-previous {
+    vertical-align:middle;
+    width: 24px;
+    height: 24px;
+    fill: white;
+  }
+
+  .icon-previous path {
+    d: path("m16 7-7 5 7 5zm-7 5V7H7v10h2zM12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z");
+
+   }
+
+  .icon-next {
+    vertical-align:middle;
+    width: 24px;
+    height: 24px;
+    fill: white;
+  }
+
+  .icon-next path {
+    d: path("M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zM7 7v10l7-5zm9 10V7h-2v10z");
+  }
+
+
+  /* Estilo para os blocos das imagens */
+  .image-container {
+    display: block;
+    text-align: center;
+    width: 100%;
+    height: calc(100vh - 150px);
+    background-color: #1e1e1e;
+    border-radius: 0px 0px 18px 18px;
+    border: 1px solid #1e1e1e;
+    overflow: scroll;
+  }
+
+  .image-container img {
+    width: 95%;
+   }
+
+  .image-container-visible {
+    display: block;
+  }
+
+  .image-container-invisible {
+    display: none;
+  }
+
 
   .dialog {
     position: absolute;

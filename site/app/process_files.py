@@ -64,24 +64,35 @@ def extract_images_from_pdf(app, current_user, file_uuid):
         status = 'Error'
         message = f"O arquivo com UUID '{file_uuid}' não existe."
     else:
-        pdf = pdfium.PdfDocument(file.file)
+        name_stem = pathlib.Path(file.name).stem
+        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
+        files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
+        if len(files_processed) == 0:
+            # image not extracted: extract
+            pdf = pdfium.PdfDocument(file.file)
 
-        page_count = len(pdf)
-        for index in range(page_count):
-            page = pdf[index]
-            bitmap = page.render(scale=200/72)
-            pil_image = bitmap.to_pil()
-            buffer = io.BytesIO()
-            pil_image.save(buffer, format='PNG')
-            png_image = buffer.getvalue()
+            page_count = len(pdf)
+            for index in range(page_count):
+                page = pdf[index]
+                bitmap = page.render(scale=200/72)
+                pil_image = bitmap.to_pil()
+                buffer = io.BytesIO()
+                pil_image.save(buffer, format='PNG')
+                png_image = buffer.getvalue()
 
-            try:
-                file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
-                processed_type_id = FilesProcessedTypes.get_one(file_processed_type = file_processed_type).id
-                FilesProcessed.add(user_id=current_user.id, parent_file_id=file.id, name=file.name, file=png_image, processed_type_id=processed_type_id)
-            except exc.SQLAlchemyError as e:
-                # TODO log error
-                status = 'Error'
-                message = "Houve um erro na inserção da imagem extraida do arquivo."
+                # change file name and number it
+                name_index = ''
+                if index != 0:
+                    name_index = '_' + str(index)
+
+                name = f'{name_stem}{name_index}.png'
+
+                try:
+                    FilesProcessed.add(user_id=current_user.id, parent_file_id=file.id, name=name, file=png_image, processed_type_id=processed_type_id)
+                except exc.SQLAlchemyError as e:
+                    # TODO log error
+                    status = 'Error'
+                    message = 'Houve um erro na inserção da imagem extraida do arquivo.'
 
     return status, message
