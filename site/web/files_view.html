@@ -74,9 +74,9 @@
     }
 
     function set_page_counter() {
-      image_container = image_container_visible = document.querySelector('.image-container-visible')
-      index = Array.from(image_container.children).indexOf(image_container)
-      page_counter = document.querySelector('.page-counter').textContent = 'X'
+      image_container_visible = document.querySelector('.image-container-visible')
+      index = Array.from(image_container_visible.parentNode.children).indexOf(image_container_visible)
+      page_counter = document.querySelector('.page-counter').textContent = index + 1
     }
 
     // Event listener adding functions ...
@@ -85,10 +85,6 @@
     function iconNextAddEventListener(element) {
       element.addEventListener('click', function(e) {
         image_container_visible = document.querySelector('.image-container-visible')
-
-        image = image_container_visible.children[0]
-        console.log('============= image.naturalWidth: ' + image.naturalWidth) 
-
         image_container_next = image_container_visible.nextElementSibling
 
         if (image_container_next != null) {
