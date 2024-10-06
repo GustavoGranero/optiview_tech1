@@ -102,14 +102,14 @@
                 <div class="cell cell-centered">{{ file.user.user_name }}</div>
                 <div class="cell cell-centered">{{ file.file_size }}</div>
                 <div class="cell">
-                  {% if file.files_processed|length < 2%}
+                  {% if file.files_processed|selectattr("processed_type_id", "ne", 1)|list|length == 0%}
                     <button class="button-not-processed button-analize">Analizar planta</button>
                   {% else %}
                     <button class="button-processed button-analized">Analisada</button>
                   {% endif %}
                 </div>
                 <div class="cell">
-                  {% if file.files_processed|length < 2%}
+                  {% if file.files_processed|selectattr("processed_type_id", "ne", 1)|list|length == 0%}
                     <button class="button-not-processed button-view">Visualizar</button>
                   {% else %}
                     <button class="button-processed button-view-detail">Vis. Detalhada</button>
@@ -227,14 +227,30 @@
         line = this.parentNode.parentNode
         file_uuid = line.id;
 
-        // create invisible link
-        link = document.createElement('a');
-        link.setAttribute('href', '/files_processed/' + file_uuid);
-        this.parentNode.appendChild(link);
-        // call click event of invisble link to start download
-        link.click();
-        // remove link
-        this.parentNode.removeChild(link);
+        // test if file exists and can be processed before moving to new page
+        fetch('/validate_file_for_process/' + file_uuid)
+        .then(response => {
+          if(response.status < 300)
+            return response.json();
+          else
+            throw(response.status + ' ' + response.statusText);
+        })
+        .then(json => {
+          if (json.status == 'Ok') {
+            // create invisible link
+            link = document.createElement('a');
+            link.setAttribute('href', '/files_processed/' + file_uuid);
+            this.parentNode.appendChild(link);
+            // call click event of invisble link to start download
+            link.click();
+            // remove link
+            this.parentNode.removeChild(link);
+          }
+          else {
+            show_error(json.message)
+          }
+        })
+        .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
       });
     }
 
@@ -244,7 +260,7 @@
         line = this.parentNode.parentNode
         file_uuid = line.id;
 
-        // call download endpoint
+        // call file_process endpoint
         fetch('/file_process/' + file_uuid)
         .then(response => {
           if(response.status < 300)

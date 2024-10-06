@@ -69,6 +69,35 @@ from process_files import (
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@app.route("/validate_file_for_process/<uuid>", methods=["GET", "POST"])
+@login_required
+def validate_file_for_process(uuid):
+    status = 'Ok'
+    message = ''
+
+    if not is_valid_uuid(uuid):
+        status = 'Error'
+        message = 'A UUID é inválida.'
+    else:
+        try:
+            file = Files.get_one(user_id=current_user.id, uuid=uuid)
+            if file is None:
+                status = 'Error'
+                message = 'O arquivo não existe no servidor.'
+            elif pathlib.Path(file.name).suffix.lower() == '.dwg':
+                status = 'Error'
+                message = 'O processamento de arquivos do tipo DWG<br>ainda não foi implementado.'
+        except exc.SQLAlchemyError as e:
+            # TODO log error
+            status = 'Error'
+            message = 'Houve um erro no processamento do arquivo'
+
+    status = {
+        'status': status,
+        'message': message
+    }
+    return status
+
 @app.route("/file_process/<uuid>", methods=["GET", "POST"])
 @login_required
 def file_process(uuid):
@@ -129,6 +158,7 @@ def image(uuid):
             as_attachment=False,
             mimetype='image/png'
         )
+
 
 @app.route("/files_processed/<uuid>", methods=["GET", "POST"])
 @login_required
