@@ -2,7 +2,6 @@ import re
 import os
 import io
 import pathlib
-import base64
 
 from flask import (
     Flask,
@@ -89,9 +88,7 @@ def file_process(uuid):
         else:
             status, message = extract_images_from_pdf(app, current_user, uuid)
   
-            file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
-            processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
-            files_images_extracted = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
+
             
             # TODO process file here using files_images_extracted
 
@@ -109,6 +106,30 @@ def file_process(uuid):
     }
     return status
 
+@app.route("/image/<uuid>", methods=["GET", "POST"])
+@login_required
+def image(uuid):
+    status = 'Ok'
+    message = ''
+    file_name = ''
+    images = []
+
+    if is_valid_uuid(uuid):
+        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
+        file = FilesProcessed.get_one(user_id=current_user.id, uuid=uuid, processed_type_id=processed_type_id)
+        
+    if not is_valid_uuid(uuid):
+        abort(401)
+    elif file is None:
+        abort(404)
+    else:
+        return send_file(
+            io.BytesIO(file.file),
+            as_attachment=False,
+            mimetype='image/png'
+        )
+
 @app.route("/file_view/<uuid>", methods=["GET", "POST"])
 @login_required
 def file_view(uuid):
@@ -117,18 +138,14 @@ def file_view(uuid):
     file_name = ''
     images = []
 
-   
     status, message = extract_images_from_pdf(app, current_user, uuid)
     if status == "Ok":
         file = Files.get_one(user_id=current_user.id, uuid=uuid)
         file_name = file.name
         for index, file_processed in enumerate(file.files_processed):
-            file_data = file_processed.file
-            encoded_image = base64.b64encode(file_data).decode("utf-8")
             image = { 
                 'index': index,
                 'uuid': file_processed.uuid,
-                'encoded_image': encoded_image,
             }
             images.append(image)
 

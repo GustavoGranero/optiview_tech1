@@ -45,7 +45,7 @@
           {% else %}
             <div id="{{ image['uuid'] }}" class="image-container image-container-invisible">
           {% endif %}
-              <img src="data:image/jpeg;base64,{{ image['encoded_image'] | safe }}">
+              <img src="/image/{{ image['uuid'] }}">
           </div>
         {% endfor %}
       </div>
