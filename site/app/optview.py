@@ -130,9 +130,9 @@ def image(uuid):
             mimetype='image/png'
         )
 
-@app.route("/file_view/<uuid>", methods=["GET", "POST"])
+@app.route("/files_processed/<uuid>", methods=["GET", "POST"])
 @login_required
-def file_view(uuid):
+def files_processed(uuid):
     status = 'Ok'
     message = ''
     file_name = ''
@@ -156,7 +156,7 @@ def file_view(uuid):
         'file_name': file_name,
         'images': images,
     }
-    return render_template('/files_view.html', **context)
+    return render_template('/files_processed.html', **context)
 
 @app.route("/folder/<uuid>", methods=["GET", "POST"])
 @login_required
@@ -180,7 +180,7 @@ def folder(uuid):
         'user': current_user,
         'folder': folder,
     }
-    return render_template("/files.html", **context)
+    return render_template("/folder.html", **context)
 
 @app.route("/create_folder/", methods=["GET", "POST"])
 @login_required

@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="/css/loader.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/sidebar_laranja.css">
-  <link rel="stylesheet" href="/css/files.css">
+  <link rel="stylesheet" href="/css/folder.css">
   <link rel="stylesheet" href="/css/rodape.css">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -229,7 +229,7 @@
 
         // create invisible link
         link = document.createElement('a');
-        link.setAttribute('href', '/file_view/' + file_uuid);
+        link.setAttribute('href', '/files_processed/' + file_uuid);
         this.parentNode.appendChild(link);
         // call click event of invisble link to start download
         link.click();
