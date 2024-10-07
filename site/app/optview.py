@@ -64,6 +64,7 @@ from actions import execute_action
 from process_files import (
     is_valid_file_type,
     extract_images_from_pdf,
+    extract_tables_from_image,
 )
 
 login_manager = LoginManager()
@@ -116,11 +117,12 @@ def file_process(uuid):
             message = 'O processamento de arquivos do tipo DWG<br>ainda não foi implementado.'
         else:
             status, message = extract_images_from_pdf(app, current_user, uuid)
-  
 
-            
-            # TODO process file here using files_images_extracted
+            if status == "Ok":
+                status, message = extract_tables_from_image(app, current_user, uuid)
 
+            if status == "Ok":
+                pass
 
             # TODO remove abort when done       
             abort(501)

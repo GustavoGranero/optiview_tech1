@@ -1,16 +1,18 @@
 import pathlib
 import io
 
-import pypdfium2 as pdfium 
+import pypdfium2 as pdfium
 from sqlalchemy import exc
 
 from models.files import Files
 from models.files_processed import FilesProcessed
 from models.files_processed_types import FilesProcessedTypes
 from validate_fields import is_valid_uuid
+from ml_models.table_model import TableModel
 
 
 SIGNATURES = {
+
     '.pdf': {
         'offset': 0,
         'magic_bytes_list':[
@@ -47,6 +49,19 @@ def is_valid_file_type(file_data, file_name):
         return False
     else:
         return False
+
+def save_processed_file(current_user, parent_file_id, processed_type_id, png_image, name):
+    status = 'Ok'
+    message = ''
+    
+    try:
+        FilesProcessed.add(user_id=current_user.id, parent_file_id=parent_file_id, name=name, file=png_image, processed_type_id=processed_type_id)
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        status = 'Error'
+        message = 'Houve um erro na inserção da imagem extraida do arquivo.'
+
+    return status, message
 
 def extract_images_from_pdf(app, current_user, file_uuid):
     status = 'Ok'
@@ -88,11 +103,43 @@ def extract_images_from_pdf(app, current_user, file_uuid):
 
                 name = f'{name_stem}{name_index}.png'
 
-                try:
-                    FilesProcessed.add(user_id=current_user.id, parent_file_id=file.id, name=name, file=png_image, processed_type_id=processed_type_id)
-                except exc.SQLAlchemyError as e:
-                    # TODO log error
-                    status = 'Error'
-                    message = 'Houve um erro na inserção da imagem extraida do arquivo.'
+                status, message = save_processed_file(current_user, file.id, processed_type_id, png_image, name)
+
+    return status, message
+
+def extract_tables_from_image(app, current_user, file_uuid):
+    status = 'Ok'
+    message = ''
+
+    file = None
+
+    if is_valid_uuid(file_uuid):
+        file = Files.get_one(user_id = current_user.id, uuid = file_uuid)
+
+    if not is_valid_uuid(file_uuid):
+        status = 'Error'
+        message = f"A UUID do arquivo é inválida."
+    elif file is None:
+        status = 'Error'
+        message = f"O arquivo com UUID '{file_uuid}' não existe."
+    else:
+        in_file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+        in_processed_type_id = FilesProcessedTypes.get_one(file_processed_type=in_file_processed_type).id
+        out_file_processed_type = app.config['PROCESSED_FILE_TYPE_LEGEND']
+        out_processed_type_id = FilesProcessedTypes.get_one(file_processed_type=out_file_processed_type).id
+
+        model = TableModel(app)
+
+        for file_processed in file.files_processed:
+            if file_processed.processed_type_id == in_processed_type_id:
+                # process only extracted images
+                images_data = model.extract_tables(file_processed.name, file_processed.file)
+
+                for image_data in images_data:
+                    name = image_data['name']
+                    png_image = image_data['image_data']
+                    status, message = save_processed_file(current_user, file.id, out_processed_type_id, png_image, name)
+                    if status != 'Ok': 
+                        break
 
     return status, message

@@ -29,6 +29,8 @@ EMAIL_API_TOKEN = SECRET_EMAIL_API_TOKEN
 EMAIL_ADDRESS_FROM = 'noreply@trial-7dnvo4drnzng5r86.mlsender.net'
 EMAIL_NAME_FROM = 'OptiView Tech'
 
+EMAIL_TEMPLATES_PATH = '../email_templates/'
+
 EMAIL_TEMPLATE_CONFIRM_EMAIL = f'confirm_email_{LANGUAGE}.html'
 EMAIL_TEMPLATE_CONFIRM_EMAIL_CHANGE_ORIGINAL = f'confirm_email_change_original_{LANGUAGE}.html'
 EMAIL_TEMPLATE_CONFIRM_EMAIL_CHANGE_NEW = f'confirm_email_change_new_{LANGUAGE}.html'
@@ -60,3 +62,6 @@ PROCESSED_FILE_TYPE_PLAN = 'plan'
 PROCESSED_FILE_TYPE_LEGEND = 'legend'
 
 FOLDER_NEW_NAME_TEMPLATE = f'New folder{{number}}'
+
+WEIGHTS_PATH = '../../ml_weights/'
+TABLE_WEIGHTS= f'{WEIGHTS_PATH}best.pt'
