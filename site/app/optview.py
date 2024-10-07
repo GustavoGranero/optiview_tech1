@@ -146,9 +146,7 @@ def image(uuid):
     images = []
 
     if is_valid_uuid(uuid):
-        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
-        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
-        file = FilesProcessed.get_one(user_id=current_user.id, uuid=uuid, processed_type_id=processed_type_id)
+        file = FilesProcessed.get_one(user_id=current_user.id, uuid=uuid)
         
     if not is_valid_uuid(uuid):
         abort(401)

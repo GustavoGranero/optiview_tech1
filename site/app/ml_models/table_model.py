@@ -40,7 +40,7 @@ class TableModel:
         image = Image.open(BytesIO(file_data))
 
         images_data = []
-        results = self.model.predict(image, conf=0.5, device='cpu')
+        results = self.model.predict(image, imgsz=3008, conf=0.5, device='cpu')
         result = results[0]
         for index, box in enumerate(result.boxes):
             if self.model.names[int(box.cls)] == 'table':
@@ -57,6 +57,3 @@ class TableModel:
                 images_data.append(image_data)
 
         return images_data
-    
-
-                

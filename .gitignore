@@ -3,3 +3,4 @@ site/app/models/__pycache__/
 site/app/our_secrets.py
 venv/
 secrets/
+site/app/ml_models/__pycache__/
