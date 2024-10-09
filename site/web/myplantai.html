@@ -156,7 +156,6 @@
 
     // ... rename folder on the UI
     function rename_folder_ui(json) {
-      show_error(json.message) // TODO está aqui agora para apagar a mensagem anterior mudar para o else depois de colocar o dialog
       if (json.status != 'Ok') {
         div = document.getElementById(json.uuid);
         if (div != null) {
