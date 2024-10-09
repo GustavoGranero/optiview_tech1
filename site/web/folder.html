@@ -105,14 +105,14 @@
                   {% if file.files_processed|selectattr("processed_type_id", "ne", 1)|list|length == 0%}
                     <button class="button-not-processed button-analize">Analizar planta</button>
                   {% else %}
-                    <button class="button-processed button-analized">Analisada</button>
+                    <button class="button-processed button-analized" disabled>Analisada</button>
                   {% endif %}
                 </div>
                 <div class="cell">
                   {% if file.files_processed|selectattr("processed_type_id", "ne", 1)|list|length == 0%}
                     <button class="button-not-processed button-view">Visualizar</button>
                   {% else %}
-                    <button class="button-processed button-view-detail">Vis. Detalhada</button>
+                    <button class="button-processed button-view">Vis. Detalhada</button>
                   {% endif %}
                 </div>
                 <div class="cell cell-icon icon-download icon-button">
@@ -260,6 +260,13 @@
         line = this.parentNode.parentNode
         file_uuid = line.id;
 
+        div_processed = this.parentNode
+        this.classList = []
+        this.setAttribute('disabled', true);
+        this.classList.remove('button-not-processed')
+        this.classList.add('button-processing')
+        this.innerText = 'Analisando...'
+
         // call file_process endpoint
         fetch('/file_process/' + file_uuid)
         .then(response => {
@@ -270,11 +277,17 @@
         })
         .then(json => {
           if (json.status == 'Ok') {
-            div_processed = this.parentNode
-            div_processed.innerHTML = `<button class="button-processed button-analized">Analisada</button>`
+            this.classList.remove('button-processing')
+            this.classList.add('button-processed')
+            this.classList.add('button-analized')
+            this.classList.remove('button-analize')
+            this.classList.add('button-analized')
+            this.innerText = 'Analisada'
 
-            div_view = div_processed.parentNode.querySelector('.button-view').parentNode 
-            div_view.innerHTML = `<button class="button-processed button-view-detail">Vis. Detalhada</button>`
+            button_view = div_processed.parentNode.querySelector('.button-view')
+            button_view.classList.remove('button-not-processed')
+            button_view.classList.add('button-processed')
+            button_view.innerText = 'Vis. Detalhada'
           }
           else {
             show_error(json.message)

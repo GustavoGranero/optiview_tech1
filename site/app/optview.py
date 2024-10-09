@@ -124,8 +124,6 @@ def file_process(uuid):
             if status == "Ok":
                 pass
 
-            # TODO remove abort when done       
-            abort(501)
     except exc.SQLAlchemyError as e:
         # TODO log error
         status = 'Error'

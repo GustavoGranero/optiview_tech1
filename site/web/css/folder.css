@@ -216,6 +216,20 @@ body {
     color: grey;
   }
 
+  .button-processing {
+    width: 140px; 
+    background-color: #CBB655; 
+    border: none; 
+    border-radius: 6px;
+    /* cursor: pointer; */
+    cursor: progress;
+
+  }
+
+  .button-processing:disabled {
+    color: #585858;
+  }
+
   .button-processed {
     width: 140px; 
     background-color: #6f9649; 
@@ -225,7 +239,11 @@ body {
   }
 
   .button-processed:disabled {
-    color: grey;
+    color: #585858;
+  }
+
+  .button-analized {
+    cursor: not-allowed;
   }
 
   .icon-pdf svg {
