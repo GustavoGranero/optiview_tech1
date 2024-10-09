@@ -260,8 +260,6 @@
         line = this.parentNode.parentNode
         file_uuid = line.id;
 
-        div_processed = this.parentNode
-        this.classList = []
         this.setAttribute('disabled', true);
         this.classList.remove('button-not-processed')
         this.classList.add('button-processing')
@@ -279,11 +277,11 @@
           if (json.status == 'Ok') {
             this.classList.remove('button-processing')
             this.classList.add('button-processed')
-            this.classList.add('button-analized')
             this.classList.remove('button-analize')
             this.classList.add('button-analized')
             this.innerText = 'Analisada'
 
+            div_processed = this.parentNode
             button_view = div_processed.parentNode.querySelector('.button-view')
             button_view.classList.remove('button-not-processed')
             button_view.classList.add('button-processed')
