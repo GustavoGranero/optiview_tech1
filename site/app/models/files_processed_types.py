@@ -6,3 +6,4 @@ class FilesProcessedTypes(BaseMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     file_processed_type = db.Column(db.String(250), unique=True, nullable=False)
+    name = db.Column(db.String(250), unique=True, nullable=False)
