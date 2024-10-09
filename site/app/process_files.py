@@ -123,23 +123,32 @@ def extract_tables_from_image(app, current_user, file_uuid):
         status = 'Error'
         message = f"O arquivo com UUID '{file_uuid}' não existe."
     else:
-        in_file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
-        in_processed_type_id = FilesProcessedTypes.get_one(file_processed_type=in_file_processed_type).id
-        out_file_processed_type = app.config['PROCESSED_FILE_TYPE_LEGEND']
-        out_processed_type_id = FilesProcessedTypes.get_one(file_processed_type=out_file_processed_type).id
+        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
+        files_already_processed = FilesProcessed.query.filter(
+            FilesProcessed.user_id == current_user.id, 
+            FilesProcessed.parent_file_id == file.id,
+            FilesProcessed.processed_type_id != processed_type_id,
+        ).all()
+        if len(files_already_processed) == 0:
+            # no files processed: process
+            in_file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+            in_processed_type_id = FilesProcessedTypes.get_one(file_processed_type=in_file_processed_type).id
+            out_file_processed_type = app.config['PROCESSED_FILE_TYPE_LEGEND']
+            out_processed_type_id = FilesProcessedTypes.get_one(file_processed_type=out_file_processed_type).id
 
-        model = TableModel(app)
+            model = TableModel(app)
 
-        for file_processed in file.files_processed:
-            if file_processed.processed_type_id == in_processed_type_id:
-                # process only extracted images
-                images_data = model.extract_tables(file_processed.name, file_processed.file)
+            for file_processed in file.files_processed:
+                if file_processed.processed_type_id == in_processed_type_id:
+                    # process only extracted images
+                    images_data = model.extract_tables(file_processed.name, file_processed.file)
 
-                for image_data in images_data:
-                    name = image_data['name']
-                    png_image = image_data['image_data']
-                    status, message = save_processed_file(current_user, file.id, out_processed_type_id, png_image, name)
-                    if status != 'Ok': 
-                        break
+                    for image_data in images_data:
+                        name = image_data['name']
+                        png_image = image_data['image_data']
+                        status, message = save_processed_file(current_user, file.id, out_processed_type_id, png_image, name)
+                        if status != 'Ok': 
+                            break
 
     return status, message

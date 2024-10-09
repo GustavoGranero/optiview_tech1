@@ -157,7 +157,6 @@ def image(uuid):
             mimetype='image/png'
         )
 
-
 @app.route("/files_processed/<uuid>", methods=["GET", "POST"])
 @login_required
 def files_processed(uuid):
