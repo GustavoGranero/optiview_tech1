@@ -41,7 +41,7 @@
       <div>
         {% for image in images %}
           {% if image['index'] == 0 %}
-            <div id="{{ image['uuid'] }}" stle="padding: 5px" class="image-container image-container-visible">
+            <div id="{{ image['uuid'] }}" class="image-container image-container-visible">
           {% else %}
             <div id="{{ image['uuid'] }}" class="image-container image-container-invisible">
           {% endif %}

@@ -277,7 +277,7 @@ def rename_folder():
     }
     return status
 
-@app.route("/file//<uuid>", methods=["GET", "POST"])
+@app.route("/file/<uuid>", methods=["GET", "POST"])
 @login_required
 def download_file(uuid):
     if not is_valid_uuid(uuid):

@@ -291,7 +291,14 @@
             show_error(json.message)
           }
         })
-        .catch((err) => {show_error('Erro comunicação com o servidor: <br>"' + err +'"')})
+        .catch((err) => {
+          this.removeAttribute('disabled');
+          this.classList.remove('button-processing')
+          this.classList.add('button-not-processed')
+          this.innerText = 'Analisar planta'
+
+          show_error('Erro comunicação com o servidor: <br>"' + err +'"')
+        })
       });
     }
 

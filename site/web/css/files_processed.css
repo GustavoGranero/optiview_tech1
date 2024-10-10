@@ -82,6 +82,7 @@ body {
   /* Estilo para os blocos das imagens */
   .image-container {
     display: block;
+    padding-top: 50px;
     text-align: center;
     width: 100%;
     height: calc(100vh - 150px);
