@@ -20,14 +20,14 @@ class TableModel:
         filename = os.path.join(os.path.dirname(__file__), self.app.config['TABLE_WEIGHTS'])  
         return filename
     
-    def get_new_file_name(self, original_name, index):
+    def get_new_file_name(self, original_name, file_type, index=0):
         name_stem = Path(original_name).stem
         # change file name and number it
         name_index = ''
         if index != 0:
             name_index = '_' + str(index)
 
-        new_name = f'{name_stem}_legend{name_index}.png'
+        new_name = f'{name_stem}_{file_type}{name_index}.png'
         return new_name
     
     def pil_image_to_bytes(self, pil_image):
@@ -49,10 +49,11 @@ class TableModel:
                 box_bounds = tuple(map(int, box.xyxy[0]))
                 table_image = image.crop(box_bounds)
                 image_data = self.pil_image_to_bytes(table_image)
-                new_name = self.get_new_file_name(file_name, index)
+                new_name = self.get_new_file_name(file_name, 'legend', index)
                 image_data = {
                     'name': new_name,
                     'image_data': image_data,
+                    'box_bounds': box_bounds
                 }
                 images_data.append(image_data)
 
