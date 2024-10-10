@@ -15,3 +15,11 @@ class Folders(BaseMixin, db.Model):
     name = db.Column(db.String(250), unique=True, nullable=False)
 
     files = db.relationship('Files', backref='files', lazy='joined')
+    files_processed = db.relationship(
+        'FilesProcessed',
+        backref='files_processed',
+        lazy='joined',
+        secondary='files',
+        primaryjoin='Folders.id==files.c.folder_id',
+        secondaryjoin='files.c.id==FilesProcessed.parent_file_id'
+    )
