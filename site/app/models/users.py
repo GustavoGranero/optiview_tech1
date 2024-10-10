@@ -29,7 +29,7 @@ class Users(UserMixin, BaseMixin, db.Model):
 
     plan = db.relationship('Plans', backref='users', lazy='joined')
     hash_type = db.relationship('HashTypes', backref='users', lazy='joined')
-    folders = db.relationship('Folders', backref='users', lazy='joined')
+    folders = db.relationship('Folders', backref='users', lazy='joined', order_by="asc(Folders.id)")
 
     @classmethod
     def update_login_failure(cls, user_name_or_email, failed):
