@@ -16,12 +16,3 @@ class Folders(BaseMixin, db.Model):
 
     files = db.relationship('Files', backref='files', lazy='joined', order_by='asc(Files.id)')
     files_processed = db.relationship('FilesProcessed', backref='files_processed', lazy='joined', order_by='asc(FilesProcessed.id)')
-    # files_processed = db.relationship(
-    #     'FilesProcessed',
-    #     backref='files_processed',
-    #     lazy='joined',
-    #     secondary='files',
-    #     primaryjoin='Folders.id==files.c.folder_id',
-    #     secondaryjoin='files.c.id==FilesProcessed.parent_file_id',
-    #     order_by='asc(FilesProcessed.id)'
-    # )
