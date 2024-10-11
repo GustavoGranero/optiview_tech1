@@ -181,6 +181,14 @@ body {
     overflow: scroll;
   }
 
+  .hidden {
+    display: none;
+  }
+
+  .visible {
+    display: block;
+  }
+
   .row {
     display: table-row;
   }
