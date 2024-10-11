@@ -71,7 +71,7 @@
       </div>
       
       <!-- Container para as linhas arquivos-->
-      <div id="{{ folder.uuid }}" class="lines-container files" style='display: none;'>
+      <div id="{{ folder.uuid }}" class="lines-container files">
         <div class="table table-lines">
           <div class="col-spacer"></div>
           <div class="col-icon"></div>
@@ -194,7 +194,7 @@
       </div>
 
       <!-- Container para as linhas plantas-->
-      <div id="{{ folder.uuid }}" class="lines-container plans">
+      <div id="{{ folder.uuid }}" class="lines-container plans" style='display: none;'>
         <div class="table table-lines">
           <div class="col-spacer"></div>
           <div class="col-icon"></div>
@@ -497,7 +497,7 @@
                 </div>
                 <div class="cell"></div>
         `;
-        document.querySelector('.table-lines').insertBefore(newFile, null);
+        document.querySelector('.files .table-lines').insertBefore(newFile, null);
 
         // add download event to download icon
         iconDownloadAddEventListener(newFile.querySelector('.icon-download svg'));
