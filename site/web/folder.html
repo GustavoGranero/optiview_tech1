@@ -71,7 +71,7 @@
       </div>
       
       <!-- Container para as linhas arquivos-->
-      <div id="{{ folder.uuid }}" class="lines-container files">
+      <div id="{{ folder.uuid }}" class="lines-container files" style='display: none;'>
         <div class="table table-lines">
           <div class="col-spacer"></div>
           <div class="col-icon"></div>
@@ -91,13 +91,18 @@
                 <div class="cell"></div>
                 {% if (file.name|lower).endswith('.pdf') %}
                 <div class="cell cell-icon icon-pdf">
-                {% else %}
-                <div class="cell cell-icon icon-dwg">
-                {% endif %}
                   <svg>
                     <path></path>
                   </svg>
                 </div>
+                {% else %}
+                <div class="cell cell-icon icon-dwg">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                {% endif %}
+
                 <div class="cell file-name">{{ file.name }}</div>
                 <div class="cell cell-centered">{{ file.user.user_name }}</div>
                 <div class="cell cell-centered">{{ file.file_size }}</div>
@@ -114,6 +119,108 @@
                   {% else %}
                     <button class="button-processed button-view">Vis. Detalhada</button>
                   {% endif %}
+                </div>
+                <div class="cell cell-icon icon-download icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell cell-icon icon-trash icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell cell-icon icon-vdots icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell"></div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Container para as linhas legendas-->
+      <div id="{{ folder.uuid }}" class="lines-container legends" style='display: none;'>
+        <div class="table table-lines">
+          <div class="col-spacer"></div>
+          <div class="col-icon"></div>
+          <div class="col-name"></div>
+          <div class="col-owner"></div>
+          <div class="col-size"></div>
+          <div class="col-view"></div>
+          <div class="col-icon"></div>
+          <div class="col-icon"></div>
+          <div class="col-icon"></div>
+          <div class="col-filler"></div>
+
+          {% if folder != None %}
+            {% for file in folder.files_processed|selectattr("processed_type_id", "eq", 3)%}
+              <div id="{{ file.uuid }}" class="row">
+                <div class="cell"></div>
+                <div class="cell cell-icon icon-png">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell file-name">{{ file.name }}</div>
+                <div class="cell cell-centered">{{ file.user.user_name }}</div>
+                <div class="cell cell-centered">{{ file.file_size }}</div>
+                <div class="cell">
+                    <button class="button-not-processed button-view">Visualizar</button>
+                </div>
+                <div class="cell cell-icon icon-download icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell cell-icon icon-trash icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell cell-icon icon-vdots icon-button">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell"></div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Container para as linhas plantas-->
+      <div id="{{ folder.uuid }}" class="lines-container plans">
+        <div class="table table-lines">
+          <div class="col-spacer"></div>
+          <div class="col-icon"></div>
+          <div class="col-name"></div>
+          <div class="col-owner"></div>
+          <div class="col-size"></div>
+          <div class="col-view"></div>
+          <div class="col-icon"></div>
+          <div class="col-icon"></div>
+          <div class="col-icon"></div>
+          <div class="col-filler"></div>
+
+          {% if folder != None %}
+            {% for file in folder.files_processed|selectattr("processed_type_id", "eq", 2)%}
+              <div id="{{ file.uuid }}" class="row">
+                <div class="cell"></div>
+                <div class="cell cell-icon icon-png">
+                  <svg>
+                    <path></path>
+                  </svg>
+                </div>
+                <div class="cell file-name">{{ file.name }}</div>
+                <div class="cell cell-centered">{{ file.user.user_name }}</div>
+                <div class="cell cell-centered">{{ file.file_size }}</div>
+                <div class="cell">
+                    <button class="button-not-processed button-view">Visualizar</button>
                 </div>
                 <div class="cell cell-icon icon-download icon-button">
                   <svg>

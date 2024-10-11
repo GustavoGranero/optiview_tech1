@@ -51,12 +51,12 @@ def is_valid_file_type(file_data, file_name):
     else:
         return False
 
-def save_processed_file(current_user, parent_file_id, processed_type_id, png_image, name):
+def save_processed_file(current_user, folder_id, parent_file_id, processed_type_id, png_image, name):
     status = 'Ok'
     message = ''
     
     try:
-        FilesProcessed.add(user_id=current_user.id, parent_file_id=parent_file_id, name=name, file=png_image, processed_type_id=processed_type_id)
+        FilesProcessed.add(user_id=current_user.id, folder_id=folder_id, parent_file_id=parent_file_id, name=name, file=png_image, processed_type_id=processed_type_id)
     except exc.SQLAlchemyError as e:
         # TODO log error
         status = 'Error'
@@ -104,7 +104,7 @@ def extract_images_from_pdf(app, current_user, file_uuid):
 
                 name = f'{name_stem}{name_index}.png'
 
-                status, message = save_processed_file(current_user, file.id, processed_type_id, png_image, name)
+                status, message = save_processed_file(current_user, file.folder_id, file.id, processed_type_id, png_image, name)
 
     return status, message
 
@@ -152,7 +152,7 @@ def extract_tables_from_image(app, current_user, file_uuid):
                     for image_data in tables_images_data:
                         name = image_data['name']
                         png_image = image_data['image_data']
-                        status, message = save_processed_file(current_user, file.id, legend_type_id, png_image, name)
+                        status, message = save_processed_file(current_user, file.folder_id, file.id, legend_type_id, png_image, name)
                         if status != 'Ok': 
                             break
 
@@ -167,6 +167,6 @@ def extract_tables_from_image(app, current_user, file_uuid):
                     if status == 'Ok':
                         png_plan_image = model.pil_image_to_bytes(plan_image)
                         plan_file_name = model.get_new_file_name(file.name, 'plan')
-                        status, message = save_processed_file(current_user, file.id, plan_type_id, png_plan_image, plan_file_name)
+                        status, message = save_processed_file(current_user, file.folder_id, file.id, plan_type_id, png_plan_image, plan_file_name)
 
     return status, message

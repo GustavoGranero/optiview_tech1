@@ -298,6 +298,7 @@ CREATE TABLE files_processed (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	"uuid" uuid DEFAULT gen_random_uuid() NOT NULL,
 	user_id int8 NOT NULL,
+    folder_id int8 NOT NULL,
 	parent_file_id int8 NOT NULL,
 	"name" varchar NOT NULL,
 	file bytea NOT NULL,
@@ -306,9 +307,26 @@ CREATE TABLE files_processed (
 	CONSTRAINT files_processed_unique UNIQUE (uuid),
 	CONSTRAINT files_processed_parent_file_id_fk FOREIGN KEY (parent_file_id) REFERENCES files(id) ON DELETE CASCADE,
 	CONSTRAINT files_processed_type_id FOREIGN KEY (processed_type_id) REFERENCES files_processed_types(id),
-	CONSTRAINT files_processed_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
+	CONSTRAINT files_processed_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT files_processed_folder_id_fk FOREIGN KEY (folder_id) REFERENCES folders(id),
 );
 
+CREATE TABLE files_processed (
+	id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
+	"uuid" uuid DEFAULT gen_random_uuid() NOT NULL,
+	user_id int8 NOT NULL,
+	parent_file_id int8 NOT NULL,
+	"name" varchar NOT NULL,
+	file bytea NOT NULL,
+	processed_type_id int8 NOT NULL,
+	folder_id int8 NOT NULL,
+	CONSTRAINT files_processed_pk PRIMARY KEY (id),
+	CONSTRAINT files_processed_unique UNIQUE (uuid),
+	CONSTRAINT files_processed_folder_id_fk FOREIGN KEY (folder_id) REFERENCES folders(id),
+	CONSTRAINT files_processed_parent_file_id_fk FOREIGN KEY (parent_file_id) REFERENCES files(id) ON DELETE CASCADE,
+	CONSTRAINT files_processed_type_id FOREIGN KEY (processed_type_id) REFERENCES files_processed_types(id),
+	CONSTRAINT files_processed_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (1, 'confirm_email');
 INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (2, 'confirm_password_reset');
@@ -376,6 +394,7 @@ INSERT INTO public.versions VALUES ('202409191606', '2024-09-19 16:06:00-03');
 INSERT INTO public.versions VALUES ('202409201513', '2024-09-20 15:13:00-03');
 INSERT INTO public.versions VALUES ('202410020013', '2024-10-02 00:13:00-03');
 INSERT INTO public.versions VALUES ('202410090851', '2024-10-09 08:51:00-03');
+INSERT INTO public.versions VALUES ('202410102036', '2024-10-10 20:36:00-03');
 
 
 SELECT pg_catalog.setval('public.action_types_id_seq', 4, true);

@@ -7,4 +7,4 @@ UPDATE files_processed_types SET "name" = 'Legenda' WHERE id = 3
 
 ALTER TABLE public.files_processed_types ALTER COLUMN "name" SET NOT NULL;
 
-INSERT INTO public.versions VALUES ('202410090851', '2024-10-09 00:08:51-03');
+INSERT INTO public.versions VALUES ('202410090851', '2024-10-09 08:51:00-03');
