@@ -291,8 +291,16 @@
         file_uuid = line.id;
         file_name = line.querySelector('.file-name').innerHTML;
 
+        container_class_list = e.target.closest('.lines-container').classList
+        if (container_class_list.contains('files')) {
+          endpoint = '/file/'
+        }
+        else {
+          endpoint = '/image/'
+        }
+
         // call download endpoint
-        fetch('/file/' + file_uuid)
+        fetch(endpoint + file_uuid)
         .then(response => {
           if(response.status < 300)
             return response.blob();

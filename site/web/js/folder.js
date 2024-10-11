@@ -1,4 +1,8 @@
 // Seleciona todas as abas
+function update_itens_count(count) {
+  document.querySelector('.sub-text').innerText = count + ' ítem(s)'
+}
+
 const tabs = document.querySelectorAll('.tab');
 container = document.querySelector('.lines-container');
 
@@ -25,13 +29,18 @@ tabs.forEach(tab => {
     switch(this.id) {
       case 'files':
         container = document.querySelector('.files');
+        lines_count = document.querySelectorAll('.files .row').length;
         break;
       case 'plans':
         container = document.querySelector('.plans');
+        lines_count = document.querySelectorAll('.plans .row').length;
         break;
       case 'legends':
         container = document.querySelector('.legends');
-    } 
+        lines_count = document.querySelectorAll('.legends .row').length;
+    }
+    // document.querySelector('.sub-text').innerText = lines_count + ' ítem(s)'
+    update_itens_count(lines_count)
     container.classList.add('visible');
     container.classList.add('hidden')
   });
