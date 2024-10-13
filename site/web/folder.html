@@ -327,8 +327,18 @@
     // ... add click event to button-view
     function buttonViewClickAddEventListener(element) {
       element.addEventListener('click', function(e) {
-        line = this.parentNode.parentNode
+        // DOIT mudar quando for imagens: planta ou legenda
+        line = this.closest('.row')
         file_uuid = line.id;
+
+        container_class_list = e.target.closest('.lines-container').classList
+        if (container_class_list.contains('files')) {
+          // DOIT get the UUID of the parent in some way
+        }
+        else {
+          // DOIT get the UUID of the parent in some way
+        }
+
 
         // test if file exists and can be processed before moving to new page
         fetch('/validate_file_for_process/' + file_uuid)

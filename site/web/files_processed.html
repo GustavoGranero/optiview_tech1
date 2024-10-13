@@ -40,7 +40,7 @@
       <!-- Container para as imagens -->
       <div>
         {% for image in images %}
-          {% if image['index'] == 0 %}
+          {% if (image_uuid is none and image['index'] == 0) or (image_uuid is not none and image_uuid == image['uuid']) %}
             <div id="{{ image['uuid'] }}" class="image-container image-container-visible">
           {% else %}
             <div id="{{ image['uuid'] }}" class="image-container image-container-invisible">
@@ -111,6 +111,9 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // seta a página correta casoe tenha sido aberta direto em uma imagem
+      set_page_counter()
+
       // Add event listeners ...
 
       // ... add event listener to dialog-confirm-cancel

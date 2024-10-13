@@ -158,21 +158,47 @@ def image(uuid):
         )
 
 @app.route("/files_processed/<uuid>", methods=["GET", "POST"])
+@app.route("/files_processed/image/<image_uuid>", methods=["GET", "POST"])
 @login_required
-def files_processed(uuid):
+def files_processed(uuid=None, image_uuid=None):
     status = 'Ok'
     message = ''
     file_name = ''
     images = []
 
-    status, message = extract_images_from_pdf(app, current_user, uuid)
+    file_processed = None
+    file = None
+
+    if uuid is None and image_uuid is not None:
+        # images was passed: get uuid
+
+        if is_valid_uuid(image_uuid):
+            file_processed = FilesProcessed.get_one(user_id=current_user.id, uuid=image_uuid)
+
+        if not is_valid_uuid(image_uuid):
+            status = 'Error'
+            message = f"A UUID da imagem é inválida."
+        elif file_processed is None:
+            status = 'Error'
+            message = f"A imagem com UUID '{image_uuid}' não existe."
+        else:
+            file = Files.get_one(user_id=current_user.id, id=file_processed.parent_file_id)
+            uuid = file.uuid
+
     if status == "Ok":
-        file = Files.get_one(user_id=current_user.id, uuid=uuid)
+        status, message = extract_images_from_pdf(app, current_user, uuid)
+
+    if status == "Ok":
+        if file is None:
+            file = Files.get_one(user_id=current_user.id, uuid=uuid)
+
         file_name = file.name
         for index, file_processed in enumerate(file.files_processed):
             image = { 
                 'index': index,
-                'uuid': file_processed.uuid,
+                'uuid': str(file_processed.uuid),
+                'name': file_processed.name,
+                'type_name': file_processed.processed_file_type.name,
             }
             images.append(image)
 
@@ -182,6 +208,7 @@ def files_processed(uuid):
         'user': current_user,
         'file_name': file_name,
         'images': images,
+        'image_uuid': image_uuid,
     }
     return render_template('/files_processed.html', **context)
 
