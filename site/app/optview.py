@@ -104,6 +104,7 @@ def validate_file_for_process(uuid):
 def file_process(uuid):
     status = 'Ok'
     message = ''
+    images = []
 
     if not is_valid_uuid(uuid):
         abort(400, {'error': 'UUID inválida.'})
@@ -121,17 +122,28 @@ def file_process(uuid):
             if status == "Ok":
                 status, message = extract_tables_from_image(app, current_user, uuid)
 
+            # prepare data of images created by the processing to be returned to add on the page
             if status == "Ok":
-                pass
+                files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id)
+                for file_processed in files_processed:
+                    image = { 
+                        'uuid': str(file_processed.uuid),
+                        'name': file_processed.name,
+                        'size': file_processed.file_size,
+                        'type_name': file_processed.processed_file_type.name,
+                    }
+                    images.append(image)
 
     except exc.SQLAlchemyError as e:
         # TODO log error
         status = 'Error'
         message = 'Houve um erro no processamento do arquivo'
     
+    
     status = {
         'status': status,
-        'message': message
+        'message': message,
+        'images': images,
     }
     return status
 

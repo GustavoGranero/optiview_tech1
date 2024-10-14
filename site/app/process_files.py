@@ -71,7 +71,7 @@ def extract_images_from_pdf(app, current_user, file_uuid):
     file = None
 
     if is_valid_uuid(file_uuid):
-        file = Files.get_one(user_id = current_user.id, uuid = file_uuid)
+        file = Files.get_one(user_id=current_user.id, uuid=file_uuid)
 
     if not is_valid_uuid(file_uuid):
         status = 'Error'
@@ -115,7 +115,7 @@ def extract_tables_from_image(app, current_user, file_uuid):
     file = None
 
     if is_valid_uuid(file_uuid):
-        file = Files.get_one(user_id = current_user.id, uuid = file_uuid)
+        file = Files.get_one(user_id=current_user.id, uuid=file_uuid)
 
     if not is_valid_uuid(file_uuid):
         status = 'Error'
