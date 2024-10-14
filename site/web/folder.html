@@ -330,18 +330,17 @@
         // DOIT mudar quando for imagens: planta ou legenda
         line = this.closest('.row')
         file_uuid = line.id;
-
         container_class_list = e.target.closest('.lines-container').classList
-        if (container_class_list.contains('files')) {
-          // DOIT get the UUID of the parent in some way
-        }
-        else {
-          // DOIT get the UUID of the parent in some way
-        }
-
 
         // test if file exists and can be processed before moving to new page
-        fetch('/validate_file_for_process/' + file_uuid)
+        if (container_class_list.contains('files')) {
+          url = '/validate_file_for_process/'
+        }
+        else {
+          url = '/validate_file_for_process/image/'
+        }
+
+        fetch(url + file_uuid)
         .then(response => {
           if(response.status < 300)
             return response.json();
@@ -350,9 +349,17 @@
         })
         .then(json => {
           if (json.status == 'Ok') {
+            // select the endpoint for files or images generated
+            if (container_class_list.contains('files')) {
+              url = '/files_processed/'
+            }
+            else {
+              url = '/files_processed/image/'
+            }
+
             // create invisible link
             link = document.createElement('a');
-            link.setAttribute('href', '/files_processed/' + file_uuid);
+            link.setAttribute('href', url + file_uuid);
             this.parentNode.appendChild(link);
             // call click event of invisble link to start download
             link.click();

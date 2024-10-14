@@ -71,17 +71,24 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 @app.route("/validate_file_for_process/<uuid>", methods=["GET", "POST"])
+@app.route("/validate_file_for_process/image/<image_uuid>", methods=["GET", "POST"])
 @login_required
-def validate_file_for_process(uuid):
+def validate_file_for_process(uuid=None, image_uuid=None):
     status = 'Ok'
     message = ''
+
+    if image_uuid is not None:
+        uuid = image_uuid
 
     if not is_valid_uuid(uuid):
         status = 'Error'
         message = 'A UUID é inválida.'
     else:
         try:
-            file = Files.get_one(user_id=current_user.id, uuid=uuid)
+            if image_uuid is not None:
+                file = FilesProcessed.get_one(user_id=current_user.id, uuid=uuid)
+            else:
+                file = Files.get_one(user_id=current_user.id, uuid=uuid)
             if file is None:
                 status = 'Error'
                 message = 'O arquivo não existe no servidor.'
@@ -182,8 +189,7 @@ def files_processed(uuid=None, image_uuid=None):
     file = None
 
     if uuid is None and image_uuid is not None:
-        # images was passed: get uuid
-
+        # image was passed: get uuid of parent file 
         if is_valid_uuid(image_uuid):
             file_processed = FilesProcessed.get_one(user_id=current_user.id, uuid=image_uuid)
 

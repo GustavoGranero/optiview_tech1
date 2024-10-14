@@ -19,7 +19,12 @@ class Files(BaseMixin, db.Model):
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
 
     user = db.relationship('Users', backref='files', lazy='joined')
-    files_processed = db.relationship('FilesProcessed', backref='files', lazy='joined', cascade="all,delete", order_by="asc(FilesProcessed.processed_type_id)")
+    files_processed = db.relationship(
+        'FilesProcessed', backref='files', 
+        lazy='joined', 
+        cascade="all,delete",
+        order_by="asc(FilesProcessed.processed_type_id), asc(FilesProcessed.id)"
+        )
     
     @property
     def file_size(self):
