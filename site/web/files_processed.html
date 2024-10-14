@@ -24,28 +24,38 @@
       <div class="header-container">
         <!-- Texto superior -->
         <div class="header-text">Arquivo {{ file_name }}</div>
-        {% if images|length < 2 %}
-          <div class="sub-text">{{ images|length }} item</div>
-        {% else %}
-          <div class="sub-text"> {{ images|length }} itens</div>
-
-          <div class="sub-text">
+        <div class="sub-text">
+          {% if images|length < 2 %}
+            <span class="page-count">{{ images|length }} item</span>
+          {% else %}
+            <span class="page-count"> {{ images|length }} itens</span>
             <svg class="icon-previous"><path></path></svg>
             <span class="page-counter">1</span>
             <svg class="icon-next"><path></path></svg>
-          </div>
-        {% endif %}
+
+          {% endif %}
+          <span class="page-type-name"></span>
+          <span class="page-name"></span>
+          <span class="page-size"></span>
+        </div>
       </div>
 
       <!-- Container para as imagens -->
       <div>
         {% for image in images %}
           {% if (image_uuid is none and image['index'] == 0) or (image_uuid is not none and image_uuid == image['uuid']) %}
-            <div id="{{ image['uuid'] }}" class="image-container image-container-visible">
+            {% set visibility_class = 'image-container-visible'%}
           {% else %}
-            <div id="{{ image['uuid'] }}" class="image-container image-container-invisible">
+            {% set visibility_class =  'image-container-invisible'%}
           {% endif %}
-              <img src="/image/{{ image['uuid'] }}">
+          <div id="{{ image['uuid'] }}" 
+                class="image-container {{ visibility_class }}"
+                data-type-name="{{ image['type_name'] }}"
+                data-name="{{ image['name'] }}"
+                data-size="{{ image['size'] }}"
+                data-owner="{{ image['owner'] }}"
+          >
+            <img src="/image/{{ image['uuid'] }}">
           </div>
         {% endfor %}
       </div>
@@ -76,6 +86,10 @@
       image_container_visible = document.querySelector('.image-container-visible')
       index = Array.from(image_container_visible.parentNode.children).indexOf(image_container_visible)
       page_counter = document.querySelector('.page-counter').textContent = index + 1
+
+      document.querySelector('.page-type-name').textContent = image_container_visible.getAttribute('data-type-name')
+      document.querySelector('.page-name').textContent = image_container_visible.getAttribute('data-name')
+      document.querySelector('.page-size').textContent = image_container_visible.getAttribute('data-size')
     }
 
     // Event listener adding functions ...

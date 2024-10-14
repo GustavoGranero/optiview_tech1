@@ -27,16 +27,12 @@ body {
     padding: 20px;
     border: 1px solid #1e1e1e;
     position: relative;
-    /* padding-bottom: 62px; */
     border-bottom: 1px solid #fff;
     border-radius: 18px 18px 0px 0px;
   }
   
   /* Estilização para o texto principal */
   .header-text {
-    /* position: absolute; */
-    /* top: 0px; */
-    /* left: 20px; */
     color: white;
     font-size: 30px;
     font-weight: bold;
@@ -44,12 +40,8 @@ body {
   
   /* Estilização para os subtítulos */
   .sub-text {
-    /* position: absolute; */
-    /* top: 40px; */
-    /* left: 20px; */
     display:inline-block;
     justify-content: center;
-    padding-right: 10px;
     color: white;
     font-size: 14px;
     font-weight: normal;
@@ -64,7 +56,6 @@ body {
 
   .icon-previous path {
     d: path("m16 7-7 5 7 5zm-7 5V7H7v10h2zM12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z");
-
    }
 
   .icon-next {
@@ -78,6 +69,49 @@ body {
     d: path("M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zM7 7v10l7-5zm9 10V7h-2v10z");
   }
 
+  .page-count {
+    display:inline-block;
+    vertical-align: middle;
+    width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .page-counter {
+    display:inline-block;
+    vertical-align: middle;
+    text-align: center;
+    width: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .page-type-name {
+    display:inline-block;
+    vertical-align: middle;
+    width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 15px;
+  }
+
+  .page-name {
+    display:inline-block;
+    vertical-align: middle;
+    width: 400px;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 15px;
+  }
+
+  .page-size {
+    display:inline-block;
+    vertical-align: middle;
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 15px;
+  }
 
   /* Estilo para os blocos das imagens */
   .image-container {
