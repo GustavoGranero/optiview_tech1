@@ -131,13 +131,16 @@ def file_process(uuid):
 
             # prepare data of images created by the processing to be returned to add on the page
             if status == "Ok":
-                files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id)
+                # TODO maybe use Files.get_one(user_id=current_user.id, uuid=uuid) again to refrese FilesProcessed
+                files_processed = FilesProcessed.query
+                files_processed = files_processed.filter_by(user_id=current_user.id, parent_file_id=file.id)
+                files_processed = files_processed.order_by(FilesProcessed.processed_type_id, FilesProcessed.id)
                 for file_processed in files_processed:
                     image = { 
                         'uuid': str(file_processed.uuid),
                         'name': file_processed.name,
                         'size': file_processed.file_size,
-                        'type_name': file_processed.processed_file_type.name,
+                        'type': file_processed.processed_file_type.file_processed_type,
                     }
                     images.append(image)
 
@@ -157,11 +160,6 @@ def file_process(uuid):
 @app.route("/image/<uuid>", methods=["GET", "POST"])
 @login_required
 def image(uuid):
-    status = 'Ok'
-    message = ''
-    file_name = ''
-    images = []
-
     if is_valid_uuid(uuid):
         file = FilesProcessed.get_one(user_id=current_user.id, uuid=uuid)
         
@@ -189,7 +187,7 @@ def files_processed(uuid=None, image_uuid=None):
     file = None
 
     if uuid is None and image_uuid is not None:
-        # image was passed: get uuid of parent file 
+        # images was passed: get uuid of parent file 
         if is_valid_uuid(image_uuid):
             file_processed = FilesProcessed.get_one(user_id=current_user.id, uuid=image_uuid)
 
@@ -214,9 +212,11 @@ def files_processed(uuid=None, image_uuid=None):
         for index, file_processed in enumerate(file.files_processed):
             image = { 
                 'index': index,
-                'uuid': str(file_processed.uuid),
                 'name': file_processed.name,
+                'uuid': str(file_processed.uuid),
                 'type_name': file_processed.processed_file_type.name,
+                'owner': file_processed.user.user_name,
+                'size' : file_processed.file_size,
             }
             images.append(image)
 

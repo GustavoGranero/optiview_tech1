@@ -406,6 +406,8 @@
             button_view.classList.remove('button-not-processed')
             button_view.classList.add('button-processed')
             button_view.innerText = 'Vis. Detalhada'
+
+            add_processed_results_ui(json.images)
           }
           else {
             show_error(json.message)
@@ -467,12 +469,28 @@
         }
       )
       .then((response) => response.json())
-      .then((json) =>  create_file_ui(document.querySelector('.add-file'), json))
-      .catch((error) => create_file_ui(null, {status: 'Error', message: 'Falha na comunicação com o servidor'}));
+      .then((json) =>  create_file_ui(json))
+      .catch((error) => create_file_ui({status: 'Error', message: 'Falha na comunicação com o servidor'}));
     }
     // ... create file line on page
-    function create_file_ui(parent, json) {
+    function create_file_ui(json) {
       if (json.status == 'Ok') {
+        if (json.hasOwnProperty('type')) {
+          switch(json.type) {
+            case 'plan':
+              file_type_class = '.plans';
+              break;
+            case 'legend':
+              file_type_class = '.legends';
+              break; 
+            default:
+              return;     
+          }
+        }
+        else {
+          file_type_class = '.files'
+        }
+        
         const newFile = document.createElement('div');
         newFile.classList.add('row');
         newFile.setAttribute("id", json.uuid);
@@ -486,44 +504,69 @@
                 </div>
                 <div class="cell file-name">` + json.name + `</div>
                 <div class="cell cell-centered">` + json.owner + `</div>
-                <div class="cell cell-centered">` + json.size + `</div>
+                <div class="cell cell-centered">` + json.size + `</div>`
+
+        if (file_type_class == '.files') {
+          newFile.innerHTML = newFile.innerHTML + `
                 <div class="cell">
                   <button class="button-not-processed button-analize">Analizar planta</button>
-                </div>
-                <div class="cell">
+                </div>`
+        }
+        
+        newFile.innerHTML = newFile.innerHTML + `
+               <div class="cell">
                   <button class="button-not-processed button-view">Visualizar</button>
                 </div>
                 <div class="cell cell-icon icon-download icon-button">
                   <svg>
                     <path></path>
                   </svg>
-                </div>
+                </div>`
+
+        if (file_type_class == '.files') {
+          newFile.innerHTML = newFile.innerHTML + `
                 <div class="cell cell-icon icon-trash icon-button">
                   <svg>
                     <path></path>
                   </svg>
-                </div>
+                </div>`
+        }
+
+        newFile.innerHTML = newFile.innerHTML + `
                 <div class="cell cell-icon icon-vdots icon-button">
                   <svg>
                     <path></path>
                   </svg>
                 </div>
                 <div class="cell"></div>
-        `;
-        document.querySelector('.files .table-lines').insertBefore(newFile, null);
+        `
+
+        document.querySelector(file_type_class + ' .table-lines').insertBefore(newFile, null);
 
         // add download event to download icon
         iconDownloadAddEventListener(newFile.querySelector('.icon-download svg'));
-        // add delete event to delete icon
-        iconDeleteAddEventListener(newFile.querySelector('.icon-trash svg'))
+        if (file_type_class == '.files') {
+          // add delete event to delete icon
+          iconDeleteAddEventListener(newFile.querySelector('.icon-trash svg'))
+        }
         // add event to button-view
         buttonViewClickAddEventListener(newFile.querySelector('.button-view'))
-        // add event to button-analize
-        buttonAnalizeClickAddEventListener(newFile.querySelector('.button-analize'))
+        if (file_type_class == '.files') {
+          // add event to button-analize
+          buttonAnalizeClickAddEventListener(newFile.querySelector('.button-analize'))
+        }
       }
       else {
         show_error(json.message)
       }
+    }
+  
+    function add_processed_results_ui(files_created) {
+      files_created.forEach(file_created => {
+        file_created.status = 'Ok';
+        create_file_ui(file_created);
+      });
+
     }
   </script>
   <script>
