@@ -4,7 +4,7 @@ COMPANY = "Optiview Tech"
 PRODUCT = "MyPlanAI"
 LANGUAGE = "pt"
 
-DATABASE_HOST = "localhost"
+DATABASE_HOST = "192.168.96.1"
 DATABASE_PORT = 5432
 DATABASE_NAME = 'optview'
 DATABASE_USER = 'postgres'
