@@ -12,9 +12,10 @@ class TableModel:
         self.app = app
 
         # initialize class attribute just the first time
-        if self.model is None:
-            self.model = YOLO(self.get_weights_filename())
-            self.model.to('cpu')
+        # TODO better store it on optviview.py and import it like db
+        if TableModel.model is None:
+            TableModel.model = YOLO(self.get_weights_filename())
+            TableModel.model.to('cpu')
 
     def get_weights_filename(self):
         filename = os.path.join(os.path.dirname(__file__), self.app.config['TABLE_WEIGHTS'])  

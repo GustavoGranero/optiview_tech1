@@ -1,15 +1,19 @@
 import pathlib
 from io import BytesIO
+import datetime
 
 import pypdfium2 as pdfium
 from sqlalchemy import exc
 from PIL import Image
+import numpy as np
+import cv2
 
 from models.files import Files
 from models.files_processed import FilesProcessed
 from models.files_processed_types import FilesProcessedTypes
 from validate_fields import is_valid_uuid
 from ml_models.table_model import TableModel
+from ml_models.ocr import Ocr
 
 
 SIGNATURES = {
@@ -170,3 +174,169 @@ def extract_tables_from_image(app, current_user, file_uuid):
                         status, message = save_processed_file(current_user, file.folder_id, file.id, plan_type_id, png_plan_image, plan_file_name)
 
     return status, message
+
+def divide_image_with_overlap(image, num_rows=6, num_cols=6, overlap=20, sub_width=0, sub_height=0):
+    sub_images = []
+    coordinates = []
+    height, width = image.shape[:2]
+
+    if sub_width > 0 and sub_height > 0:
+        num_cols = width // sub_width + (1 if width % sub_width != 0 else 0)
+        num_cols = height // sub_height + (1 if height % sub_height != 0 else 0)
+    else:
+        sub_width = width // num_cols
+        sub_height = height // num_rows
+
+    for row in range(num_rows):
+        for col in range(num_cols):
+            start_row = max(row * sub_height - overlap, 0)
+            end_row = min(start_row + sub_height + 2 * overlap, height)
+            start_col = max(col * sub_width - overlap, 0)
+            end_col = min(start_col + sub_width + 2 * overlap, width)
+
+            sub_image = image[start_row:end_row, start_col:end_col]
+            sub_images.append(sub_image)
+            coordinates.append((start_row, start_col))
+
+    return sub_images, coordinates
+
+def get_first_column(img_table):
+    # img_table must be a opencv image in grayscale
+
+    # uses the 3/4 bottom part to avoid headers
+    width = img_table.shape[1]
+    height = 3 * img_table.shape[0] // 4
+    img_threshold0 = img_table[-height:,:]
+
+    # remove gray backgrounds
+    _, img_threshold0 = cv2.threshold(img_threshold0, 100, 255, cv2.THRESH_BINARY)
+
+    # remove vertical lines
+    vertical_structure = cv2.getStructuringElement(cv2.MORPH_RECT, (2,1))
+    img_threshold0 = cv2.dilate(img_threshold0, vertical_structure)
+
+    # blur deeply
+    img_blured = img_threshold0
+    for i in range(1,10):
+        img_blured = cv2.blur(img_blured, (5, 1))
+
+    # keeps only black areas
+    _, img_threshold = cv2.threshold(img_blured, 254, 255, cv2.THRESH_BINARY)
+
+    # remove horizontal lines
+    horizontal_structure = cv2.getStructuringElement(cv2.MORPH_RECT, (1,3))
+    img_dilated = cv2.dilate(img_threshold, horizontal_structure)
+    _, img_threshold2 = cv2.threshold(img_dilated, 254, 255, cv2.THRESH_BINARY)
+
+    # find the first colum position
+    min_columns = np.min(img_threshold2, axis=0)
+    first_zero_column = min_columns.argmin()
+    min_columns_cropped = min_columns[first_zero_column:]
+    second_zero_colum = min_columns_cropped.argmax()
+    x = first_zero_column + second_zero_colum
+
+    # crop the original image to get only the first column
+    return img_table[:,0:x]
+
+def legends_pre_processing(app, files_processed):
+    legend_type = app.config['PROCESSED_FILE_TYPE_LEGEND']
+    legend_type_id = FilesProcessedTypes.get_one(file_processed_type=legend_type).id
+
+    images_first_columns = []
+    for file_processed in files_processed:
+        if file_processed.processed_type_id == legend_type_id:
+            png_image = file_processed.file
+            pil_image = Image.open(BytesIO(png_image))
+            # IMPORTANT: must be in grayscale opencv image
+            opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2GRAY)
+            
+            img_first_column = get_first_column(opencv_image)
+            images_first_columns.append(img_first_column)
+   
+    return images_first_columns
+
+def legend_processing(ocr_results):
+    def is_number(s):
+        try:
+            int(s)
+            float(s)
+            return True
+        except ValueError:
+            return False
+
+    target_words = []
+    final_targets = []
+    for legend in ocr_results:
+        contagem_componentes = {}
+        for word in legend[0]:
+            if len(word[0]) >= 3 and is_number(word[0]) == False:
+                target_words.append(word[0])
+                # Use word[0] (presumably the word string) as the key instead of the entire word array
+                if word[0] in contagem_componentes:
+                    contagem_componentes[word[0]] += 1
+                else:
+                    contagem_componentes[word[0]] = 1
+          
+    for item, count in contagem_componentes.items():
+        # Correctly iterate through dictionary items
+        if count > 1:
+            # Use count instead of iten.value()
+            for i in range(1, count + 1):
+                if count >= 10:
+                    final_targets.append(item + str(i))
+                else:
+                    final_targets.append(item + '0' + str(i))
+        else:
+            final_targets.append(item)
+
+    return target_words, final_targets
+
+def locate_targets(image ,target_words, adjusted_word_info, overlap=25):
+    encontrados = []
+    for item in adjusted_word_info:
+        if item[0].lower() in target_words:
+            encontrados.append(item)
+
+    target_crops = []
+    for word in encontrados:
+        pontos = word[1]
+        x_inicial = min(pontos[0][0], pontos[1][0], pontos[2][0], pontos[3][0])  # - overlap
+        y_inicial = min(pontos[0][1], pontos[1][1], pontos[2][1], pontos[3][1])  # - overlap
+        x_final = max(pontos[0][0], pontos[1][0], pontos[2][0], pontos[3][0]) + overlap
+        y_final = max(pontos[0][1], pontos[1][1], pontos[2][1], pontos[3][1]) + overlap
+
+        x_inicial, y_inicial, x_final, y_final = map(int, [x_inicial, y_inicial, x_final, y_final])
+        target_crops.append(image[y_inicial:y_final, x_inicial:x_final])
+
+    return target_crops
+
+def process_images(app, files_processed):
+    ocr = Ocr(app)
+
+    images_first_columns = legends_pre_processing(app, files_processed)
+
+    plan_type = app.config['PROCESSED_FILE_TYPE_PLAN']
+    plan_type_id = FilesProcessedTypes.get_one(file_processed_type=plan_type).id
+
+    for file_processed in files_processed:
+        if file_processed.processed_type_id == plan_type_id:
+            png_image = file_processed.file
+            pil_image = Image.open(BytesIO(png_image))
+            numpy_image = np.asarray(pil_image)
+
+            sub_images, coordinates = divide_image_with_overlap(numpy_image)
+            adjusted_word_info = ocr.apply_ocr(sub_images, coordinates)
+            ocr_results = ocr.legend_ocr(images_first_columns)
+            target, final = legend_processing(ocr_results)
+            target_crops = locate_targets(numpy_image, target, adjusted_word_info)
+            count_bank = ocr.count_targets(target, final, target_crops)
+            pass
+
+def save(name, images):
+    path = '/home/agranero/Dropbox/Code/Python/optiview_tech1/tests/'
+    if isinstance(images, list):
+        for index, image in enumerate(images):
+            cv2.imwrite(f'{path}{name}_{index}.png', image)
+
+    else:
+        cv2.imwrite(f'{path}{name}.png', image)

@@ -24,7 +24,7 @@ from sqlalchemy import exc
 
 from database import get_database
 
-# initalized before imporsts that use them
+# initalized before imports that use them
 app = Flask(__name__, static_url_path='',  static_folder='../web', template_folder="../web")
 app.config.from_pyfile('config.py')
 db = get_database(app)
@@ -65,6 +65,7 @@ from process_files import (
     is_valid_file_type,
     extract_images_from_pdf,
     extract_tables_from_image,
+    process_images,
 )
 
 login_manager = LoginManager()
@@ -135,6 +136,9 @@ def file_process(uuid):
                 files_processed = FilesProcessed.query
                 files_processed = files_processed.filter_by(user_id=current_user.id, parent_file_id=file.id)
                 files_processed = files_processed.order_by(FilesProcessed.processed_type_id, FilesProcessed.id)
+
+                process_images(app, files_processed)
+
                 for file_processed in files_processed:
                     image = { 
                         'uuid': str(file_processed.uuid),
@@ -143,7 +147,7 @@ def file_process(uuid):
                         'type': file_processed.processed_file_type.file_processed_type,
                     }
                     images.append(image)
-
+                    
     except exc.SQLAlchemyError as e:
         # TODO log error
         status = 'Error'
