@@ -4,7 +4,8 @@ COMPANY = "Optiview Tech"
 PRODUCT = "MyPlanAI"
 LANGUAGE = "pt"
 
-DATABASE_HOST = "192.168.96.1"
+DATABASE_HOST = "localhost"
+# DATABASE_HOST = "192.168.96.1" # for WSL in Windows
 DATABASE_PORT = 5432
 DATABASE_NAME = 'optview'
 DATABASE_USER = 'postgres'
