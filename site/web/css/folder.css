@@ -26,7 +26,7 @@ body {
     cursor: pointer;
     background-color: #555; /* Cor inicial */
     font-size: 13px;
-    border: 1px solid #1e1e1e; /* Conecta a aba com o container */
+    border: 1px solid #11101D; /* Conecta a aba com o container */
   }
   
   .tab:not(:last-child) {
@@ -34,8 +34,8 @@ body {
   }
   
   .tab.active {
-    background-color: #1e1e1e; /* Fundo mais escuro para a aba ativa */
-    border-bottom: 1px solid #1e1e1e; /* Conecta a aba com o container */
+    background-color: #11101D; /* Fundo mais escuro para a aba ativa */
+    border-bottom: 1px solid #11101D; /* Conecta a aba com o container */
   }
   
   .tab:hover {
@@ -45,9 +45,9 @@ body {
   /* Estilo para o bloco que contém o texto superior */
   .header-container {
     width: 100%;
-    background-color: #1e1e1e;
+    background-color: #11101D;
     padding: 20px;
-    border: 1px solid #1e1e1e;
+    border: 1px solid #11101D;
     position: relative;
     padding-bottom: 62px;
     border-bottom: 1px solid #fff;
@@ -175,10 +175,10 @@ body {
   .lines-container {
     width: 100%;
     height: calc(100vh - 250px);
-    background-color: #1e1e1e;
+    background-color: #11101D;
     border-radius: 0px 0px 18px 18px;
-    border: 1px solid #1e1e1e;
-    overflow: scroll;
+    border: 1px solid #11101D;
+    overflow: none;
   }
 
   .hidden {
