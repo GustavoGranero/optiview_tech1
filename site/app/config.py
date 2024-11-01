@@ -66,3 +66,6 @@ FOLDER_NEW_NAME_TEMPLATE = f'New folder{{number}}'
 
 WEIGHTS_PATH = '../../ml_weights/'
 TABLE_WEIGHTS= f'{WEIGHTS_PATH}best.pt'
+EXTRACTED_IMAGE_TYPE = 'JPEG'
+IMAGE_TYPE = 'PNG'
+DEVICE = 'cpu'

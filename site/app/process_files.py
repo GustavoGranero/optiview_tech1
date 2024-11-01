@@ -2,7 +2,7 @@ import pathlib
 from io import BytesIO
 import datetime
 
-import pypdfium2 as pdfium
+from pdf2image import convert_from_bytes
 from sqlalchemy import exc
 from PIL import Image
 import numpy as np
@@ -90,25 +90,23 @@ def extract_images_from_pdf(app, current_user, file_uuid):
         files_processed = FilesProcessed.get_all(user_id=current_user.id, parent_file_id=file.id, processed_type_id=processed_type_id)
         if len(files_processed) == 0:
             # image not extracted: extract
-            pdf = pdfium.PdfDocument(file.file)
+            images = convert_from_bytes(file.file, fmt=app.config['EXTRACTED_IMAGE_TYPE'])
 
-            page_count = len(pdf)
+            page_count = len(images)
             for index in range(page_count):
-                page = pdf[index]
-                bitmap = page.render(scale=200/72)
-                pil_image = bitmap.to_pil()
+                pil_image = images[index]
                 buffer = BytesIO()
-                pil_image.save(buffer, format='PNG')
-                png_image = buffer.getvalue()
+                pil_image.save(buffer, format=app.config['IMAGE_TYPE'])
+                image = buffer.getvalue()
 
                 # change file name and number it
                 name_index = ''
                 if index != 0:
                     name_index = '_' + str(index)
 
-                name = f'{name_stem}{name_index}.png'
+                name = f'{name_stem}{name_index}.{app.config["IMAGE_TYPE"].lower()}'
 
-                status, message = save_processed_file(current_user, file.folder_id, file.id, processed_type_id, png_image, name)
+                status, message = save_processed_file(current_user, file.folder_id, file.id, processed_type_id, image, name)
 
     return status, message
 

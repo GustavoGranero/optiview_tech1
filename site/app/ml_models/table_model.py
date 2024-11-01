@@ -5,6 +5,8 @@ from io import BytesIO
 from ultralytics import YOLO
 from PIL import Image
 
+from optview import app
+
 class TableModel:
     model = None
 
@@ -28,12 +30,12 @@ class TableModel:
         if index != 0:
             name_index = '_' + str(index)
 
-        new_name = f'{name_stem}_{file_type}{name_index}.png'
+        new_name = f'{name_stem}_{file_type}{name_index}.{app.config["IMAGE_TYPE"].lower()}'
         return new_name
     
     def pil_image_to_bytes(self, pil_image):
             buffer = BytesIO()
-            pil_image.save(buffer, format='PNG')
+            pil_image.save(buffer, format=app.config['IMAGE_TYPE'])
             image_bytes = buffer.getvalue()
             return image_bytes
 
@@ -41,7 +43,7 @@ class TableModel:
         image = Image.open(BytesIO(file_data))
 
         images_data = []
-        results = self.model.predict(image, imgsz=3008, conf=0.5, device='cpu')
+        results = self.model.predict(image, imgsz=3008, conf=0.5, device=app.config['DEVICE'])
         result = results[0]
         for index, box in enumerate(result.boxes):
             if self.model.names[int(box.cls)] == 'table':
