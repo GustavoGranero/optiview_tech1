@@ -43,6 +43,7 @@ from models.folders import Folders
 from models.files import Files
 from models.files_processed import FilesProcessed
 from models.files_processed_types import FilesProcessedTypes
+from models.files_processed_results import FilesProcessedResults
 from validate_fields import (
     is_valid_password,
     is_valid_password_length,

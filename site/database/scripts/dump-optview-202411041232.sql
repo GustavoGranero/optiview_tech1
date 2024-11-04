@@ -311,6 +311,18 @@ CREATE TABLE files_processed (
     CONSTRAINT files_processed_folder_id_fk FOREIGN KEY (folder_id) REFERENCES folders(id),
 );
 
+CREATE TABLE files_processed_results (
+	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
+	plan_file_id int8 NOT NULL,
+	code varchar NOT NULL,
+	description varchar NOT NULL,
+	image_plan bytea NOT NULL,
+	image_plan_box json NOT NULL,
+	image_table_line bytea NULL,
+	image_table_line_box json NULL,
+	CONSTRAINT files_processed_results_pk PRIMARY KEY (id)
+);
+
 
 INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (1, 'confirm_email');
 INSERT INTO public.action_types OVERRIDING SYSTEM VALUE VALUES (2, 'confirm_password_reset');
@@ -364,9 +376,10 @@ INSERT INTO public.plans OVERRIDING SYSTEM VALUE VALUES (3, 'Empresarial Mensal'
 INSERT INTO public.plans OVERRIDING SYSTEM VALUE VALUES (4, 'Individual Anual', 4);
 INSERT INTO public.plans OVERRIDING SYSTEM VALUE VALUES (5, 'Empresarial Anual', 5);
 
-INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (1,'extracted_image','Imagem extraída');
-INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (2,'plan','Planta');
-INSERT INTO public.files_processed_types (id,file_processed_type) OVERRIDING SYSTEM VALUE VALUES (3,'legend','Legenda');
+INSERT INTO public.files_processed_types (id,file_processed_type,"name") OVERRIDING SYSTEM VALUE VALUES (1,'extracted_image','Imagem extraída');
+INSERT INTO public.files_processed_types (id,file_processed_type,"name") OVERRIDING SYSTEM VALUE VALUES (2,'plan','Planta');
+INSERT INTO public.files_processed_types (id,file_processed_type,"name") OVERRIDING SYSTEM VALUE VALUES (3,'legend','Legenda');
+INSERT INTO public.files_processed_types (id,file_processed_type,"name") OVERRIDING SYSTEM VALUE VALUES (4,'result','Resultado');
 
 INSERT INTO public.versions VALUES ('202407231657', '2024-07-23 16:57:00-03');
 INSERT INTO public.versions VALUES ('202408060938', '2024-08-06 09:38:00-03');
@@ -379,6 +392,7 @@ INSERT INTO public.versions VALUES ('202409201513', '2024-09-20 15:13:00-03');
 INSERT INTO public.versions VALUES ('202410020013', '2024-10-02 00:13:00-03');
 INSERT INTO public.versions VALUES ('202410090851', '2024-10-09 08:51:00-03');
 INSERT INTO public.versions VALUES ('202410102036', '2024-10-10 20:36:00-03');
+INSERT INTO public.versions VALUES ('202411041232', '2024-11-04 12:32:00-03');
 
 
 SELECT pg_catalog.setval('public.action_types_id_seq', 4, true);
@@ -403,6 +417,9 @@ SELECT pg_catalog.setval('public.plan_resources_id_seq', 3, true);
 
 
 SELECT pg_catalog.setval('public.plans_id_seq', 5, true);
+
+
+SELECT pg_catalog.setval('public.files_processed_types_seq', 4, true);
 
 
 ALTER TABLE ONLY public.action_types
@@ -559,4 +576,9 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_plans_fk FOREIGN KEY (plan_id) REFERENCES public.plans(id);
+
+
+ALTER TABLE public.files_processed_results 
+    ADD CONSTRAINT files_processed_results_files_processed_fk FOREIGN KEY (plan_file_id) REFERENCES public.files_processed(id) ON DELETE CASCADE;
+
 

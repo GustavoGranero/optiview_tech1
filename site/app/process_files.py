@@ -342,18 +342,18 @@ def process_images(app, files_processed):
             target_crops, target_boxes = locate_targets(numpy_image, target, adjusted_word_info)
             count_bank, image_bank, box_bank = ocr.count_targets(target, final, target_crops, target_boxes)
 
-            # TODO save in database tables to be created.
+    #         # TODO save in database tables to be created
 
-            # helper.save_object('count_bank', count_bank)
-            # helper.save_object('image_bank', image_bank)
-            # for key in image_bank:
-            #     image = image_bank[key]
-            #     helper.save(f'image_bank_{key}', image)
-            # helper.save_object('box_bank', box_bank)    
-            # helper.save_object('target_crops', target_crops)
-            # helper.save_object('target_boxes', target_boxes)
-            # helper.save_object('target', target)
-            # helper.save_object('final', final)
-            # helper.save_object('ocr_results', ocr_results)
-            # helper.save_object('adjusted_word_info', adjusted_word_info)
+    #         helper.save_object('count_bank', count_bank)
+    #         helper.save_object('image_bank', image_bank)
+    #         for key in image_bank:
+    #             image = image_bank[key]
+    #             helper.save(f'image_bank_{key}', image)
+    #         helper.save_object('box_bank', box_bank)    
+    #         helper.save_object('target_crops', target_crops)
+    #         helper.save_object('target_boxes', target_boxes)
+    #         helper.save_object('target', target)
+    #         helper.save_object('final', final)
+    #         helper.save_object('ocr_results', ocr_results)
+    #         helper.save_object('adjusted_word_info', adjusted_word_info)
     pass
