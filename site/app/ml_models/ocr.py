@@ -39,17 +39,17 @@ class Ocr:
 
         return prediction_groups
     
-    def count_targets(self, target_words, final_targets, target_crops):
-        banco_de_contagem = {}
+    def count_targets(self, target_words, final_targets, target_crops, target_boxes):
         crops_ocr = []
-
         for crop in target_crops:
             prediction_groups = Ocr.pipeline.recognize([crop])
             # prediction_groups is list of (word, box) tuples.
             crops_ocr.append(prediction_groups[0])
 
         codigos = []
-        for ocr in crops_ocr:
+        imagens = []
+        boxes = []
+        for index, ocr in enumerate(crops_ocr):
             alvo = ''
             outros = []
             for item in ocr:
@@ -62,11 +62,21 @@ class Ocr:
                 word = alvo + item
                 if word in final_targets:
                     codigos.append(word)
+                    imagens.append(target_crops[index])
+                    boxes.append(target_boxes[index])
+        
+        banco_de_contagem = {}
+        banco_de_imagens = {}
+        banco_de_boxes = {}
 
-        for codigo in codigos:
+        for index, codigo in enumerate(codigos):
             if codigo in banco_de_contagem:
                 banco_de_contagem[codigo] += 1
+                banco_de_imagens[codigo].append(imagens[index])
+                banco_de_boxes[codigo].append(boxes[index])
             else:
                 banco_de_contagem[codigo] = 1
+                banco_de_imagens[codigo] = [imagens[index]]
+                banco_de_boxes[codigo] = [boxes[index]]
 
-        return banco_de_contagem
+        return banco_de_contagem, banco_de_imagens, banco_de_boxes

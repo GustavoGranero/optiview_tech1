@@ -4,8 +4,8 @@ COMPANY = "Optiview Tech"
 PRODUCT = "MyPlanAI"
 LANGUAGE = "pt"
 
-DATABASE_HOST = "localhost"
-# DATABASE_HOST = "192.168.96.1" # for WSL in Windows
+DATABASE_HOST = "localhost" # for development in Linux
+# DATABASE_HOST = "192.168.96.1" # development for WSL in Windows
 DATABASE_PORT = 5432
 DATABASE_NAME = 'optview'
 DATABASE_USER = 'postgres'
@@ -68,4 +68,5 @@ WEIGHTS_PATH = '../../ml_weights/'
 TABLE_WEIGHTS= f'{WEIGHTS_PATH}best.pt'
 EXTRACTED_IMAGE_TYPE = 'JPEG'
 IMAGE_TYPE = 'PNG'
-DEVICE = 'cpu'
+DEVICE = 'cpu' # for development in computers without GPU
+# DEVICE = 'gpu'

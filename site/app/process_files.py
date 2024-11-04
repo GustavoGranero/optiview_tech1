@@ -1,6 +1,5 @@
 import pathlib
 from io import BytesIO
-import datetime
 
 from pdf2image import convert_from_bytes
 from sqlalchemy import exc
@@ -14,6 +13,7 @@ from models.files_processed_types import FilesProcessedTypes
 from validate_fields import is_valid_uuid
 from ml_models.table_model import TableModel
 from ml_models.ocr import Ocr
+import helper
 
 
 SIGNATURES = {
@@ -296,6 +296,7 @@ def locate_targets(image ,target_words, adjusted_word_info, overlap=25):
             encontrados.append(item)
 
     target_crops = []
+    bound_boxes = []
     for word in encontrados:
         pontos = word[1]
         x_inicial = min(pontos[0][0], pontos[1][0], pontos[2][0], pontos[3][0])  # - overlap
@@ -305,10 +306,22 @@ def locate_targets(image ,target_words, adjusted_word_info, overlap=25):
 
         x_inicial, y_inicial, x_final, y_final = map(int, [x_inicial, y_inicial, x_final, y_final])
         target_crops.append(image[y_inicial:y_final, x_inicial:x_final])
+        bound_boxes.append((x_inicial, y_inicial, x_final, y_final))
 
-    return target_crops
+    return target_crops, bound_boxes
 
 def process_images(app, files_processed):
+    # adjusted_word_info = helper.load_object('adjusted_word_info')
+    # ocr_results = helper.load_object('ocr_results')
+    # target = helper.load_object('target')
+    # final = helper.load_object('final')
+    # target_crops = helper.load_object('target_crops')
+    # helper.save('target_crops', target_crops)
+    # target_boxes = helper.load_object('target_boxes')
+    # count_bank = helper.load_object('count_bank')
+    # image_bank = helper.load_object('image_bank')
+    # box_bank = helper.load_object('box_bank')
+
     ocr = Ocr(app)
 
     images_first_columns = legends_pre_processing(app, files_processed)
@@ -326,15 +339,21 @@ def process_images(app, files_processed):
             adjusted_word_info = ocr.apply_ocr(sub_images, coordinates)
             ocr_results = ocr.legend_ocr(images_first_columns)
             target, final = legend_processing(ocr_results)
-            target_crops = locate_targets(numpy_image, target, adjusted_word_info)
-            count_bank = ocr.count_targets(target, final, target_crops)
-            pass
+            target_crops, target_boxes = locate_targets(numpy_image, target, adjusted_word_info)
+            count_bank, image_bank, box_bank = ocr.count_targets(target, final, target_crops, target_boxes)
 
-def save(name, images):
-    path = '/home/agranero/Dropbox/Code/Python/optiview_tech1/tests/'
-    if isinstance(images, list):
-        for index, image in enumerate(images):
-            cv2.imwrite(f'{path}{name}_{index}.png', image)
+            # TODO save in database tables to be created.
 
-    else:
-        cv2.imwrite(f'{path}{name}.png', image)
+            # helper.save_object('count_bank', count_bank)
+            # helper.save_object('image_bank', image_bank)
+            # for key in image_bank:
+            #     image = image_bank[key]
+            #     helper.save(f'image_bank_{key}', image)
+            # helper.save_object('box_bank', box_bank)    
+            # helper.save_object('target_crops', target_crops)
+            # helper.save_object('target_boxes', target_boxes)
+            # helper.save_object('target', target)
+            # helper.save_object('final', final)
+            # helper.save_object('ocr_results', ocr_results)
+            # helper.save_object('adjusted_word_info', adjusted_word_info)
+    pass
