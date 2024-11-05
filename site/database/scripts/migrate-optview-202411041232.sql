@@ -4,7 +4,7 @@ CREATE TABLE files_processed_results (
 	id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
 	plan_file_id int8 NOT NULL,
 	code varchar NOT NULL,
-	description varchar NOT NULL,
+	description varchar NULL,
 	image_plan bytea NOT NULL,
 	image_plan_box json NOT NULL,
 	image_table_line bytea NULL,

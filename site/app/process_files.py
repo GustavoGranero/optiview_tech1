@@ -7,9 +7,11 @@ from PIL import Image
 import numpy as np
 import cv2
 
+from optview import app
 from models.files import Files
 from models.files_processed import FilesProcessed
 from models.files_processed_types import FilesProcessedTypes
+from models.files_processed_results import FilesProcessedResults
 from validate_fields import is_valid_uuid
 from ml_models.table_model import TableModel
 from ml_models.ocr import Ocr
@@ -67,6 +69,44 @@ def save_processed_file(current_user, folder_id, parent_file_id, processed_type_
         message = 'Houve um erro na inserção da imagem extraida do arquivo.'
 
     return status, message
+
+def save_results(plan_file_id, bank):
+    status = 'Ok'
+    message = ''
+
+    try:
+        for code in bank:
+            item = bank[code]
+            for index in range(item['count']):
+                image_plan = item['images'][index]
+                cv2_image_plan = np.array(image_plan)
+                pil_image_plan = Image.fromarray(cv2_image_plan)
+                buffer = BytesIO()
+                pil_image_plan.save(buffer, format=app.config['IMAGE_TYPE'])
+                bytea_image_plan = buffer.getvalue()
+                
+                image_plan_box = item['boxes'][index]
+                image_plan_box_dict = { 'box': list(image_plan_box)}
+
+                FilesProcessedResults.add(
+                    plan_file_id=plan_file_id,
+                    code=code,
+                    description=None,
+                    image_plan=bytea_image_plan,
+                    image_plan_box=image_plan_box_dict,
+                    image_table_line=None,
+                    image_table_line_box=None,
+                )
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        status = 'Error'
+        message = 'Houve um erro na inserção da imagem extraida do arquivo.'
+
+    result = {
+        'status': status,
+        'message': message,
+    }
+    return result
 
 def extract_images_from_pdf(app, current_user, file_uuid):
     status = 'Ok'
@@ -311,16 +351,10 @@ def locate_targets(image ,target_words, adjusted_word_info, overlap=25):
     return target_crops, bound_boxes
 
 def process_images(app, files_processed):
-    # adjusted_word_info = helper.load_object('adjusted_word_info')
-    # ocr_results = helper.load_object('ocr_results')
-    # target = helper.load_object('target')
-    # final = helper.load_object('final')
-    # target_crops = helper.load_object('target_crops')
-    # helper.save('target_crops', target_crops)
-    # target_boxes = helper.load_object('target_boxes')
-    # count_bank = helper.load_object('count_bank')
-    # image_bank = helper.load_object('image_bank')
-    # box_bank = helper.load_object('box_bank')
+    result = {
+        'status': 'Ok',
+        'message': ''
+    }
 
     ocr = Ocr(app)
 
@@ -340,20 +374,10 @@ def process_images(app, files_processed):
             ocr_results = ocr.legend_ocr(images_first_columns)
             target, final = legend_processing(ocr_results)
             target_crops, target_boxes = locate_targets(numpy_image, target, adjusted_word_info)
-            count_bank, image_bank, box_bank = ocr.count_targets(target, final, target_crops, target_boxes)
+            bank = ocr.count_targets(target, final, target_crops, target_boxes)
 
-    #         # TODO save in database tables to be created
+            result = save_results(file_processed.id, bank)
+            if result['status'] != 'Ok':
+                break
 
-    #         helper.save_object('count_bank', count_bank)
-    #         helper.save_object('image_bank', image_bank)
-    #         for key in image_bank:
-    #             image = image_bank[key]
-    #             helper.save(f'image_bank_{key}', image)
-    #         helper.save_object('box_bank', box_bank)    
-    #         helper.save_object('target_crops', target_crops)
-    #         helper.save_object('target_boxes', target_boxes)
-    #         helper.save_object('target', target)
-    #         helper.save_object('final', final)
-    #         helper.save_object('ocr_results', ocr_results)
-    #         helper.save_object('adjusted_word_info', adjusted_word_info)
-    pass
+    return result

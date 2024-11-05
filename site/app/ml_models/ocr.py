@@ -65,18 +65,18 @@ class Ocr:
                     imagens.append(target_crops[index])
                     boxes.append(target_boxes[index])
         
-        banco_de_contagem = {}
-        banco_de_imagens = {}
-        banco_de_boxes = {}
-
+        bank = {}
         for index, codigo in enumerate(codigos):
-            if codigo in banco_de_contagem:
-                banco_de_contagem[codigo] += 1
-                banco_de_imagens[codigo].append(imagens[index])
-                banco_de_boxes[codigo].append(boxes[index])
+            if codigo in bank:
+                bank[codigo]['count'] += 1
+                bank[codigo]['images'].append(imagens[index])
+                bank[codigo]['boxes'].append(boxes[index])
             else:
-                banco_de_contagem[codigo] = 1
-                banco_de_imagens[codigo] = [imagens[index]]
-                banco_de_boxes[codigo] = [boxes[index]]
+                elemento = {
+                    'count': 1,
+                    'images': [imagens[index]],
+                    'boxes': [boxes[index]]
+                }
+                bank[codigo] = elemento
 
-        return banco_de_contagem, banco_de_imagens, banco_de_boxes
+        return bank
