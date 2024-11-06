@@ -22,12 +22,14 @@ class FilesProcessed(BaseMixin, db.Model):
 
     user = db.relationship('Users', backref='files_processed', lazy='joined')
     processed_file_type = db.relationship('FilesProcessedTypes', backref='files_processed', lazy='joined')
-    files_processed_results = db.relationship(
-        'FilesProcessedResults', 
-        backref='files_processed', 
-        lazy='joined', 
-        cascade="all,delete"
-        )
+    # Makes al too slow that is why I hate ORMs: 
+    # ...they get the control from you and make you vulnerable to endless performance bugs
+    # files_processed_results = db.relationship(
+    #     'FilesProcessedResults', 
+    #     backref='files_processed', 
+    #     lazy='joined', 
+    #     cascade="all,delete"
+    #     )
     
     @property
     def file_size(self):

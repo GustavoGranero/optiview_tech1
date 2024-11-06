@@ -9,7 +9,6 @@ body {
   }
   
   .main-container {
-    position: absolute; 
     left: 20px;
     width: 95%;
   }
@@ -116,14 +115,27 @@ body {
   /* Estilo para os blocos das imagens */
   .image-container {
     display: block;
+    float: left;
     padding-top: 50px;
     text-align: center;
-    width: 100%;
+    width: 85%;
     height: calc(100vh - 150px);
     background-color: #1e1e1e;
-    border-radius: 0px 0px 18px 18px;
+    border-radius: 0px 0px 0px 18px;
     border: 1px solid #1e1e1e;
     overflow: scroll;
+  }
+
+  .results-container {
+    display: block; 
+    float: right;
+    padding-top: 50px;
+    width: 15%;
+    height: calc(100vh - 150px);
+    background-color: red;
+    border-radius: 0px 0px 18px 0px;
+    border: 1px solid #1e1e1e;
+    overflow: scroll-v;
   }
 
   .image-container img {
