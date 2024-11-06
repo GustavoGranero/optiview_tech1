@@ -2,6 +2,7 @@ import re
 import os
 import io
 import pathlib
+import base64
 
 from flask import (
     Flask,
@@ -187,6 +188,7 @@ def files_processed(uuid=None, image_uuid=None):
     message = ''
     file_name = ''
     images = []
+    result_group = {}
 
     file_processed = None
     file = None
@@ -215,6 +217,25 @@ def files_processed(uuid=None, image_uuid=None):
 
         file_name = file.name
         for index, file_processed in enumerate(file.files_processed):
+            files_processed_results = FilesProcessedResults.get_all(plan_file_id=file_processed.id)
+            if len(files_processed_results) != 0:
+                results = []
+                for file_processed_result in files_processed_results:
+                    result = {
+                        'id': file_processed_result.id,
+                        'code': file_processed_result.code,
+                        'description': file_processed_result.description,
+                        'image_plan': base64.b64encode(file_processed_result.image_plan).decode('utf8'),
+                        'image_plan_box': file_processed_result.image_plan_box,
+                        'image_table_line': file_processed_result.image_table_line,
+                        'image_table_line_box': file_processed_result.image_table_line_box,
+                    }
+                    results.append(result)
+
+                
+                group_title = file_processed.name[file_processed.name.rfind('plan'): file_processed.name.rfind('.')].capitalize()
+                result_group[group_title] = results
+    
             image = { 
                 'index': index,
                 'name': file_processed.name,
@@ -232,6 +253,7 @@ def files_processed(uuid=None, image_uuid=None):
         'file_name': file_name,
         'images': images,
         'image_uuid': image_uuid,
+        'result_group': result_group,
     }
     return render_template('/files_processed.html', **context)
 

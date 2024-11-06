@@ -123,20 +123,46 @@ body {
     background-color: #1e1e1e;
     border-radius: 0px 0px 0px 18px;
     border: 1px solid #1e1e1e;
-    overflow: scroll;
+    overflow-y: scroll;
   }
 
   .results-container {
     display: block; 
     float: right;
     padding-top: 50px;
+    padding-left: 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
     width: 15%;
     height: calc(100vh - 150px);
-    background-color: red;
+    background-color: #1e1e1e;
     border-radius: 0px 0px 18px 0px;
     border: 1px solid #1e1e1e;
     border-left: 1px solid #fff;
-    overflow: scroll-v;
+    overflow-y: scroll;
+  }
+
+  .results {
+    padding-left: 20px;
+  }
+
+  .results-anchor {
+    transform:scale(0.6);
+  }
+
+  summary {
+    list-style-type: none;
+  }
+
+  summary::after {
+    margin-left: 1ch;
+    content: '\276F';
+  }
+
+  details[open] > summary::after {
+    display: inline-block;
+    transform:rotate(90deg);
   }
 
   .image-container img {

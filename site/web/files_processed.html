@@ -62,7 +62,21 @@
 
       <!-- Container para os resultados -->
       <div class="results-container">
-        <!-- TODO colocar o conteúdo -->
+        {% for group_title, results in result_group.items() %}
+          <details open>
+            <summary>{{ group_title }}</summary>
+            <div class="results">
+              {% for result in results %}
+                <details>
+                  <summary>{{ result['code'] }}</summary>
+                  <div>
+                    <img class="results-anchor" src="data:image/jpeg;base64, {{ result['image_plan'] | safe }}"> 
+                  </div>
+                </details>                
+              {% endfor %}
+            </div>
+          </details>
+        {% endfor %}
       </div>
 
       <!-- Containers das caixas de diálogo -->
