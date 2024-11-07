@@ -66,13 +66,27 @@
           <details open>
             <summary>{{ group_title }}</summary>
             <div class="results">
+              {% set ns = namespace(group_count=0) %}
               {% for result in results %}
-                <details>
-                  <summary>{{ result['code'] }}</summary>
-                  <div>
-                    <img class="results-anchor" src="data:image/jpeg;base64, {{ result['image_plan'] | safe }}"> 
-                  </div>
-                </details>                
+                {% set ns.group_count = ns.group_count + 1 %}
+                {% if not loop.last and loop.nextitem['code'] != result['code'] %}
+                  <details>
+                    <summary>{{ ns.group_count }} x {{ result['code'] }}</summary>
+                    <div>
+                      <img class="results-anchor" src="data:image/jpeg;base64, {{ result['image_plan'] | safe }}"> 
+                    </div>
+                  </details>
+                  {% set ns.group_count = 0 %}
+                {% else %}
+                  {% if loop.last %}
+                    <details>
+                      <summary>{{ ns.group_count }} x {{ result['code'] }}</summary>
+                      <div>
+                        <img class="results-anchor" src="data:image/jpeg;base64, {{ result['image_plan'] | safe }}"> 
+                      </div>
+                    </details>
+                  {% endif %}
+                {% endif %}
               {% endfor %}
             </div>
           </details>
@@ -150,7 +164,7 @@
 
         el.style.transform = "scale(" + currentZoom + ") translate3d(0px,0px,1px)"
 
-        // seting top left the scroolbars cam roll to top and left after scaling ...
+        // seting top left the scrollbars cam roll to top and left after scaling ...
         el.style.transformOrigin = 'top left'
         // ... as this is annoying moves scrollbars to center
         scrollElement = el.parentNode;
@@ -170,7 +184,7 @@
         }
         e.target.style.transform = "scale(" + currentZoom + ") translate3d(0px,0px,1px)"
         
-         // seting top left the scroolbars cam roll to top and left after scaling ...
+         // seting top left the scrollbars cam roll to top and left after scaling ...
         el.style.transformOrigin = 'top left'
         // ... as this is annoying moves scrollbars to center
         scrollElement = el.parentNode;

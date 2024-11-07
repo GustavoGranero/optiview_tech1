@@ -22,9 +22,9 @@ body {
   /* Estilo para o bloco que contém o texto superior */
   .header-container {
     width: 100%;
-    background-color: #1e1e1e;
+    background-color: #1d1b31;
     padding: 20px;
-    border: 1px solid #1e1e1e;
+    border: 1px solid #1d1b31;
     position: relative;
     border-bottom: 1px solid #fff;
     border-radius: 18px 18px 0px 0px;
@@ -120,9 +120,9 @@ body {
     text-align: center;
     width: 85%;
     height: calc(100vh - 150px);
-    background-color: #1e1e1e;
+    background-color: #1d1b31;
     border-radius: 0px 0px 0px 18px;
-    border: 1px solid #1e1e1e;
+    border: 1px solid #1d1b31;
     /* overflow-y: scroll;
     overflow-x: hidden; */
     overflow: scroll;
@@ -150,9 +150,9 @@ body {
     font-weight: bold;
     width: 15%;
     height: calc(100vh - 150px);
-    background-color: #1e1e1e;
+    background-color: #1d1b31;
     border-radius: 0px 0px 18px 0px;
-    border: 1px solid #1e1e1e;
+    border: 1px solid #1d1b31;
     border-left: 1px solid #fff;
     overflow-y: scroll;
     overflow-x: hidden;
