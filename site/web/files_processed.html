@@ -55,7 +55,7 @@
                 data-size="{{ image['size'] }}"
                 data-owner="{{ image['owner'] }}"
           >
-            <img src="/image/{{ image['uuid'] }}">
+            <img current_zoom="0.95" src="/image/{{ image['uuid'] }}">
           </div>
         {% endfor %}
       </div>
@@ -140,6 +140,45 @@
         }
       });
     }
+
+    function imageZoomIn(element) {
+      element.addEventListener('click', function(e) {
+        el = e.target
+        currentZoom = element.getAttribute('current_zoom')
+        currentZoom = Number(currentZoom) + 0.25
+        element.setAttribute('current_zoom', currentZoom)
+
+        el.style.transform = "scale(" + currentZoom + ") translate3d(0px,0px,1px)"
+
+        // seting top left the scroolbars cam roll to top and left after scaling ...
+        el.style.transformOrigin = 'top left'
+        // ... as this is annoying moves scrollbars to center
+        scrollElement = el.parentNode;
+        scrollElement.scrollLeft =  (scrollElement.scrollWidth - scrollElement.clientWidth ) / 2;
+        scrollElement.scrollTop =  (scrollElement.scrollHeight - scrollElement.clientHeight ) / 2;
+      });
+    }
+
+    function imageZoomOut(element) {
+      element.addEventListener('contextmenu', function(e) {
+        e.preventDefault()
+        el = e.target
+        currentZoom = element.getAttribute('current_zoom')
+        if (currentZoom > 1) {
+          currentZoom = currentZoom - 0.25
+          element.setAttribute('current_zoom', currentZoom)
+        }
+        e.target.style.transform = "scale(" + currentZoom + ") translate3d(0px,0px,1px)"
+        
+         // seting top left the scroolbars cam roll to top and left after scaling ...
+        el.style.transformOrigin = 'top left'
+        // ... as this is annoying moves scrollbars to center
+        scrollElement = el.parentNode;
+        scrollElement.scrollLeft =  (scrollElement.scrollWidth - scrollElement.clientWidth ) / 2;
+        scrollElement.scrollTop =  (scrollElement.scrollHeight -    scrollElement.clientHeight ) / 2;
+      });
+    }
+
     
   </script>
   <script>
@@ -149,11 +188,17 @@
 
       // Add event listeners ...
 
-      // ... add event listener to dialog-confirm-cancel
+      // ... add event listener to icon-next
       iconNextAddEventListener(document.querySelector('.icon-next'))
 
       // ... add event listener to icon-previous
       iconPreviousAddEventListener(document.querySelector('.icon-previous'))
+
+      // ... add event listener to image container
+      imageZoomIn(document.querySelector('.image-container img'))
+
+      // ... add event listener to image container
+      imageZoomOut(document.querySelector('.image-container img'))
     });
   </script>
 </body>
