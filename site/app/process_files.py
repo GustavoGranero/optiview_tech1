@@ -8,6 +8,7 @@ import numpy as np
 import cv2
 
 from optview import app
+from optview import db
 from models.files import Files
 from models.files_processed import FilesProcessed
 from models.files_processed_types import FilesProcessedTypes
@@ -42,6 +43,18 @@ SIGNATURES = {
     },
 }
 
+BOXES_COLORS = {
+    'red': (255, 0, 0),
+    'green': (0, 255, 0),
+    'blue': (0, 0, 255),
+    'magenta': (255, 0, 255),
+    'yellow': (255, 255, 0),
+    'cyan': (0, 255, 255),
+    'brown': (150, 75, 0),
+    'orange': (255, 165, 0),
+    'violet': (128, 0, 255),
+}
+
 def is_valid_file_type(file_data, file_name):
     suffix = pathlib.Path(file_name).suffix.lower()
 
@@ -69,6 +82,57 @@ def save_processed_file(current_user, folder_id, parent_file_id, processed_type_
         message = 'Houve um erro na inserção da imagem extraida do arquivo.'
 
     return status, message
+
+def save_drawn_boxes(plan_file_id, bank):
+    status = 'Ok'
+    message = ''
+
+    try:
+        plan_image_file = FilesProcessed.get_one(id=plan_file_id)
+
+        parent_file_id = plan_image_file.parent_file_id
+        
+        file_processed_type = app.config['PROCESSED_FILE_TYPE_EXTRACTED_IMAGE']
+        processed_type_id = FilesProcessedTypes.get_one(file_processed_type=file_processed_type).id
+
+        # TODO FIX there is an ambiguity here as if the PDF have many pages we can´t tell what is the corresponding ....
+        # ... add page number on the base
+        extracted_image_file = FilesProcessed.get_one(parent_file_id=parent_file_id, processed_type_id=processed_type_id)
+     
+        cv2_plan_image = np.array(Image.open(BytesIO(plan_image_file.file)))
+        cv2_extracted_image = np.array(Image.open(BytesIO(extracted_image_file.file)))
+        for index, code in enumerate(bank):
+            color_index = index % len(BOXES_COLORS)
+            color = [*BOXES_COLORS.values()][color_index]
+            for box in bank[code]['boxes']:
+                x1, y1, x2, y2 = box
+                cv2.rectangle(cv2_plan_image, (x1, y1), (x2, y2), color=color, thickness=3)
+                cv2.rectangle(cv2_extracted_image, (x1, y1), (x2, y2), color=color, thickness=3)
+
+        pil_plan_image = Image.fromarray(cv2_plan_image)
+        buffer = BytesIO()
+        pil_plan_image.save(buffer, format=app.config['IMAGE_TYPE'])
+        plan_image_bytes = buffer.getvalue()
+
+        pil_extracted_image = Image.fromarray(cv2_extracted_image)
+        buffer = BytesIO()
+        pil_extracted_image.save(buffer, format=app.config['IMAGE_TYPE'])
+        extracted_image_bytes = buffer.getvalue()
+
+        plan_image_file.file = plan_image_bytes
+        extracted_image_file.file = extracted_image_bytes
+        db.session.commit()
+    except exc.SQLAlchemyError as e:
+        # TODO log error
+        status = 'Error'
+        message = 'Houve um erro na colocação de boxes nas imagens extraídas do arquivo'
+
+    result = {
+        'status': status,
+        'message': message,
+    }
+    return result
+
 
 def save_results(plan_file_id, bank):
     status = 'Ok'
@@ -380,4 +444,8 @@ def process_images(app, files_processed):
             if result['status'] != 'Ok':
                 break
 
+            result = save_drawn_boxes(file_processed.id, bank)
+            if result['status'] != 'Ok':
+                break
+            
     return result
